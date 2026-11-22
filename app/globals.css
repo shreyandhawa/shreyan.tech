@@ -82,3 +82,53 @@ body {
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0.33 0.33 0.33 0 0.35 0.33 0.33 0.33 0 0.35 0.33 0.33 0.33 0 0.35 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+
+/* ---- Motion ---- */
+
+/* Page enter: blocks go from blurred and transparent to sharp, 40ms apart (set --i per block, six at most). */
+@keyframes enter {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.enter {
+  animation: enter 450ms ease-out both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+/* Route change: the page cross-fades in 200ms; a card's media morphs into the project hero in 400ms. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+::view-transition-group(.morph) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: fade-in 150ms ease-out both;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Custom cursor: the system cursor is hidden only once ours has mounted, and comes back over text fields and code. */
+html.custom-cursor,
+html.custom-cursor * {
+  cursor: none !important;
+}
+html.custom-cursor :is(input, textarea, select, [contenteditable], pre, [data-cursor-system]),
+html.custom-cursor :is(input, textarea, select, [contenteditable], pre, [data-cursor-system]) * {
+  cursor: auto !important;
+}

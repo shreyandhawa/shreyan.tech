@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { MediaFrame } from "@/components/MediaFrame";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/content/site";
@@ -7,7 +8,9 @@ function Card({ project, order }: { project: Project; order: number }) {
   const { name, slug, card, listing } = project;
   return (
     <Link href={`/work/${slug}/`} data-cursor="View project" className="group block" style={{ order }}>
-      <MediaFrame media={card} eager={order < 2} hover />
+      <ViewTransition name={`media-${slug}`} share="morph" default="none">
+        <MediaFrame media={card} eager={order < 2} hover />
+      </ViewTransition>
       <p className="mt-3 text-[14px] leading-5">
         <span className="text-ink">{name}</span>
         <span aria-hidden="true" className="mx-2 text-muted">
@@ -30,11 +33,11 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
+      <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
         {headline}
       </h1>
-      <p className="mt-8 max-w-[640px] text-[17px] leading-[27px] text-ink-2">{intro}</p>
-      <div className="mt-10 grid gap-8 md:grid-cols-2 md:gap-12">
+      <p className="enter mt-8 max-w-[640px] [--i:1] text-[17px] leading-[27px] text-ink-2">{intro}</p>
+      <div className="enter mt-10 grid gap-8 [--i:2] md:grid-cols-2 md:gap-12">
         <section>
           <h2 className="text-[14px] leading-5 text-muted">Currently</h2>
           <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>
@@ -45,7 +48,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section aria-labelledby="work" className="mt-16">
+      <section aria-labelledby="work" className="enter mt-16 [--i:3]">
         <h2 id="work" className="sr-only">
           Work
         </h2>

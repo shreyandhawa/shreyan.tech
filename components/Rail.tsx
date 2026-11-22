@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
 
@@ -48,6 +48,27 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
   const section = useActiveSection(pathname, project ? items.map((i) => i.id) : []);
   const active = project ? section : pathname;
 
+  // One marker that slides to the active item (200ms); placed without animation the first time.
+  // Offsets are relative to <nav>, the nearest positioned ancestor of each <li>.
+  const list = useRef<HTMLUListElement>(null);
+  const marker = useRef<HTMLSpanElement>(null);
+  const placed = useRef(false);
+  useLayoutEffect(() => {
+    const place = () => {
+      const m = marker.current;
+      const li = list.current?.querySelector("[aria-current]")?.parentElement;
+      if (!m) return;
+      if (!li) return void (m.style.opacity = "0");
+      m.style.transition = placed.current ? "" : "none";
+      m.style.opacity = "1";
+      m.style.transform = `translate(${li.offsetLeft - 13}px, ${li.offsetTop + li.offsetHeight / 2 - 2.5}px)`;
+      placed.current = true;
+    };
+    place();
+    addEventListener("resize", place);
+    return () => removeEventListener("resize", place);
+  }, [active, items.length]);
+
   return (
     <header className="relative z-30 px-4 pt-4 md:fixed md:inset-y-0 md:left-0 md:w-[200px] md:p-0 lg:w-[288px]">
       <p className="flex h-10 items-center text-[14px] text-ink-2 md:absolute md:left-8 md:top-8 md:block md:h-auto">
@@ -69,13 +90,17 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
       </p>
 
       {(items.length > 0 || (!project && hasResume)) && (
-        <nav aria-label={project ? "Sections" : "Main"} className="mt-3 pl-3 md:absolute md:left-8 md:top-[226px] md:mt-0 md:pl-0">
-          <ul className="flex gap-6 text-[15px] leading-5 md:flex-col md:gap-3">
+        <nav aria-label={project ? "Sections" : "Main"} className="relative mt-3 pl-3 md:absolute md:left-8 md:top-[226px] md:mt-0 md:pl-0">
+          <span
+            ref={marker}
+            aria-hidden="true"
+            className="absolute left-0 top-0 size-[5px] bg-accent opacity-0 transition-transform duration-200 ease-out motion-reduce:transition-none"
+          />
+          <ul ref={list} className="flex gap-6 text-[15px] leading-5 md:flex-col md:gap-3">
             {items.map((item) => {
               const isActive = item.id === active;
               return (
-                <li key={item.id} className="relative">
-                  {isActive && <span aria-hidden="true" className="absolute -left-[13px] top-1/2 size-[5px] -translate-y-1/2 bg-accent" />}
+                <li key={item.id}>
                   <Link
                     href={item.href}
                     aria-current={isActive ? (project ? "location" : "page") : undefined}

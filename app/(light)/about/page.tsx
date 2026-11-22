@@ -4,9 +4,9 @@ import { site, type Row } from "@/content/site";
 
 export const metadata: Metadata = { title: "About", description: site.about[0] };
 
-function Rows({ title, rows }: { title: string; rows: Row[] }) {
+function Rows({ title, rows, className }: { title: string; rows: Row[]; className: string }) {
   return (
-    <section aria-labelledby={title} className="mt-16">
+    <section aria-labelledby={title} className={`enter mt-16 ${className}`}>
       <h2 id={title} className="label">
         {title}
       </h2>
@@ -35,7 +35,7 @@ export default function About() {
   return (
     <>
       <h1 className="sr-only">About</h1>
-      <div className="grid gap-10 md:grid-cols-[1fr_280px] md:gap-12">
+      <div className="enter grid gap-10 md:grid-cols-[1fr_280px] md:gap-12">
         <div>
           <p className="font-serif text-[26px] leading-[34px] tracking-[-0.3px] text-ink md:text-[32px] md:leading-[42px]">{statement}</p>
           {body.map((p) => (
@@ -50,10 +50,10 @@ export default function About() {
         </div>
       </div>
 
-      <Rows title="Research" rows={site.research} />
-      <Rows title="Education" rows={site.education} />
+      <Rows title="Research" rows={site.research} className="[--i:1]" />
+      <Rows title="Education" rows={site.education} className="[--i:2]" />
 
-      <section aria-labelledby="contact" className="mt-16">
+      <section aria-labelledby="contact" className="enter mt-16 [--i:3]">
         <h2 id="contact" className="label">
           Contact
         </h2>
