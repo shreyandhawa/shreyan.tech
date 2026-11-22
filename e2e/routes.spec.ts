@@ -5,7 +5,7 @@ const routes = [
   "/",
   "/about/",
   "/lily/",
-  ...["lumencell", "arohexis", "nosolear", "trustory", "resauce"].map((s) => `/work/${s}/`),
+  ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/work/${s}/`),
 ];
 
 for (const [size, viewport] of [

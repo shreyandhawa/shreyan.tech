@@ -27,23 +27,17 @@ function Card({ project }: { project: Project }) {
 }
 
 export default function Home() {
-  const { headline, intro, currently, previously } = site.home;
+  const { headline, intro, currently } = site.home;
   return (
     <>
       <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
         {headline}
       </h1>
       <p className="enter mt-8 max-w-[640px] [--i:1] text-[17px] leading-[27px] text-ink-2">{intro}</p>
-      <div className="enter mt-10 grid gap-8 [--i:2] md:grid-cols-2 md:gap-12">
-        <section>
-          <h2 className="text-[14px] leading-5 text-muted">Currently</h2>
-          <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>
-        </section>
-        <section>
-          <h2 className="text-[14px] leading-5 text-muted">Previously</h2>
-          <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{previously}</p>
-        </section>
-      </div>
+      <section className="enter mt-10 max-w-[640px] [--i:2]">
+        <h2 className="text-[14px] leading-5 text-muted">Currently</h2>
+        <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>
+      </section>
 
       <section aria-labelledby="work" className="enter mt-16 [--i:3]">
         <h2 id="work" className="sr-only">

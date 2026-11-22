@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "About", description: site.about[0] }
 
 export default function About() {
   const [statement, ...body] = site.about;
-  const { email, github, city, availability } = site.contact;
+  const { email, github, linkedin, availability } = site.contact;
 
   return (
     <>
@@ -30,15 +30,16 @@ export default function About() {
           Contact
         </h2>
         <CopyEmail email={email} className="mt-3 text-[28px] leading-[34px] md:text-[44px] md:leading-[52px]" />
-        <p className="mt-3 text-[14px] text-ink">
-          <a href={github.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 hover:underline">
-            {github.label}
-            <span aria-hidden="true"> ↗</span>
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
-        </p>
-        <p className="mt-3 text-[14px] leading-[22px] text-ink-2">{city}</p>
-        <p className="text-[14px] leading-[22px] text-ink-2">{availability}</p>
+        {[github, linkedin].map((l) => (
+          <p key={l.href} className="mt-3 text-[14px] text-ink">
+            <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 hover:underline">
+              {l.label}
+              <span aria-hidden="true"> ↗</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
+        ))}
+        <p className="mt-3 text-[14px] leading-[22px] text-ink-2">{availability}</p>
       </section>
     </>
   );

@@ -120,38 +120,6 @@ const media = {
       "Concept",
     ),
   },
-  resauce: {
-    caseEvidence: img(
-      "resauce/case-evidence",
-      1728,
-      1080,
-      "ReSauce case view for synthetic case SYN-0015: a nursing note with the quoted ICE score highlighted, beside the research record, a symptom timeline from Day 0 to Day +28 and an open onset-date finding.",
-    ),
-    inspector: img(
-      "resauce/inspector",
-      1728,
-      1080,
-      "ReSauce pipeline page with a case inspector open on SYN-0015, listing an onset date mismatch and a maximum grade mismatch, each with the record value and the documented value.",
-    ),
-    reviewQueue: img(
-      "resauce/review-queue",
-      1728,
-      1080,
-      "ReSauce review queue: a list of discrepancy alerts on the left, and on the right a finding that the recorded grade is not supported by the documented evidence, with quoted source text and confirm, dismiss and needs clinician buttons.",
-    ),
-    results: img(
-      "resauce/results",
-      1728,
-      1584,
-      "ReSauce results page comparing precision, recall and exact agreement for ReSauce, Baseline A and Baseline B on the dev split and the held-out split, with a note that the data is synthetic and not clinical validation.",
-    ),
-    audit: img(
-      "resauce/audit-trail",
-      1728,
-      1080,
-      "ReSauce audit trail: an append-only table of verification runs for each synthetic case, with time, case, result and the frozen pipeline version.",
-    ),
-  },
 };
 
 export const projects: Project[] = [
@@ -167,36 +135,17 @@ export const projects: Project[] = [
       status: "Shipped, v0.2.0 on PyPI",
       year: "2026 – present",
     },
-    role: "Author. Built with AI assistance — I wrote the specification, the evaluation design and the thresholds.",
+    role: "Author.",
     timeline: "April 2026 – present",
-    status:
-      "Shipped — v0.2.0 on PyPI. Individual methods stay labelled experimental until they pass their gates.",
-    stack: [
-      "Python",
-      "scanpy",
-      "AnnData",
-      "NumPy",
-      "SciPy",
-      "pandas",
-      "PAGA + DPT",
-      "Palantir",
-      "scFates",
-      "FastAPI",
-      "pydantic",
-      "typer",
-      "React",
-      "deck.gl",
-      "pytest",
-      "hypothesis",
-      "mypy (strict)",
-    ],
+    status: "Shipped, v0.2.0 on PyPI.",
+    stack: ["Python", "scanpy", "PAGA + DPT", "Palantir", "scFates", "FastAPI", "React", "pytest"],
     code: "https://github.com/shreyandhawa/lumenCell_V2",
     sections: [
       {
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "Cells don't come with timestamps, so their order through a biological process has to be inferred — and my first attempt got it almost exactly backwards (Spearman ≈ −0.2 against known ground truth, meaning the ordering was close to reversed). I rebuilt the engine so inference runs in PCA and diffusion space rather than on the 2-D picture, and the current version reaches Spearman 0.95 on public pancreas data. Every threshold was written into `benchmarks/thresholds.toml` before any score was computed, so I couldn't move the goalposts after seeing the results; methods that miss a gate are marked experimental in the app, and some of mine are.",
+          "Cells don't come with timestamps, so their order has to be inferred. The current version reaches Spearman 0.95 on public pancreas data. My first attempt scored about −0.2 against known ground truth, close to reversed, so I rebuilt the engine to run inference in PCA and diffusion space instead of on the 2-D picture. Every threshold was written into `benchmarks/thresholds.toml` before any score was computed. Methods that miss a gate are marked experimental in the app, and some of mine are.",
         ],
         figures: [media.lumencell.pickRoot],
       },
@@ -204,7 +153,7 @@ export const projects: Project[] = [
         id: "validation",
         title: "Validation",
         paragraphs: [
-          "The part I care about most is the validation. T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together — which gives you a way to check the answer using evidence the method never saw. I score that agreement against three null models, and deliberately exclude receptor genes from feature selection so the model can't cheat by recognising clones from expression. It runs on published CD19 CAR-T data (Sheih et al. 2020) and T-cell exhaustion data (Daniel et al. 2022).",
+          "T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together. That checks the answer with evidence the method never saw. I score the agreement against three null models, and exclude receptor genes from feature selection so the model can't recognise clones from expression. Case studies: published CD19 CAR-T data (Sheih et al. 2020) and T-cell exhaustion data (Daniel et al. 2022).",
         ],
         figures: [media.lumencell.evidence],
       },
@@ -246,8 +195,8 @@ export const projects: Project[] = [
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "Everything stays on the device. No account, no sign-in, and no network requests at all — not as a promise but as a Content Security Policy that blocks them, so the claim is enforced rather than stated. Each feature is grounded in cited psychology research instead of invented mechanics.",
-          "623 tests across 73 files, including automated accessibility checks. Shipped v1.0, then kept going through v2.1, v2.2 and v2.3 after a live walkthrough turned up real bugs.",
+          "Everything stays on the device: no account, no sign-in, and no network requests, enforced by a Content Security Policy that blocks them. Each feature is grounded in cited psychology research.",
+          "623 tests across 73 files, including automated accessibility checks. Shipped v1.0, then v2.1 to v2.3 after a live walkthrough turned up real bugs.",
         ],
         figures: [media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
       },
@@ -301,7 +250,7 @@ export const projects: Project[] = [
       status: "In progress",
       year: "Fall 2026 – present",
     },
-    role: "Review interface. Team of seven — the ingestion and comparison backend is my teammates' work.",
+    role: "Review interface, in a team of seven. The ingestion and comparison backend is my teammates' work.",
     timeline: "Fall 2026 – present",
     status: "In progress",
     where:
@@ -312,36 +261,9 @@ export const projects: Project[] = [
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "My first project built with other people rather than alone. The system takes statements from text, PDFs, transcripts and other documents, stores versioned evidence, and flags claims that conflict with each other — with every flag carrying the exact source text it came from.",
-          "I'm responsible for the review interface: the views where a person compares claims side by side, and the flow for handling matches the system isn't confident about. The design principle I'm building to is that an uncertain match stays visibly unresolved rather than being quietly guessed, which means the interface has to make \"we don't know\" a first-class state rather than an error.",
+          "The system takes statements from text, PDFs, transcripts and other documents, stores versioned evidence, and flags claims that conflict, each flag carrying the exact source text it came from.",
+          "I'm building the review interface: the side-by-side view for comparing claims, and the flow for matches the system isn't confident about. An uncertain match stays visibly unresolved rather than being quietly guessed.",
         ],
-      },
-    ],
-  },
-  {
-    slug: "resauce",
-    card: media.resauce.caseEvidence,
-    hero: media.resauce.caseEvidence,
-    name: "ReSauce",
-    oneLine: "Clinical records checked against source documents",
-    listing: {
-      what: "Clinical records checked against source documents",
-      status: "Hackathon prototype, not continued",
-      year: "2026",
-    },
-    // Role and stack still to come (HANDOFF.md); their rows stay hidden until then.
-    timeline: "2026",
-    status: "Hackathon prototype, not continued",
-    stack: [],
-    code: "https://github.com/shreyandhawa/ReSauce",
-    sections: [
-      {
-        id: "overview",
-        title: "Overview",
-        paragraphs: [
-          "Checks clinical research records against the documents behind them, every finding traced to quoted text. I scored 72 synthetic ICANS cases against two baselines with the specification committed before any model was called, and the frontier-language-model baseline beat my own rules engine. The README explains why rather than hiding it. All data synthetic.",
-        ],
-        figures: [media.resauce.inspector, media.resauce.reviewQueue, media.resauce.results, media.resauce.audit],
       },
     ],
   },

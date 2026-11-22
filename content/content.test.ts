@@ -17,8 +17,8 @@ function expectMedia(m: Media) {
 }
 
 describe("projects", () => {
-  it("lists the five projects in grid order with unique slugs", () => {
-    expect(projects.map((p) => p.slug)).toEqual(["lumencell", "arohexis", "nosolear", "trustory", "resauce"]);
+  it("lists the four projects in grid order with unique slugs", () => {
+    expect(projects.map((p) => p.slug)).toEqual(["lumencell", "arohexis", "nosolear", "trustory"]);
   });
 
   it.each(projects)("$name has every field its page needs", (p) => {
@@ -43,21 +43,15 @@ describe("projects", () => {
 
   it("next project wraps around", () => {
     expect(nextProject("lumencell").slug).toBe("arohexis");
-    expect(nextProject("resauce").slug).toBe("lumencell");
+    expect(nextProject("trustory").slug).toBe("lumencell");
   });
 });
 
 describe("site", () => {
   it("has the About, Research, Education and Contact content", () => {
-    expect(site.about).toHaveLength(3);
-    expect(site.research.map((r) => r.label)).toEqual([
-      "lumenCell",
-      "Interests",
-      "Looking for",
-      "Stack I actually work in",
-      "Learning now",
-    ]);
-    expect(site.education).toHaveLength(3);
+    expect(site.about).toHaveLength(2);
+    expect(site.research.map((r) => r.label)).toEqual(["lumenCell"]);
+    expect(site.education).toHaveLength(2);
     expect(site.contact.email).toMatch(/@/);
   });
 });

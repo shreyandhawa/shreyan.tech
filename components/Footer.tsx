@@ -16,6 +16,17 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
           </a>
         </li>
         <li>
+          <a
+            href={site.contact.linkedin.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="LinkedIn ↗"
+            className="tap relative transition-colors duration-150 hover:text-ink"
+          >
+            LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </li>
+        <li>
           <a href={`mailto:${site.contact.email}`} className="tap relative transition-colors duration-150 hover:text-ink">
             Email
           </a>
