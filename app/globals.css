@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Light side */
 :root {
   --bg: #e4eae0;
   --surface: #d5ded0;
@@ -11,23 +10,6 @@
   --accent: #c21a1d;
 }
 
-/* Lily side */
-[data-side="lily"] {
-  --bg: #0b0a0c;
-  --surface: #131116;
-  --ink: #ede6da;
-  --muted: #8c8378;
-  --scarlet: #e3221b;
-  --scarlet-deep: #8e0e12;
-  --anther: #f4b63f;
-  --stem: #4f7a32;
-  /* Small scarlet text: --scarlet is 4.2:1 on --bg, under AA for 10-11px; the front petal edge colour is 5.7:1. */
-  --scarlet-light: #f4513f;
-  /* Light-side tokens some shared components use, mapped for the dark scene. */
-  --ink-2: #c9c1b4;
-  --line: #2c2830;
-}
-
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -36,11 +18,6 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
-  --color-scarlet: var(--scarlet);
-  --color-scarlet-deep: var(--scarlet-deep);
-  --color-anther: var(--anther);
-  --color-stem: var(--stem);
-  --color-scarlet-light: var(--scarlet-light);
   --font-serif: var(--font-instrument-serif);
   --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);

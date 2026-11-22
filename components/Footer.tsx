@@ -39,7 +39,6 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
           </li>
         )}
       </ul>
-      <p>{site.footerNote}</p>
     </footer>
   );
 }

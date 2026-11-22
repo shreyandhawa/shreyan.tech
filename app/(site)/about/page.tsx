@@ -11,7 +11,6 @@ export default function About() {
   return (
     <>
       <h1 className="sr-only">About</h1>
-      {/* The illustrated portrait (280x360, right of this text from md up) returns once the art exists: HANDOFF.md. */}
       <div className="enter max-w-[640px]">
         {site.about.map((p, i) => (
           <p key={p} className={`${i ? "mt-6" : ""} text-[16px] leading-[26px] text-ink-2`}>

@@ -18,13 +18,13 @@ test.describe("reduced motion", () => {
 test("page enter blurs blocks in, 40ms apart", async ({ page }) => {
   await page.goto("/");
   expect(await page.locator("h1").evaluate(animation)).toBe("enter 0.45s");
-  expect(await page.locator("h1 + p").evaluate((el) => getComputedStyle(el).animationDelay)).toBe("0.04s");
+  expect(await page.locator("h1 + section").evaluate((el) => getComputedStyle(el).animationDelay)).toBe("0.04s");
 });
 
 test("cursor shows a label over a card", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveClass(/custom-cursor/);
-  await page.locator('a[href="/work/lumencell/"]').hover();
+  await page.locator('a[href="/projects/lumencell/"]').hover();
   const label = page.getByText("View project", { exact: true });
   await expect(label).toHaveCount(1);
   await expect.poll(() => label.evaluate((el) => el.parentElement!.style.width)).not.toBe("0px");
@@ -54,8 +54,8 @@ test("a card's media morphs into the project hero", async ({ page }) => {
     }) as typeof document.startViewTransition;
   });
   await page.goto("/");
-  await page.locator('a[href="/work/lumencell/"]').click();
-  await expect(page).toHaveURL(/\/work\/lumencell\/$/);
+  await page.locator('a[href="/projects/lumencell/"]').click();
+  await expect(page).toHaveURL(/\/projects\/lumencell\/$/);
   await expect
     .poll(() => page.evaluate(() => (window as unknown as { morphs: string[] }).morphs))
     .toContain("::view-transition-group(media-lumencell)");

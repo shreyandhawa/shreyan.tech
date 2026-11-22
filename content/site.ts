@@ -52,6 +52,4 @@ export const site = {
     linkedin: { href: "https://www.linkedin.com/in/shreyan-dhawa/", label: "linkedin.com/in/shreyan-dhawa" },
     availability: "Open to summer 2027 research placements and internships",
   },
-
-  footerNote: "There is another side to this site. Try the flower.",
 };

@@ -4,8 +4,7 @@ import { expect, test } from "@playwright/test";
 const routes = [
   "/",
   "/about/",
-  "/lily/",
-  ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/work/${s}/`),
+  ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/projects/${s}/`),
 ];
 
 for (const [size, viewport] of [

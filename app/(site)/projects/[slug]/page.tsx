@@ -10,7 +10,7 @@ export function generateStaticParams() {
   return projects.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const p = getProject((await params).slug)!;
   return { title: p.name, description: p.oneLine };
 }
@@ -24,7 +24,7 @@ function Meta({ label, value, wide }: { label: string; value: string; wide?: boo
   );
 }
 
-export default async function ProjectPage({ params }: PageProps<"/work/[slug]">) {
+export default async function ProjectPage({ params }: PageProps<"/projects/[slug]">) {
   const p = getProject((await params).slug)!;
   const next = nextProject(p.slug);
   const last = p.sections.length - 1;
@@ -85,7 +85,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
         <nav aria-label="Next project" className="enter mt-16 [--i:4] border-t border-line pt-6">
           <p className="label">Next</p>
-          <Link href={`/work/${next.slug}/`} className="tap relative mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
+          <Link href={`/projects/${next.slug}/`} className="tap relative mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
             {next.name} <span aria-hidden="true">→</span>
           </Link>
         </nav>

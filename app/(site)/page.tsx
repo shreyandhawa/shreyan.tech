@@ -7,7 +7,7 @@ import { site } from "@/content/site";
 function Card({ project }: { project: Project }) {
   const { name, slug, card, listing } = project;
   return (
-    <Link href={`/work/${slug}/`} data-cursor="View project" className="group block">
+    <Link href={`/projects/${slug}/`} data-cursor="View project" className="group block">
       <ViewTransition name={`media-${slug}`} share="morph" default="none">
         {/* Lazy: the h1 is the first-screen content at every width, and the cards start below the fold on phones. */}
         <MediaFrame media={card} sizes="(min-width: 900px) 420px, 100vw" hover />
@@ -33,14 +33,14 @@ export default function Home() {
       <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
         {headline}
       </h1>
-      <section className="enter mt-10 max-w-[640px] [--i:2]">
+      <section className="enter mt-10 max-w-[640px] [--i:1]">
         <h2 className="text-[14px] leading-5 text-muted">Currently</h2>
         <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>
       </section>
 
-      <section aria-labelledby="work" className="enter mt-16 [--i:3]">
-        <h2 id="work" className="sr-only">
-          Work
+      <section aria-labelledby="projects" className="enter mt-16 [--i:2]">
+        <h2 id="projects" className="sr-only">
+          Projects
         </h2>
         {/* One list in source order, so reading and Tab order match what is on screen at every width. */}
         <div className="grid items-start gap-10 md:grid-cols-2 md:gap-x-6">

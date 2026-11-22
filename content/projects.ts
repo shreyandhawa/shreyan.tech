@@ -23,9 +23,9 @@ export type Section = {
 export type Project = {
   slug: string;
   name: string;
-  /** "One line": lead paragraph on the project page and the lily panel. */
+  /** "One line": lead paragraph on the project page. */
   oneLine: string;
-  /** Row in the main work list: card meta and description on Home. */
+  /** Row in the main project list: card meta and description on Home. */
   listing: { what: string; status: string; year: string };
   /** Hidden on the page while undefined; likewise the Stack row while `stack` is empty. */
   role?: string;

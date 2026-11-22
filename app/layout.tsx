@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Cursor } from "@/components/Cursor";
-import { Takeover } from "@/components/takeover/Takeover";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -29,14 +28,14 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "The lily side of the site: an illustrated figure with crossed arms above a field of red spider lilies, each finger labelled.",
+        alt: `${site.name}: ${site.home.headline}`,
       },
     ],
   },
   twitter: { card: "summary_large_image" },
 };
 
-// Light side --bg (globals.css); /lily sets its own.
+// --bg in globals.css.
 export const viewport: Viewport = { themeColor: "#e4eae0" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -48,7 +47,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans antialiased">
         {children}
-        <Takeover />
         <Cursor />
       </body>
     </html>

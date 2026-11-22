@@ -6,7 +6,7 @@ import { Rail } from "@/components/Rail";
 // The Resume link is hidden until public/resume.pdf exists.
 const hasResume = existsSync(join(process.cwd(), "public", "resume.pdf"));
 
-export default function LightLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a href="#content" className="sr-only z-50 bg-bg px-3 py-2 focus:not-sr-only focus:fixed focus:left-4 focus:top-4">

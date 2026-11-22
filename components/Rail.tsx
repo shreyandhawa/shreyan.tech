@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { getProject } from "@/content/projects";
-import { LilyButton } from "./LilyButton";
 import { site } from "@/content/site";
 
 type Item = { id: string; href: string; label: string };
@@ -35,14 +34,14 @@ function useActiveSection(key: string, ids: string[]) {
 
 export function Rail({ hasResume }: { hasResume: boolean }) {
   const pathname = usePathname().replace(/(.)\/$/, "$1");
-  const project = getProject(pathname.match(/^\/work\/([^/]+)/)?.[1] ?? "");
+  const project = getProject(pathname.match(/^\/projects\/([^/]+)/)?.[1] ?? "");
 
   const items: Item[] = project
     ? project.sections.length > 1
       ? project.sections.map((s) => ({ id: s.id, href: `#${s.id}`, label: s.title }))
       : []
     : [
-        { id: "/", href: "/", label: "Work" },
+        { id: "/", href: "/", label: "Projects" },
         { id: "/about", href: "/about/", label: "About" },
       ];
 
@@ -76,7 +75,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
         {project ? (
           <>
             <Link href="/" className="tap relative transition-colors duration-150 hover:text-ink">
-              <span aria-hidden="true">← </span>Work
+              <span aria-hidden="true">← </span>Projects
             </Link>
             <span aria-hidden="true" className="mx-1.5 text-muted">
               /
@@ -123,8 +122,6 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
           </ul>
         </nav>
       )}
-      {/* Inside the header so it sits in a landmark; positioned top-right either way. */}
-      <LilyButton />
     </header>
   );
 }

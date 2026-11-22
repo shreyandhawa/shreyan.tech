@@ -1,5 +1,5 @@
 // Writes an 840px-wide copy (<name>-840.avif / .webp) beside every image in public/media wider than that,
-// so small frames (Home cards, the lily panel) don't download the full screenshot. Skips copies that exist.
+// so small frames (Home cards) don't download the full screenshot. Skips copies that exist.
 // 840 is SMALL in content/projects.ts. Run after adding media: npm run media
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
