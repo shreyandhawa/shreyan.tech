@@ -4,13 +4,14 @@ import { MediaFrame } from "@/components/MediaFrame";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/content/site";
 
-function Card({ project }: { project: Project }) {
+// The first project spans both columns as the lead piece.
+function Card({ project, featured }: { project: Project; featured?: boolean }) {
   const { name, slug, card, listing } = project;
   return (
-    <Link href={`/projects/${slug}/`} data-cursor="View project" className="group block">
+    <Link href={`/projects/${slug}/`} data-cursor="View project" className={`group block ${featured ? "md:col-span-2" : ""}`}>
       <ViewTransition name={`media-${slug}`} share="morph" default="none">
         {/* Lazy: the h1 is the first-screen content at every width, and the cards start below the fold on phones. */}
-        <MediaFrame media={card} sizes="(min-width: 900px) 420px, 100vw" hover />
+        <MediaFrame media={card} sizes={featured ? "(min-width: 900px) 864px, 100vw" : "(min-width: 900px) 420px, 100vw"} hover />
       </ViewTransition>
       <p className="mt-3 text-[14px] leading-5">
         <span className="text-ink">{name}</span>
@@ -44,8 +45,8 @@ export default function Home() {
         </h2>
         {/* One list in source order, so reading and Tab order match what is on screen at every width. */}
         <div className="grid items-start gap-10 md:grid-cols-2 md:gap-x-6">
-          {projects.map((p) => (
-            <Card key={p.slug} project={p} />
+          {projects.map((p, i) => (
+            <Card key={p.slug} project={p} featured={i === 0} />
           ))}
         </div>
       </section>

@@ -61,7 +61,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
       if (!li) return void (m.style.opacity = "0");
       m.style.transition = placed.current ? "" : "none";
       m.style.opacity = "1";
-      m.style.transform = `translate(${li.offsetLeft - 13}px, ${li.offsetTop + li.offsetHeight / 2 - 2.5}px)`;
+      m.style.transform = `translate(${li.offsetLeft - 15}px, ${li.offsetTop + li.offsetHeight / 2 - 4}px)`;
       placed.current = true;
     };
     place();
@@ -94,8 +94,13 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
           <span
             ref={marker}
             aria-hidden="true"
-            className="absolute left-0 top-0 size-[5px] bg-accent opacity-0 transition-transform duration-200 ease-out motion-reduce:transition-none"
-          />
+            className="absolute left-0 top-0 size-2 text-accent opacity-0 transition-transform duration-200 ease-out motion-reduce:transition-none"
+          >
+            {/* The cursor's seed, turned to point at the link. */}
+            <svg viewBox="0 0 16 16" className="block size-full rotate-[135deg]">
+              <path d="M0 0C6 1 15 5 15 10A5 5 0 0 1 10 15C5 15 1 6 0 0Z" fill="currentColor" />
+            </svg>
+          </span>
           <ul ref={list} className="flex gap-6 text-[15px] leading-5 md:flex-col md:gap-3">
             {items.map((item) => {
               const isActive = item.id === active;

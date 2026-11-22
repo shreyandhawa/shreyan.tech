@@ -2,12 +2,12 @@
 
 export type Row = { label: string; value: string[] };
 
-const headline = "Shreyan is a computer science undergraduate working where code meets biology.";
+const headline = "Hi! I'm Shreyan Dhawa, I work with computational methods for protein and cell engineering.";
 
 export const site = {
   name: "Shreyan Dhawa",
   url: "https://shreyan.tech",
-  description: `${headline} Author of lumenCell, single-cell trajectory inference with T-cell clonotype validation.`,
+  description: `Computer science undergraduate working on computational methods for protein and cell engineering. Author of lumenCell, single-cell trajectory inference with T-cell clonotype validation.`,
 
   home: {
     headline,
