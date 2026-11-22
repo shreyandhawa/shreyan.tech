@@ -49,7 +49,7 @@ describe("projects", () => {
 
 describe("site", () => {
   it("has the About, Research, Education and Contact content", () => {
-    expect(site.about).toHaveLength(2);
+    expect(site.about).toHaveLength(4);
     expect(site.research.map((r) => r.label)).toEqual(["lumenCell"]);
     expect(site.education).toHaveLength(2);
     expect(site.contact.email).toMatch(/@/);

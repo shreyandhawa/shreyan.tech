@@ -48,8 +48,8 @@ function Body({ finger }: { finger: Finger }) {
 
   switch (finger.id) {
     case "about":
-      return site.about.map((p, i) => (
-        <p key={p} className={i ? "mt-4 text-[15px] leading-[23px] text-ink-2" : "mt-4 font-serif text-[22px] leading-[29px] text-ink"}>
+      return site.about.map((p) => (
+        <p key={p} className="mt-4 text-[15px] leading-[23px] text-ink-2">
           {p}
         </p>
       ));

@@ -6,23 +6,21 @@ import { site } from "@/content/site";
 export const metadata: Metadata = { title: "About", description: site.about[0] };
 
 export default function About() {
-  const [statement, ...body] = site.about;
-  const { email, github, linkedin, availability } = site.contact;
+  const { email, github, linkedin } = site.contact;
 
   return (
     <>
       <h1 className="sr-only">About</h1>
       {/* The illustrated portrait (280x360, right of this text from md up) returns once the art exists: HANDOFF.md. */}
       <div className="enter max-w-[640px]">
-        <p className="font-serif text-[26px] leading-[34px] tracking-[-0.3px] text-ink md:text-[32px] md:leading-[42px]">{statement}</p>
-        {body.map((p) => (
-          <p key={p} className="mt-6 text-[16px] leading-[26px] text-ink-2">
+        {site.about.map((p, i) => (
+          <p key={p} className={`${i ? "mt-6" : ""} text-[16px] leading-[26px] text-ink-2`}>
             {p}
           </p>
         ))}
       </div>
 
-      <Rows title="Research" rows={site.research} className="enter mt-16 [--i:1]" />
+      <Rows title="Independent research" rows={site.research} className="enter mt-16 [--i:1]" />
       <Rows title="Education" rows={site.education} className="enter mt-16 [--i:2]" />
 
       <section aria-labelledby="contact" className="enter mt-16 [--i:3]">
@@ -39,7 +37,6 @@ export default function About() {
             </a>
           </p>
         ))}
-        <p className="mt-3 text-[14px] leading-[22px] text-ink-2">{availability}</p>
       </section>
     </>
   );

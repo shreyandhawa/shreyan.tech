@@ -2,8 +2,7 @@
 
 export type Row = { label: string; value: string[] };
 
-const headline =
-  "Shreyan is a computer science undergraduate, minoring in biology and mathematics, focused on computational biology.";
+const headline = "Shreyan is a computer science undergraduate working where code meets biology.";
 
 export const site = {
   name: "Shreyan Dhawa",
@@ -12,14 +11,14 @@ export const site = {
 
   home: {
     headline,
-    intro:
-      "Methods that reconstruct which cells came from which ancestor, and how they changed over time, are easy to get wrong and hard to check. I build the tools, then I try to break them.",
-    currently: "lumenCell v0.2.0, released on PyPI. Looking for summer 2027 research in computational immuno-oncology.",
+    currently: "Junior at USM, open to research opportunities.",
   },
 
   about: [
-    "I'm a computer science undergraduate at the University of Southern Mississippi, minoring in biology and mathematics. I work on single-cell biology, on the gap between a result and whether you should believe it.",
-    "I build with AI assistance and say so plainly. What I own is the part that decides whether a result is real: the specification, the evaluation design, the thresholds written before any score, and the checks allowed to fail. In lumenCell some of them fail, and the app says so.",
+    "I'm a compsci undergrad at USM, currently a junior, studying computational tools to solve problems in biology.",
+    "I'm a student, but I have solid foundations in bioinformatics, computer science and maths. I enjoy working at the intersection of these fields to help out biology however much I can.",
+    "Outside of this, I love building hobby projects that put my creative brain to the test using AI tools, and I enjoy playing chess.",
+    "Open to research and computational lab work. Reach out if you have something fun in mind that intersects with my profile.",
   ],
 
   research: [

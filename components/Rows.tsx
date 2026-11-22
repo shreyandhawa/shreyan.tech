@@ -2,7 +2,7 @@ import type { Row } from "@/content/site";
 
 /** Label and value rows separated by hairlines; stacked when the container is narrow. Without a title, the caller supplies the heading. */
 export function Rows({ title, rows, className = "" }: { title?: string; rows: Row[]; className?: string }) {
-  const id = title && `rows-${title.toLowerCase()}`;
+  const id = title && `rows-${title.toLowerCase().replaceAll(" ", "-")}`;
   return (
     <section aria-labelledby={id} className={`@container ${className}`}>
       {title && (
