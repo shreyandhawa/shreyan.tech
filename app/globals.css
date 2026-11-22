@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
+/* Light side */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #e4eae0;
+  --surface: #d5ded0;
+  --ink: #1e2a22;
+  --ink-2: #3e4b41;
+  --muted: #5c6a5e;
+  --line: #c6d0c2;
+  --accent: #c21a1d;
+}
+
+/* Lily side */
+[data-side="lily"] {
+  --bg: #0b0a0c;
+  --surface: #131116;
+  --ink: #ede6da;
+  --muted: #8c8378;
+  --scarlet: #e3221b;
+  --scarlet-deep: #8e0e12;
+  --anther: #f4b63f;
+  --stem: #4f7a32;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-scarlet: var(--scarlet);
+  --color-scarlet-deep: var(--scarlet-deep);
+  --color-anther: var(--anther);
+  --color-stem: var(--stem);
+  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
 }
