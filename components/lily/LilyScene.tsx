@@ -101,16 +101,17 @@ export function LilyScene() {
     const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
     tl.fromTo([back.current, front.current], { yPercent: 30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6 }, 0)
       .fromTo(all("#character"), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4 }, 0)
-      .fromTo(all("#forearm-right, #hand-left"), { rotation: 49, svgOrigin: "850 680" }, { rotation: 0, svgOrigin: "850 680", duration: 0.35 }, 0.1)
-      .fromTo(all("#forearm-left, #hand-right"), { rotation: -49, svgOrigin: "590 680" }, { rotation: 0, svgOrigin: "590 680", duration: 0.35 }, 0.1)
-      .fromTo(all("[data-intro=line]"), { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.25, stagger: 0.03 }, 0.3)
+      // Forearms start hanging from the elbows and swing up across the body into the cross.
+      .fromTo(all("#forearm-right, #hand-left"), { rotation: -135, svgOrigin: "850 680" }, { rotation: 0, svgOrigin: "850 680", duration: 0.4 }, 0.05)
+      .fromTo(all("#forearm-left, #hand-right"), { rotation: 135, svgOrigin: "590 680" }, { rotation: 0, svgOrigin: "590 680", duration: 0.4 }, 0.05)
+      .fromTo(all("[data-intro=line]"), { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.25, stagger: 0.03 }, 0.4)
       .fromTo(
         all("[data-intro=label]"),
         { opacity: 0, y: 6 },
         { opacity: 1, y: 0, duration: 0.2, stagger: (_i: number, target: HTMLElement) => Number(target.dataset.row) * 0.06 },
-        0.35,
+        0.45,
       )
-      .fromTo(all("[data-intro=chrome]"), { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.4);
+      .fromTo(all("[data-intro=chrome]"), { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.45);
     tl.progress(arriving ? 0 : 1);
     const unregister = registerScene(tl);
     return () => {
