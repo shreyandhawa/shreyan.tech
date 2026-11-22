@@ -31,6 +31,10 @@ describe("field", () => {
     expect(f.front.filter((x) => x.blur && x.y > 900)).toHaveLength(3);
   });
 
+  it("halves flower counts at density 0.5", () => {
+    expect(field(1440, 900, 1, 0.5).mid.length).toBe(Math.round(f.mid.length / 2));
+  });
+
   it("scales flower counts with the viewport width", () => {
     const narrow = field(720, 900);
     expect(narrow.mid.length).toBeLessThan(f.mid.length);

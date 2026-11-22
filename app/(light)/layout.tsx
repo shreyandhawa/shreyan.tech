@@ -1,7 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { Footer } from "@/components/Footer";
-import { LilyButton } from "@/components/LilyButton";
 import { Rail } from "@/components/Rail";
 
 // The Resume link is hidden until public/resume.pdf exists.
@@ -14,7 +13,6 @@ export default function LightLayout({ children }: { children: React.ReactNode })
         Skip to content
       </a>
       <Rail hasResume={hasResume} />
-      <LilyButton />
       <div className="px-4 md:pl-[200px] md:pr-[72px] lg:pl-[288px]">
         <main id="content" className="max-w-[864px] pt-12 md:pt-[220px]">
           {children}

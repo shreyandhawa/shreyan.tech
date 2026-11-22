@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { getProject } from "@/content/projects";
+import { LilyButton } from "./LilyButton";
 import { site } from "@/content/site";
 
 type Item = { id: string; href: string; label: string };
@@ -122,6 +123,8 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
           </ul>
         </nav>
       )}
+      {/* Inside the header so it sits in a landmark; positioned top-right either way. */}
+      <LilyButton />
     </header>
   );
 }

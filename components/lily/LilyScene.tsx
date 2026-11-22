@@ -14,6 +14,7 @@ import { fingers, isFingerId, lily, type FingerId, type Hand } from "@/content/l
 import { site } from "@/content/site";
 import { drift, field, petals } from "@/lib/lilies/field";
 import { fitCanvas, LilyPainter, paintPetals, type Flower } from "@/lib/lilies/paint";
+import { density, frameMeter, perf } from "@/lib/lilies/perf";
 import { LilyPanel } from "./LilyPanel";
 
 // --- URL hash as the source of truth for the selected finger -------------------------------------------------
@@ -53,14 +54,14 @@ export function LilyScene() {
   const k = Math.min(W / SCENE.w, H / SCENE.h);
   const [lit, setLit] = useState<FingerId | null>(null);
 
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
   const back = useRef<HTMLCanvasElement>(null);
   const front = useRef<HTMLCanvasElement>(null);
   // Arriving through the takeover: start hidden and let its clock play the arrival. Loaded directly: fade in.
   const [arriving] = useState(isArriving);
 
   useEffect(() => {
-    const f = field(W, H);
+    const f = field(W, H, 1, density());
     const b = fitCanvas(back.current!, W, H);
     // Under 900px everything sits behind the label list, so it all goes on the back canvas.
     const fr = desktop ? fitCanvas(front.current!, W, H) : b;
@@ -75,17 +76,21 @@ export function LilyScene() {
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Idle, the only ambient motion on the site: stamens sway a few degrees and petals drift. None with reduced motion.
+    // Under 40fps (perf.slow), the far layer and the blurred heads are dropped.
     const frame = (s: number) => {
       const sway = still ? undefined : (fl: Flower) => 0.04 * Math.sin(s * 0.8 + (fl.seed % 1000) / 159);
       b.ctx.clearRect(0, 0, W, H);
-      painter.draw(b.ctx, f.far, sway);
+      if (!perf.slow) painter.draw(b.ctx, f.far, sway);
       painter.draw(b.ctx, f.mid, sway);
       if (fr !== b) fr.ctx.clearRect(0, 0, W, H);
-      painter.draw(fr.ctx, f.front, sway);
+      painter.draw(fr.ctx, perf.slow ? f.front.filter((x) => !x.blur) : f.front, sway);
       paintPetals(fr.ctx, still ? scattered : drift(scattered, s, W, H));
     };
     if (still) return void frame(0);
+    // requestAnimationFrame already stops while the tab is hidden; unmounting (leaving /lily) cancels the loop.
+    const meter = frameMeter();
     let raf = requestAnimationFrame(function loop(ms) {
+      meter(ms);
       frame(ms / 1000);
       raf = requestAnimationFrame(loop);
     });
@@ -142,7 +147,7 @@ export function LilyScene() {
   const stageClass = "md:pointer-events-none md:absolute md:bottom-0 md:left-1/2 md:h-[900px] md:w-[1440px] md:origin-bottom";
 
   return (
-    <div
+    <main
       ref={root}
       data-side="lily"
       className={`fixed inset-0 flex flex-col overflow-hidden text-ink ${arriving ? "" : "animate-[fade-in_400ms_ease-out_both]"}`}
@@ -268,6 +273,6 @@ export function LilyScene() {
       <div data-intro="chrome">
         <LilyButton side="lily" />
       </div>
-    </div>
+    </main>
   );
 }

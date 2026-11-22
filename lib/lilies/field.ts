@@ -15,7 +15,8 @@ const BANDS: Band[] = [
   { layer: "front", per1440: 14, y: 842, lift: 90, r: [56, 82] },
 ];
 
-export function field(W: number, H: number, seed = 1): Field {
+/** `density` scales flower counts (0.5 on small machines); the hero and out-of-focus flowers always stay. */
+export function field(W: number, H: number, seed = 1, density = 1): Field {
   const rand = seeded(seed);
   const sy = H / 900;
   // Head size follows the smaller axis, but never so small the flowers turn to specks on a phone.
@@ -34,7 +35,7 @@ export function field(W: number, H: number, seed = 1): Field {
 
   const out: Field = { far: [], mid: [], front: [] };
   for (const band of BANDS) {
-    const n = Math.max(4, Math.round((band.per1440 * W) / 1440));
+    const n = Math.max(4, Math.round((band.per1440 * W * density) / 1440));
     for (let i = 0; i < n; i++) {
       // Even spacing with jitter, then pushed outward: |v|^0.7 packs more flowers near the edges.
       const v = ((i + 0.5 + between(-0.4, 0.4)) / n) * 2 - 1;
