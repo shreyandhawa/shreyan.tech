@@ -56,3 +56,19 @@ export function field(W: number, H: number, seed = 1): Field {
   for (const list of Object.values(out)) list.sort((a: Flower, b: Flower) => a.y - b.y);
   return out;
 }
+
+export type Petal = { x: number; y: number; angle: number; length: number; sign: number; seed: number };
+
+/** A dozen fallen petals scattered over the scene, kept off the centre and anywhere `avoid` says. */
+export function petals(W: number, H: number, seed = 7, count = 12, avoid?: (x: number, y: number) => boolean): Petal[] {
+  const rand = seeded(seed);
+  const s = Math.max(0.6, Math.min(W / 1440, H / 900));
+  const out: Petal[] = [];
+  while (out.length < count) {
+    const x = rand() * W;
+    const y = (0.08 + rand() * 0.6) * H;
+    if (Math.abs(x - W / 2) < 200 * s || avoid?.(x, y)) continue;
+    out.push({ x, y, angle: rand() * Math.PI * 2, length: (14 + rand() * 10) * s, sign: rand() < 0.5 ? 1 : -1, seed: Math.floor(rand() * 2 ** 31) });
+  }
+  return out;
+}

@@ -1,7 +1,8 @@
 // Canvas 2D painting for lilies. Fully open heads are baked once into bitmaps and reused;
 // only flowers that are still opening are drawn as vectors each frame.
 
-import { headBounds, seeded, sideHead, topHead, type Head, type Point } from "./geometry";
+import type { Petal } from "./field";
+import { headBounds, ribbon, seeded, sideHead, topHead, type Head, type Point } from "./geometry";
 
 export type LayerName = "far" | "mid" | "front" | "white";
 
@@ -226,4 +227,18 @@ export function fitCanvas(canvas: HTMLCanvasElement, w: number, h: number) {
   const ctx = canvas.getContext("2d")!;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, dpr };
+}
+
+/** Fallen petals: short curled scarlet ribbons with a pale mid-rib. */
+export function paintPetals(ctx: CanvasRenderingContext2D, list: Petal[]) {
+  for (const p of list) {
+    const r = ribbon(p.x, p.y, p.angle, p.length, p.length * 0.2, 1.4, p.sign, 6, seeded(p.seed));
+    ctx.fillStyle = "#E3221B";
+    ctx.fill(smooth(r.outline));
+    ctx.strokeStyle = "#FFA595";
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    r.midrib.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.stroke();
+  }
 }

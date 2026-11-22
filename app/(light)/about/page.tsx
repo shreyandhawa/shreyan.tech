@@ -1,32 +1,9 @@
 import type { Metadata } from "next";
 import { CopyEmail } from "@/components/CopyEmail";
-import { site, type Row } from "@/content/site";
+import { Rows } from "@/components/Rows";
+import { site } from "@/content/site";
 
 export const metadata: Metadata = { title: "About", description: site.about[0] };
-
-function Rows({ title, rows, className }: { title: string; rows: Row[]; className: string }) {
-  return (
-    <section aria-labelledby={title} className={`enter mt-16 ${className}`}>
-      <h2 id={title} className="label">
-        {title}
-      </h2>
-      <dl className="mt-3">
-        {rows.map((r) => (
-          <div key={r.label} className="grid gap-1 border-b border-line py-4 md:grid-cols-[180px_1fr] md:gap-6">
-            <dt className="text-[14px] font-medium leading-[22px] text-ink">{r.label}</dt>
-            <dd className="text-[14px] leading-[22px] text-ink-2">
-              {r.value.map((v) => (
-                <p key={v} className="first-letter:uppercase">
-                  {v}
-                </p>
-              ))}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-  );
-}
 
 export default function About() {
   const [statement, ...body] = site.about;
@@ -50,14 +27,14 @@ export default function About() {
         </div>
       </div>
 
-      <Rows title="Research" rows={site.research} className="[--i:1]" />
-      <Rows title="Education" rows={site.education} className="[--i:2]" />
+      <Rows title="Research" rows={site.research} className="enter mt-16 [--i:1]" />
+      <Rows title="Education" rows={site.education} className="enter mt-16 [--i:2]" />
 
       <section aria-labelledby="contact" className="enter mt-16 [--i:3]">
         <h2 id="contact" className="label">
           Contact
         </h2>
-        <CopyEmail email={email} />
+        <CopyEmail email={email} className="mt-3 text-[28px] leading-[34px] md:text-[44px] md:leading-[52px]" />
         <p className="mt-3 text-[14px] text-ink">
           <a href={github.href} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:underline">
             {github.label}

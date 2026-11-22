@@ -21,6 +21,11 @@
   --scarlet-deep: #8e0e12;
   --anther: #f4b63f;
   --stem: #4f7a32;
+  /* Small scarlet text: --scarlet is 4.2:1 on --bg, under AA for 10-11px; the front petal edge colour is 5.7:1. */
+  --scarlet-light: #f4513f;
+  /* Light-side tokens some shared components use, mapped for the dark scene. */
+  --ink-2: #c9c1b4;
+  --line: #2c2830;
 }
 
 @theme inline {
@@ -35,6 +40,7 @@
   --color-scarlet-deep: var(--scarlet-deep);
   --color-anther: var(--anther);
   --color-stem: var(--stem);
+  --color-scarlet-light: var(--scarlet-light);
   --font-serif: var(--font-instrument-serif);
   --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
