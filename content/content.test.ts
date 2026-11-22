@@ -10,12 +10,7 @@ function expectMedia(m: Media) {
   expect(m.alt.length, `alt for ${m.src}`).toBeGreaterThan(10);
   expect(m.width).toBeGreaterThan(0);
   expect(m.height).toBeGreaterThan(0);
-  if (m.src.endsWith(".webm")) {
-    expect(existsSync(publicFile(m.src)), m.src).toBe(true);
-  } else {
-    for (const ext of [".avif", ".webp"]) expect(existsSync(publicFile(m.src + ext)), m.src + ext).toBe(true);
-  }
-  if (m.poster) expectMedia(m.poster);
+  for (const ext of [".avif", ".webp"]) expect(existsSync(publicFile(m.src + ext)), m.src + ext).toBe(true);
 }
 
 describe("projects", () => {

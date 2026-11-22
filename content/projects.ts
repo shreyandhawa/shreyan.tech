@@ -1,12 +1,11 @@
 // Project copy, word for word from the content document. Inline `backticks` render as code.
 
 export type Media = {
-  /** Path under public/ without extension for stills (served as .avif with .webp fallback), or a full .webm path for video. */
+  /** Path under public/ without extension; served as .avif with a .webp fallback. */
   src: string;
   alt: string;
   width: number;
   height: number;
-  poster?: Media;
   caption?: string;
 };
 
@@ -38,9 +37,115 @@ export type Project = {
   hero?: Media;
 };
 
+const img = (src: string, width: number, height: number, alt: string, caption?: string): Media => ({
+  src: `/media/${src}`,
+  width,
+  height,
+  alt,
+  caption,
+});
+
+const media = {
+  lumencell: {
+    playback: img(
+      "lumencell/explorer-playback",
+      1440,
+      900,
+      "lumenCell explorer in dark mode playing back pseudotime on a UMAP of 21,762 cells from Sheih 2020 patient NHL-6. The inferred tree is drawn over the cells, gene trends run underneath, and the Evidence panel reports that clones do not back these lineages.",
+    ),
+    light: img(
+      "lumencell/explorer-light",
+      1440,
+      900,
+      "lumenCell explorer in light mode showing a 3-D diffusion-space view of the cells coloured by pseudotime, with one lineage focused and the Evidence panel listing checks C1 to C5.",
+    ),
+    pickRoot: img(
+      "lumencell/explorer-pick-a-root",
+      1440,
+      900,
+      "The Pick a root step: a UMAP coloured by Leiden cluster with the root cell marked at timepoint = IP, and a Run PAGA + DPT button labelled Experimental.",
+    ),
+    evidence: img(
+      "lumencell/explorer-3d-evidence",
+      1440,
+      900,
+      "3-D view in the first three diffusion components with the focused lineage in pink, beside the Evidence panel: connectivity passes, clonal support fails, and clone agreement is scored against three null models.",
+    ),
+  },
+  arohexis: {
+    home: img(
+      "arohexis/home-desktop",
+      1440,
+      900,
+      "Arohexis home screen in demo mode: a glowing side view of a brain drawn from coloured lines, one colour per area of life, beside a Light a line button and a count of 10 starts this week.",
+    ),
+    insights: img(
+      "arohexis/insights-desktop",
+      1440,
+      900,
+      "Arohexis Insights page with a bar chart of starts per week over 11 weeks, a strip showing most starts happen around 9 AM, and a breakdown of feelings.",
+    ),
+    started: img(
+      "arohexis/started-desktop",
+      1440,
+      900,
+      "The screen after starting a task: the word Started, the line That's the hard part, a two-minute timer and a choice of which area the start belongs to.",
+    ),
+    phone: img(
+      "arohexis/home-phone",
+      750,
+      1624,
+      "Arohexis home screen on a phone: the line brain above category filters, a Check in prompt and the Light a line button.",
+    ),
+  },
+  nosolear: {
+    plan: img(
+      "nosolear/plan-sketch",
+      1728,
+      1199,
+      "Diagram of the speaking coach plan: a 15-minute daily loop of speak, analyze, feedback, drill and log, the three skills it trains, the services under the hood, and the build order from baseline to progress.",
+      "App plan",
+    ),
+  },
+  resauce: {
+    caseEvidence: img(
+      "resauce/case-evidence",
+      1728,
+      1080,
+      "ReSauce case view for synthetic case SYN-0015: a nursing note with the quoted ICE score highlighted, beside the research record, a symptom timeline from Day 0 to Day +28 and an open onset-date finding.",
+    ),
+    inspector: img(
+      "resauce/inspector",
+      1728,
+      1080,
+      "ReSauce pipeline page with a case inspector open on SYN-0015, listing an onset date mismatch and a maximum grade mismatch, each with the record value and the documented value.",
+    ),
+    reviewQueue: img(
+      "resauce/review-queue",
+      1728,
+      1080,
+      "ReSauce review queue: a list of discrepancy alerts on the left, and on the right a finding that the recorded grade is not supported by the documented evidence, with quoted source text and confirm, dismiss and needs clinician buttons.",
+    ),
+    results: img(
+      "resauce/results",
+      1728,
+      1584,
+      "ReSauce results page comparing precision, recall and exact agreement for ReSauce, Baseline A and Baseline B on the dev split and the held-out split, with a note that the data is synthetic and not clinical validation.",
+    ),
+    audit: img(
+      "resauce/audit-trail",
+      1728,
+      1080,
+      "ReSauce audit trail: an append-only table of verification runs for each synthetic case, with time, case, result and the frozen pipeline version.",
+    ),
+  },
+};
+
 export const projects: Project[] = [
   {
     slug: "lumencell",
+    card: media.lumencell.light,
+    hero: media.lumencell.playback,
     name: "lumenCell",
     oneLine:
       "Interactive explorer for pseudotime and lineage trajectories in single-cell RNA-seq data.",
@@ -80,6 +185,7 @@ export const projects: Project[] = [
         paragraphs: [
           "Cells don't come with timestamps, so their order through a biological process has to be inferred — and my first attempt got it almost exactly backwards (Spearman ≈ −0.2 against known ground truth, meaning the ordering was close to reversed). I rebuilt the engine so inference runs in PCA and diffusion space rather than on the 2-D picture, and the current version reaches Spearman 0.95 on public pancreas data. Every threshold was written into `benchmarks/thresholds.toml` before any score was computed, so I couldn't move the goalposts after seeing the results; methods that miss a gate are marked experimental in the app, and some of mine are.",
         ],
+        figures: [media.lumencell.pickRoot],
       },
       {
         id: "validation",
@@ -87,6 +193,7 @@ export const projects: Project[] = [
         paragraphs: [
           "The part I care about most is the validation. T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together — which gives you a way to check the answer using evidence the method never saw. I score that agreement against three null models, and deliberately exclude receptor genes from feature selection so the model can't cheat by recognising clones from expression. It runs on published CD19 CAR-T data (Sheih et al. 2020) and T-cell exhaustion data (Daniel et al. 2022).",
         ],
+        figures: [media.lumencell.evidence],
       },
       {
         id: "try-it",
@@ -98,6 +205,9 @@ export const projects: Project[] = [
   },
   {
     slug: "arohexis",
+    card: media.arohexis.home,
+    // replay.webm was tried as the hero: it records a phone-width column, so it reads poorly at 864px.
+    hero: media.arohexis.home,
     name: "Arohexis",
     oneLine: "Installable app for chronic procrastination, with no account and no network requests.",
     listing: {
@@ -126,11 +236,14 @@ export const projects: Project[] = [
           "Everything stays on the device. No account, no sign-in, and no network requests at all — not as a promise but as a Content Security Policy that blocks them, so the claim is enforced rather than stated. Each feature is grounded in cited psychology research instead of invented mechanics.",
           "623 tests across 73 files, including automated accessibility checks. Shipped v1.0, then kept going through v2.1, v2.2 and v2.3 after a live walkthrough turned up real bugs.",
         ],
+        figures: [media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
       },
     ],
   },
   {
     slug: "nosolear",
+    card: media.nosolear.plan,
+    hero: media.nosolear.plan,
     name: "Nosolear",
     oneLine:
       "Local-first speaking coach that scores pronunciation and plans the next day's practice.",
@@ -192,6 +305,8 @@ export const projects: Project[] = [
   },
   {
     slug: "resauce",
+    card: media.resauce.caseEvidence,
+    hero: media.resauce.caseEvidence,
     name: "ReSauce",
     oneLine: "Clinical records checked against source documents",
     listing: {
@@ -211,6 +326,7 @@ export const projects: Project[] = [
         paragraphs: [
           "Checks clinical research records against the documents behind them, every finding traced to quoted text. I scored 72 synthetic ICANS cases against two baselines with the specification committed before any model was called, and the frontier-language-model baseline beat my own rules engine. The README explains why rather than hiding it. All data synthetic.",
         ],
+        figures: [media.resauce.inspector, media.resauce.reviewQueue, media.resauce.results, media.resauce.audit],
       },
     ],
   },
