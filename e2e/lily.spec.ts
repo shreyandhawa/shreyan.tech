@@ -135,3 +135,32 @@ test.describe("reduced motion", () => {
     expect(style).toEqual({ delay: "0s", duration: "0.15s", translate: "none" });
   });
 });
+
+// Idle: petals drift and stamens sway on the canvases; with reduced motion nothing moves.
+const canvasHash = (page: Page) =>
+  page.evaluate(() => {
+    const c = document.querySelectorAll<HTMLCanvasElement>("[data-side=lily] canvas")[1];
+    const d = c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data;
+    let h = 0;
+    for (let i = 0; i < d.length; i += 97) h = (h * 31 + d[i]) | 0;
+    return h;
+  });
+
+test("idle: the lilies sway and petals drift", async ({ page }) => {
+  await page.goto("/lily/");
+  await page.waitForTimeout(600);
+  const a = await canvasHash(page);
+  await page.waitForTimeout(500);
+  expect(await canvasHash(page)).not.toBe(a);
+});
+
+test.describe("reduced motion, idle", () => {
+  test.use({ reducedMotion: "reduce" });
+  test("nothing moves", async ({ page }) => {
+    await page.goto("/lily/");
+    await page.waitForTimeout(600);
+    const a = await canvasHash(page);
+    await page.waitForTimeout(500);
+    expect(await canvasHash(page)).toBe(a);
+  });
+});

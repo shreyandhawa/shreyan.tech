@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CopyEmail } from "@/components/CopyEmail";
 import { MediaFrame } from "@/components/MediaFrame";
 import { Rows } from "@/components/Rows";
+import { centreOf, unbloom } from "@/components/takeover/controller";
 import { lily, type Finger } from "@/content/lily";
 import { getProject } from "@/content/projects";
 import { site } from "@/content/site";
@@ -26,7 +27,16 @@ function Body({ finger }: { finger: Finger }) {
           ))}
         </ul>
         <p className="mt-6">
-          <Link href={`/work/${project.slug}/`} className="text-[14px] font-medium text-ink underline-offset-4 hover:underline">
+          {/* Plays the return transition and lands on the case study. */}
+          <Link
+            href={`/work/${project.slug}/`}
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+              const button = document.querySelector("[data-lily-button]");
+              if (unbloom(button ? centreOf(button) : centreOf(e.currentTarget), `/work/${project.slug}/`)) e.preventDefault();
+            }}
+            className="text-[14px] font-medium text-ink underline-offset-4 hover:underline"
+          >
             {lily.openCaseStudy}
           </Link>
         </p>

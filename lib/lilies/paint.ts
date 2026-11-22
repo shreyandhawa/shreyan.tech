@@ -4,7 +4,7 @@
 import type { Petal } from "./field";
 import { headBounds, ribbon, seeded, sideHead, topHead, type Head, type Point } from "./geometry";
 
-export type LayerName = "far" | "mid" | "front" | "white";
+export type LayerName = "far" | "mid" | "front" | "white" | "red";
 
 type Style = {
   view: "side" | "top";
@@ -49,6 +49,17 @@ export const STYLES: Record<LayerName, Style> = {
     glow: true,
   },
   white: { view: "top", florets: 6, petals: 4, fill: "#FFFFFF", outline: ["#B9B6A6", 0.7], stamen: "#A9AC9C", anther: "#D8BE6A", shadow: true },
+  // A takeover flower once the dark front reaches it: the front layer's colours, seen from above.
+  red: {
+    view: "top",
+    florets: 6,
+    petals: 4,
+    fill: ["#8E0E12", "#E3221B", "#F4513F"],
+    outline: ["#5A0609", 0.7],
+    stamen: "#E8452F",
+    anther: "#F4B63F",
+    midrib: "#FFA595",
+  },
 };
 
 export type Flower = {
@@ -137,12 +148,13 @@ export function paintHead(ctx: CanvasRenderingContext2D, head: Head, f: Flower) 
   ctx.fill(anthers);
 }
 
-export function paintStem(ctx: CanvasRenderingContext2D, f: Flower) {
+/** Stem from the ground to the head; `dx` moves the head end sideways (sway). */
+export function paintStem(ctx: CanvasRenderingContext2D, f: Flower, dx = 0) {
   const color = STYLES[f.layer].stem;
   if (!color || !f.stem) return;
   const { x, y, bend } = f.stem;
   ctx.beginPath();
-  ctx.moveTo(f.x, f.y + f.R * 0.05);
+  ctx.moveTo(f.x + dx, f.y + f.R * 0.05);
   ctx.quadraticCurveTo((f.x + x) / 2 + bend, (f.y + y) / 2, x, y);
   ctx.strokeStyle = color;
   ctx.lineWidth = Math.max(1, f.R * 0.05);
@@ -195,26 +207,47 @@ function bake(f: Flower, dpr: number): Sprite {
   return { img, glow, x, y, w, h };
 }
 
-/** Draws flowers in order: each stem, then its head (cached bitmap when open, vectors while opening). */
+/** Draws flowers: each head from a cached bitmap once fully open, or as vectors while it opens. */
 export class LilyPainter {
   private sprites = new Map<Flower, Sprite>();
   constructor(private dpr: number) {}
 
-  draw(ctx: CanvasRenderingContext2D, flowers: Flower[]) {
+  /** One head, no stem. */
+  drawHead(ctx: CanvasRenderingContext2D, f: Flower) {
+    if (f.open < 1) {
+      if (f.open > 0) paintHead(ctx, buildHead(f), f);
+      return;
+    }
+    let sprite = this.sprites.get(f);
+    if (!sprite) this.sprites.set(f, (sprite = bake(f, this.dpr)));
+    if (sprite.glow) {
+      ctx.globalCompositeOperation = "screen";
+      ctx.drawImage(sprite.glow, sprite.x, sprite.y, sprite.w, sprite.h);
+      ctx.globalCompositeOperation = "source-over";
+    }
+    ctx.drawImage(sprite.img, sprite.x, sprite.y, sprite.w, sprite.h);
+  }
+
+  /**
+   * Stems then heads, in order. `sway` gives each flower a small angle (radians): the head leans and tilts by it
+   * and the stem follows, so the stamens sway a few degrees without redrawing the cached bitmap.
+   */
+  draw(ctx: CanvasRenderingContext2D, flowers: Flower[], sway?: (f: Flower) => number) {
     for (const f of flowers) {
-      paintStem(ctx, f);
-      if (f.open < 1) {
-        if (f.open > 0) paintHead(ctx, buildHead(f), f);
+      const a = sway?.(f) ?? 0;
+      if (!a) {
+        paintStem(ctx, f);
+        this.drawHead(ctx, f);
         continue;
       }
-      let sprite = this.sprites.get(f);
-      if (!sprite) this.sprites.set(f, (sprite = bake(f, this.dpr)));
-      if (sprite.glow) {
-        ctx.globalCompositeOperation = "screen";
-        ctx.drawImage(sprite.glow, sprite.x, sprite.y, sprite.w, sprite.h);
-        ctx.globalCompositeOperation = "source-over";
-      }
-      ctx.drawImage(sprite.img, sprite.x, sprite.y, sprite.w, sprite.h);
+      const dx = a * (f.stem ? (f.stem.y - f.y) * 0.12 : 0);
+      paintStem(ctx, f, dx);
+      ctx.save();
+      ctx.translate(f.x + dx, f.y);
+      ctx.rotate(a);
+      ctx.translate(-f.x, -f.y);
+      this.drawHead(ctx, f);
+      ctx.restore();
     }
   }
 }

@@ -72,3 +72,18 @@ export function petals(W: number, H: number, seed = 7, count = 12, avoid?: (x: n
   }
   return out;
 }
+
+/** Petals drifting slowly down and to the right at time s (seconds), wrapping at the edges. */
+export function drift(list: Petal[], s: number, W: number, H: number): Petal[] {
+  return list.map((p) => {
+    const vx = 6 + (p.seed % 9);
+    const vy = 4 + (p.seed % 7);
+    const wrap = (v: number, max: number) => ((((v + 30) % (max + 60)) + (max + 60)) % (max + 60)) - 30;
+    return {
+      ...p,
+      x: wrap(p.x + vx * s + 6 * Math.sin(s * 0.4 + p.seed), W),
+      y: wrap(p.y + vy * s, H),
+      angle: p.angle + 0.25 * Math.sin(s * 0.3 + p.seed) + 0.05 * s * p.sign,
+    };
+  });
+}

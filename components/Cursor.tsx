@@ -10,6 +10,8 @@ const subscribe = (onChange: () => void) => {
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 };
+/** Dispatch on window when the page under the pointer changed without the pointer moving. */
+export const CURSOR_REFRESH = "cursor-refresh";
 // Over these the system cursor comes back and ours hides (matches the CSS in globals.css).
 const SYSTEM = "input, textarea, select, [contenteditable], pre, [data-cursor-system]";
 
@@ -34,7 +36,8 @@ export function Cursor() {
     let target: Element | null = null;
     let label = "";
     let labelWidth = 0;
-    let x = 0;
+    let x = -1;
+    let y = -1;
     const update = () => {
       el.style.opacity = target && !target.closest(SYSTEM) ? "1" : "0";
       el.dataset.accent = String(!!target?.closest("[data-cursor-accent]"));
@@ -51,6 +54,7 @@ export function Cursor() {
     };
     const move = (e: PointerEvent) => {
       x = e.clientX;
+      y = e.clientY;
       el.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       target = e.target instanceof Element ? e.target : null;
       update();
@@ -59,6 +63,13 @@ export function Cursor() {
       target = null;
       update();
     };
+    // The page can change under a still pointer (the takeover swaps routes): look again at what is under it.
+    const refresh = () => {
+      if (x < 0) return;
+      target = document.elementFromPoint(x, y);
+      update();
+    };
+    addEventListener(CURSOR_REFRESH, refresh);
     // Labels can change under a still pointer ("Copy email" → "Copied").
     const observer = new MutationObserver(update);
     observer.observe(document.body, { subtree: true, attributeFilter: ["data-cursor"] });
@@ -67,6 +78,7 @@ export function Cursor() {
     html.addEventListener("pointerleave", leave);
     return () => {
       observer.disconnect();
+      removeEventListener(CURSOR_REFRESH, refresh);
       removeEventListener("pointermove", move);
       html.removeEventListener("pointerleave", leave);
       html.classList.remove("custom-cursor");

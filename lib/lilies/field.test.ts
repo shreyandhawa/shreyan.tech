@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { field } from "./field";
+import { drift, field, petals } from "./field";
 
 describe("field", () => {
   const f = field(1440, 900);
@@ -35,5 +35,21 @@ describe("field", () => {
     const narrow = field(720, 900);
     expect(narrow.mid.length).toBeLessThan(f.mid.length);
     expect(narrow.mid.length).toBeGreaterThan(0);
+  });
+});
+
+describe("drift", () => {
+  it("moves petals slowly and keeps them on screen", () => {
+    const start = petals(1440, 900);
+    const later = drift(start, 120, 1440, 900);
+    expect(later).toHaveLength(start.length);
+    for (const p of later) {
+      expect(p.x).toBeGreaterThanOrEqual(-30);
+      expect(p.x).toBeLessThanOrEqual(1440 + 30);
+      expect(p.y).toBeGreaterThanOrEqual(-30);
+      expect(p.y).toBeLessThanOrEqual(900 + 30);
+    }
+    const oneSecond = drift(start, 1, 1440, 900);
+    oneSecond.forEach((p, i) => expect(Math.hypot(p.x - start[i].x, p.y - start[i].y)).toBeLessThan(30));
   });
 });

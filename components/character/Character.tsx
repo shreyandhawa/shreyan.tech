@@ -149,7 +149,7 @@ export function Character({ viewBox = `0 0 ${SCENE.w} ${SCENE.h}`, className, ..
 
   const wrist = (hand: Hand) => toScene(hand, [0, 40]);
   return (
-    <svg ref={svg} viewBox={viewBox} aria-hidden="true" className={className}>
+    <svg ref={svg} id="character" viewBox={viewBox} aria-hidden="true" className={className}>
       <g id="torso">
         <rect x={700} y={300} width={40} height={60} fill="var(--surface)" stroke="var(--ink)" strokeWidth={LINE} />
         <path
