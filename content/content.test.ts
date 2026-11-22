@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { nextProject, projects, type Media } from "./projects";
+import { SMALL, nextProject, projects, type Media } from "./projects";
 import { site } from "./site";
 
 const publicFile = (src: string) => join(import.meta.dirname, "..", "public", src);
@@ -10,7 +10,10 @@ function expectMedia(m: Media) {
   expect(m.alt.length, `alt for ${m.src}`).toBeGreaterThan(10);
   expect(m.width).toBeGreaterThan(0);
   expect(m.height).toBeGreaterThan(0);
-  for (const ext of [".avif", ".webp"]) expect(existsSync(publicFile(m.src + ext)), m.src + ext).toBe(true);
+  for (const ext of [".avif", ".webp"]) {
+    expect(existsSync(publicFile(m.src + ext)), m.src + ext).toBe(true);
+    if (m.width > SMALL) expect(existsSync(publicFile(`${m.src}-${SMALL}${ext}`)), `${m.src}-${SMALL}${ext}: run npm run media`).toBe(true);
+  }
 }
 
 describe("projects", () => {
@@ -19,10 +22,12 @@ describe("projects", () => {
   });
 
   it.each(projects)("$name has every field its page needs", (p) => {
-    for (const field of [p.name, p.oneLine, p.role, p.timeline, p.status, ...Object.values(p.listing)]) {
+    for (const field of [p.name, p.oneLine, p.timeline, p.status, ...Object.values(p.listing)]) {
       expect(field.trim()).not.toBe("");
     }
-    expect(p.stack.length).toBeGreaterThan(0);
+    if (p.role !== undefined) expect(p.role.trim()).not.toBe("");
+    // Missing facts are left out (their rows hide), never shipped as placeholders.
+    expect(JSON.stringify(p)).not.toMatch(/TODO/);
     expect(p.sections[0]?.title).toBe("Overview");
     for (const s of p.sections) expect(s.paragraphs.length + (s.commands?.length ?? 0)).toBeGreaterThan(0);
     if (p.code) expect(p.code).toMatch(/^https:\/\/github\.com\/shreyandhawa\//);

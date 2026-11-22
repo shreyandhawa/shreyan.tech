@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { Cursor } from "@/components/Cursor";
 import { Takeover } from "@/components/takeover/Takeover";
@@ -35,6 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
 };
+
+// Light side --bg (globals.css); /lily sets its own.
+export const viewport: Viewport = { themeColor: "#e4eae0" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -42,11 +42,11 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         <p className="enter mt-4 text-[17px] [--i:1] leading-[27px] text-ink-2">{p.oneLine}</p>
 
         <dl className="enter mt-10 grid gap-6 md:grid-cols-3 [--i:2]">
-          <Meta label="Role" value={p.role} />
+          {p.role && <Meta label="Role" value={p.role} />}
           <Meta label="Timeline" value={p.timeline} />
           <Meta label="Status" value={p.status} />
           {p.where && <Meta label="Where" value={p.where} wide />}
-          <Meta label="Stack" value={p.stack.join(" · ")} wide />
+          {p.stack.length > 0 && <Meta label="Stack" value={p.stack.join(" · ")} wide />}
         </dl>
 
         <div className="enter [--i:3]">
@@ -72,7 +72,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
               ))}
               {i === last && p.code && (
                 <p className="mt-5 text-[14px] text-ink">
-                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="underline-offset-4 transition-colors duration-150 hover:underline">
+                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
                     Code: {p.code.replace("https://", "")}
                     <span aria-hidden="true"> ↗</span>
                     <span className="sr-only"> (opens in a new tab)</span>
@@ -85,7 +85,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
         <nav aria-label="Next project" className="enter mt-16 [--i:4] border-t border-line pt-6">
           <p className="label">Next</p>
-          <Link href={`/work/${next.slug}/`} className="mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
+          <Link href={`/work/${next.slug}/`} className="tap relative mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
             {next.name} <span aria-hidden="true">→</span>
           </Link>
         </nav>

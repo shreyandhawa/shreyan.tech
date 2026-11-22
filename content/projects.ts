@@ -1,5 +1,8 @@
 // Project copy, word for word from the content document. Inline `backticks` render as code.
 
+/** Width of the smaller copy (`<src>-840.avif`/`.webp`) that `npm run media` writes beside every wider image. */
+export const SMALL = 840;
+
 export type Media = {
   /** Path under public/ without extension; served as .avif with a .webp fallback. */
   src: string;
@@ -24,7 +27,8 @@ export type Project = {
   oneLine: string;
   /** Row in the main work list: card meta and description on Home. */
   listing: { what: string; status: string; year: string };
-  role: string;
+  /** Hidden on the page while undefined; likewise the Stack row while `stack` is empty. */
+  role?: string;
   timeline: string;
   status: string;
   where?: string;
@@ -105,6 +109,15 @@ const media = {
       1199,
       "Diagram of the speaking coach plan: a 15-minute daily loop of speak, analyze, feedback, drill and log, the three skills it trains, the services under the hood, and the build order from baseline to progress.",
       "App plan",
+    ),
+  },
+  trustory: {
+    concept: img(
+      "trustory/concept",
+      1728,
+      1080,
+      "Diagram of what TruStory does: a statement in document A is linked to a contradicting statement in document B and flagged as a conflict; a second pair, matched without confidence, is linked by a dashed line and left unresolved.",
+      "Concept",
     ),
   },
   resauce: {
@@ -278,6 +291,8 @@ export const projects: Project[] = [
   },
   {
     slug: "trustory",
+    card: media.trustory.concept,
+    hero: media.trustory.concept,
     name: "TruStory",
     oneLine:
       "Compares statements across documents and flags conflicting claims, each tied to its source.",
@@ -314,10 +329,10 @@ export const projects: Project[] = [
       status: "Hackathon prototype, not continued",
       year: "2026",
     },
-    role: "TODO: role",
+    // Role and stack still to come (HANDOFF.md); their rows stay hidden until then.
     timeline: "2026",
     status: "Hackathon prototype, not continued",
-    stack: ["TODO: stack"],
+    stack: [],
     code: "https://github.com/shreyandhawa/ReSauce",
     sections: [
       {

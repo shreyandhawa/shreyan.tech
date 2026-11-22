@@ -75,7 +75,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
       <p className="flex h-10 items-center text-[14px] text-ink-2 md:absolute md:left-8 md:top-8 md:block md:h-auto">
         {project ? (
           <>
-            <Link href="/" className="transition-colors duration-150 hover:text-ink">
+            <Link href="/" className="tap relative transition-colors duration-150 hover:text-ink">
               <span aria-hidden="true">← </span>Work
             </Link>
             <span aria-hidden="true" className="mx-1.5 text-muted">
@@ -84,7 +84,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
             <span className="text-muted">{project.name}</span>
           </>
         ) : (
-          <Link href="/" className="transition-colors duration-150 hover:text-ink">
+          <Link href="/" className="tap relative transition-colors duration-150 hover:text-ink">
             {site.name}
           </Link>
         )}
@@ -105,7 +105,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
                   <Link
                     href={item.href}
                     aria-current={isActive ? (project ? "location" : "page") : undefined}
-                    className={`transition-colors duration-150 hover:text-ink ${isActive ? "text-ink" : "text-muted"}`}
+                    className={`tap relative transition-colors duration-150 hover:text-ink ${isActive ? "text-ink" : "text-muted"}`}
                   >
                     {item.label}
                   </Link>
@@ -114,7 +114,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
             })}
             {!project && hasResume && (
               <li>
-                <a href="/resume.pdf" target="_blank" rel="noopener" className="text-muted transition-colors duration-150 hover:text-ink">
+                <a href="/resume.pdf" target="_blank" rel="noopener" className="tap relative text-muted transition-colors duration-150 hover:text-ink">
                   Resume<span aria-hidden="true"> ↗</span>
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>

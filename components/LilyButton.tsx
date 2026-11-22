@@ -23,7 +23,7 @@ export function LilyButton({ side = "light" }: { side?: "light" | "lily" }) {
         const origin = centreOf(e.currentTarget);
         if (lily ? unbloom(origin, returnPath()) : bloom(origin)) e.preventDefault();
       }}
-      className={`absolute right-4 top-4 z-40 grid size-10 place-items-center rounded-full md:fixed md:right-8 md:top-8 ${
+      className={`absolute right-4 top-4 tap z-40 grid size-10 place-items-center rounded-full md:fixed md:right-8 md:top-8 ${
         lily ? "text-scarlet ring-1 ring-ink/70" : "bg-white/70 text-accent ring-1 ring-line"
       }`}
     >

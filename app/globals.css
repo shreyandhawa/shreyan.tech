@@ -78,6 +78,22 @@ body {
   color: var(--muted);
 }
 
+/* Phones: a 44px touch area centred on a small link, without moving anything. The element must be positioned.
+   Off from md up, where the rail's stacked links sit 32px apart and the pointer is a mouse. */
+@utility tap {
+  @media (width < 56.25rem) {
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      translate: -50% -50%;
+    }
+  }
+}
+
 /* Film grain: fractal noise pushed toward white so multiply only darkens the specks. */
 .grain {
   position: fixed;

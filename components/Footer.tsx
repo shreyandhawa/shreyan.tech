@@ -10,19 +10,19 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="GitHub ↗"
-            className="transition-colors duration-150 hover:text-ink"
+            className="tap relative transition-colors duration-150 hover:text-ink"
           >
             GitHub<span className="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
         <li>
-          <a href={`mailto:${site.contact.email}`} className="transition-colors duration-150 hover:text-ink">
+          <a href={`mailto:${site.contact.email}`} className="tap relative transition-colors duration-150 hover:text-ink">
             Email
           </a>
         </li>
         {hasResume && (
           <li>
-            <a href="/resume.pdf" target="_blank" rel="noopener" className="transition-colors duration-150 hover:text-ink">
+            <a href="/resume.pdf" target="_blank" rel="noopener" className="tap relative transition-colors duration-150 hover:text-ink">
               Resume<span className="sr-only"> (opens in a new tab)</span>
             </a>
           </li>

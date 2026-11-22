@@ -16,16 +16,18 @@ function Body({ finger }: { finger: Finger }) {
           {project.listing.status} · {project.listing.year}
         </p>
         <div className="mt-6">
-          <MediaFrame media={project.hero} />
+          <MediaFrame media={project.hero} sizes="(min-width: 900px) 344px, 100vw" />
         </div>
         <p className="mt-5 text-[15px] leading-[23px] text-ink">{project.oneLine}</p>
-        <ul aria-label="Stack" className="mt-5 flex flex-wrap gap-2">
-          {project.stack.slice(0, 4).map((s) => (
-            <li key={s} className="rounded-full border border-ink/40 px-2.5 py-0.5 font-mono text-[11px] text-ink">
-              {s}
-            </li>
-          ))}
-        </ul>
+        {project.stack.length > 0 && (
+          <ul aria-label="Stack" className="mt-5 flex flex-wrap gap-2">
+            {project.stack.slice(0, 4).map((s) => (
+              <li key={s} className="rounded-full border border-ink/40 px-2.5 py-0.5 font-mono text-[11px] text-ink">
+                {s}
+              </li>
+            ))}
+          </ul>
+        )}
         <p className="mt-6">
           {/* Plays the return transition and lands on the case study. */}
           <Link

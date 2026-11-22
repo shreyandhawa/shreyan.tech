@@ -4,12 +4,13 @@ import { MediaFrame } from "@/components/MediaFrame";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/content/site";
 
-function Card({ project, order }: { project: Project; order: number }) {
+function Card({ project }: { project: Project }) {
   const { name, slug, card, listing } = project;
   return (
-    <Link href={`/work/${slug}/`} data-cursor="View project" className="group block" style={{ order }}>
+    <Link href={`/work/${slug}/`} data-cursor="View project" className="group block">
       <ViewTransition name={`media-${slug}`} share="morph" default="none">
-        <MediaFrame media={card} eager={order < 2} hover />
+        {/* Lazy: the h1 is the first-screen content at every width, and the cards start below the fold on phones. */}
+        <MediaFrame media={card} sizes="(min-width: 900px) 420px, 100vw" hover />
       </ViewTransition>
       <p className="mt-3 text-[14px] leading-5">
         <span className="text-ink">{name}</span>
@@ -27,10 +28,6 @@ function Card({ project, order }: { project: Project; order: number }) {
 
 export default function Home() {
   const { headline, intro, currently, previously } = site.home;
-  // Masonry: even indexes in the left column, odd in the right; one column in source order on small screens.
-  const column = (side: 0 | 1) =>
-    projects.map((p, i) => i % 2 === side && <Card key={p.slug} project={p} order={i} />);
-
   return (
     <>
       <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
@@ -52,9 +49,11 @@ export default function Home() {
         <h2 id="work" className="sr-only">
           Work
         </h2>
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-6">
-          <div className="contents md:flex md:flex-1 md:flex-col md:gap-10">{column(0)}</div>
-          <div className="contents md:flex md:flex-1 md:flex-col md:gap-10">{column(1)}</div>
+        {/* One list in source order, so reading and Tab order match what is on screen at every width. */}
+        <div className="grid items-start gap-10 md:grid-cols-2 md:gap-x-6">
+          {projects.map((p) => (
+            <Card key={p.slug} project={p} />
+          ))}
         </div>
       </section>
     </>
