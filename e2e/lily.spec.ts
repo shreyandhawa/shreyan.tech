@@ -85,8 +85,53 @@ test.describe("under 900px", () => {
     expect(await seriousViolations(page)).toEqual([]);
 
     await page.getByRole("button", { name: /^Contact/ }).click();
-    const sheet = await page.getByRole("region", { name: "Contact" }).boundingBox();
-    expect(sheet!.y + sheet!.height).toBeCloseTo(844, 0);
+    // the sheet slides up from the bottom edge and settles there
+    const sheet = page.getByRole("region", { name: "Contact" });
+    await expect.poll(async () => Math.round((await sheet.boundingBox())!.y + (await sheet.boundingBox())!.height)).toBe(844);
     expect(await seriousViolations(page)).toEqual([]);
+  });
+});
+
+// Paths are written in the left hand's coordinates; Appendix C's index touch pose and the rest pose.
+const INDEX_TOUCH = "M28 -24L31 -64L15 -50";
+const THUMB_INDEX = "M36 20L33 -12L17 -40";
+const THUMB_REST = "M36 20L16 14L-4 8";
+const pose = (page: Page, part: string) => page.locator(`[data-pose="${part}"]`).first();
+
+test("selecting curls the finger and brings the thumb to its tip; switching moves the thumb directly", async ({ page }) => {
+  await page.goto("/lily/");
+  await page.getByRole("button", { name: /^lumenCell/ }).click();
+  await expect(pose(page, "left-index")).toHaveAttribute("d", INDEX_TOUCH);
+  await expect(pose(page, "left-thumb")).toHaveAttribute("d", THUMB_INDEX);
+  // the panel slides in after the thumb lands
+  const panel = page.getByRole("region", { name: "lumenCell" });
+  await expect.poll(() => panel.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+
+  await page.getByRole("button", { name: /^Arohexis/ }).click();
+  await expect(pose(page, "left-thumb")).toHaveAttribute("d", "M36 20L30 -10L4 -39");
+  await expect(pose(page, "left-index")).not.toHaveAttribute("d", INDEX_TOUCH);
+  await expect(pose(page, "left-middle")).toHaveAttribute("d", "M9 -24L9 -64L2 -49");
+
+  // release: the panel slides out, then unmounts; the hand returns to rest
+  await page.keyboard.press("Escape");
+  await expect.poll(() => page.locator("#lily-panel").evaluate((el) => (el as HTMLElement).inert)).toBe(true);
+  await expect(page.locator("#lily-panel")).toHaveCount(0);
+  await expect(pose(page, "left-thumb")).toHaveAttribute("d", THUMB_REST);
+});
+
+test.describe("reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("the thumb snaps and the panel fades without sliding", async ({ page }) => {
+    await page.goto("/lily/");
+    await page.getByRole("button", { name: /^lumenCell/ }).click();
+    // no tween: the pose is already there on the next frame
+    expect(await pose(page, "left-thumb").getAttribute("d")).toBe(THUMB_INDEX);
+    const panel = page.locator("#lily-panel");
+    const style = await panel.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { delay: s.transitionDelay, duration: s.transitionDuration, translate: s.translate };
+    });
+    expect(style).toEqual({ delay: "0s", duration: "0.15s", translate: "none" });
   });
 });

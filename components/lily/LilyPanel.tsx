@@ -65,15 +65,25 @@ function Body({ finger }: { finger: Finger }) {
   }
 }
 
-/** The section a finger opens: a side panel on desktop, a bottom sheet under 900px. */
-export function LilyPanel({ finger, onClose, style }: { finger: Finger; onClose: () => void; style?: React.CSSProperties }) {
+/**
+ * The section a finger opens: a side panel on desktop (over the opposite label column), a bottom sheet under
+ * 900px. Slides in over 320ms just after the thumb lands, and back out on release; a fade with reduced motion.
+ */
+export function LilyPanel({ finger, leaving, onClose, style }: { finger: Finger; leaving: boolean; onClose: () => void; style?: React.CSSProperties }) {
+  const side = finger.hand === "left" ? "md:right-10" : "md:left-10";
+  // Offsets only apply with motion allowed; reduced motion gets the fade alone.
+  const away = `motion-safe:translate-y-full motion-safe:md:translate-y-0 ${finger.hand === "left" ? "motion-safe:md:translate-x-6" : "motion-safe:md:-translate-x-6"}`;
+  const enterFrom = `starting:opacity-0 motion-safe:starting:translate-y-full motion-safe:md:starting:translate-y-0 ${
+    finger.hand === "left" ? "motion-safe:md:starting:translate-x-6" : "motion-safe:md:starting:-translate-x-6"
+  }`;
   return (
     <section
       id="lily-panel"
       aria-labelledby="lily-panel-title"
+      inert={leaving}
       style={style}
-      className={`fixed inset-x-0 bottom-0 z-30 max-h-[75dvh] overflow-y-auto rounded-t-2xl border border-ink/15 bg-surface p-6 md:inset-x-auto md:bottom-auto md:w-[400px] md:rounded-none md:p-7 ${
-        finger.hand === "left" ? "md:right-10" : "md:left-10"
+      className={`fixed inset-x-0 bottom-0 z-30 max-h-[75dvh] overflow-y-auto rounded-t-2xl border border-ink/15 bg-surface p-6 transition-[opacity,translate] duration-[320ms] ease-out motion-reduce:duration-150 md:inset-x-auto md:bottom-auto md:w-[400px] md:rounded-none md:p-7 ${side} ${
+        leaving ? `opacity-0 ${away}` : `${enterFrom} delay-200 motion-reduce:delay-0`
       }`}
     >
       <p className="label text-scarlet-light!">{finger.caption}</p>

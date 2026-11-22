@@ -81,6 +81,15 @@ export function LilyScene() {
   const select = (id: FingerId) => setHash(selected === id ? null : id);
   const selectedFinger = fingers.find((f) => f.id === selected);
   const panelHand = selectedFinger && (selectedFinger.hand === "left" ? "right" : "left");
+  // Keep the last panel mounted for its 320ms exit after release.
+  const [shown, setShown] = useState(selectedFinger);
+  if (selectedFinger && selectedFinger !== shown) setShown(selectedFinger);
+  const leaving = !selectedFinger && !!shown;
+  useEffect(() => {
+    if (!leaving) return;
+    const t = setTimeout(() => setShown(undefined), 320);
+    return () => clearTimeout(t);
+  }, [leaving]);
   const stage = desktop ? { transform: `translateX(-50%) scale(${k})` } : undefined;
   const stageClass = "md:pointer-events-none md:absolute md:bottom-0 md:left-1/2 md:h-[900px] md:w-[1440px] md:origin-bottom";
 
@@ -122,9 +131,10 @@ export function LilyScene() {
                 key={f.id}
                 points={leaderLine(f.hand, f.finger).join(" ")}
                 fill="none"
-                stroke={on ? "var(--scarlet)" : "var(--ink)"}
-                strokeOpacity={on ? 1 : lit === f.id ? 0.85 : dim ? 0 : 0.4}
                 strokeWidth={1}
+                className={`transition-[stroke,opacity] ${dim ? "duration-[320ms]" : "duration-[120ms]"} ${
+                  on ? "stroke-scarlet opacity-100 delay-[280ms] motion-reduce:delay-0" : `stroke-ink ${lit === f.id ? "opacity-85" : dim ? "opacity-0" : "opacity-40"}`
+                }`}
               />
             );
           })}
@@ -139,7 +149,7 @@ export function LilyScene() {
             const edge = hand === "left" ? { right: SCENE.w - 428 } : { left: 1012 };
             return (
               <div key={hand} inert={hidden} className="md:contents">
-                <p className={`label text-scarlet-light! md:absolute md:top-[121px] ${hidden ? "md:opacity-0" : ""}`} style={edge}>
+                <p className={`label text-scarlet-light! transition-opacity duration-[320ms] md:absolute md:top-[121px] ${hidden ? "md:opacity-0" : ""}`} style={edge}>
                   {lily.hands[hand]}
                 </p>
                 <ul className="mt-2 md:contents">
@@ -149,7 +159,7 @@ export function LilyScene() {
                       const on = selected === f.id;
                       const dim = selectedFinger?.hand === hand && !on;
                       return (
-                        <li key={f.id} className={`md:pointer-events-auto md:absolute ${hidden ? "md:opacity-0" : ""}`} style={{ ...edge, top: ROWS[f.finger] - 18 }}>
+                        <li key={f.id} className={`transition-opacity duration-[320ms] md:pointer-events-auto md:absolute ${hidden ? "md:opacity-0" : ""}`} style={{ ...edge, top: ROWS[f.finger] - 18 }}>
                           <button
                             type="button"
                             aria-expanded={on}
@@ -164,12 +174,16 @@ export function LilyScene() {
                             <span
                               className={`block font-serif text-[22px] leading-7 transition-[color,opacity] duration-[120ms] md:text-[30px] md:leading-9 ${
                                 on ? "text-scarlet" : lit === f.id ? "text-scarlet-light" : "text-ink"
-                              } ${dim ? "opacity-40" : ""}`}
+                              } ${dim ? "opacity-40" : ""} ${on || dim ? "delay-[280ms] motion-reduce:delay-0" : ""}`}
                             >
                               {f.label}
                             </span>
                             {/* Captions stay full strength when dimmed: at 40% they would fail AA contrast. */}
-                            <span className={`block font-mono text-[10px] uppercase tracking-[1.5px] ${on ? "text-scarlet-light" : "text-muted"}`}>
+                            <span
+                              className={`block font-mono text-[10px] uppercase tracking-[1.5px] transition-colors duration-[120ms] ${
+                                on ? "text-scarlet-light delay-[280ms] motion-reduce:delay-0" : "text-muted"
+                              }`}
+                            >
                               {f.caption}
                             </span>
                           </button>
@@ -183,9 +197,11 @@ export function LilyScene() {
         </div>
       </div>
 
-      {selectedFinger && (
+      {shown && (
         <LilyPanel
-          finger={selectedFinger}
+          key={shown.hand}
+          finger={shown}
+          leaving={leaving}
           onClose={() => setHash(null)}
           style={desktop ? { top: Math.max(88, 122 * k), maxHeight: H - Math.max(88, 122 * k) - 32 } : undefined}
         />
