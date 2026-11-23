@@ -56,7 +56,8 @@ describe("projects", () => {
 describe("site", () => {
   it("has the About, Research, Education and Contact content", () => {
     expect(site.about).toHaveLength(4);
-    expect(site.research.map((r) => r.label)).toEqual(["lumenCell"]);
+    expect(site.research.map((r) => r.label)).toEqual(["Clonal trajectory research"]);
+    for (const r of site.research) expect(r.href).toMatch(/^https:\/\//);
     expect(site.education).toHaveLength(2);
     expect(site.contact.email).toMatch(/@/);
   });
