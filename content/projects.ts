@@ -10,6 +10,8 @@ export type Media = {
   width: number;
   height: number;
   caption?: string;
+  /** A looping clip (path under public/, with extension) that plays on top of this still, which is its poster. */
+  video?: string;
 };
 
 export type Section = {
@@ -49,8 +51,20 @@ const img = (src: string, width: number, height: number, alt: string, caption?: 
   caption,
 });
 
+/** Home card: `<name>/card.mp4` with its poster `<name>/card-poster`. Width and height are the clip's. */
+const clip = (name: string, width: number, height: number, alt: string): Media => ({
+  ...img(`${name}/card-poster`, width, height, alt),
+  video: `/media/${name}/card.mp4`,
+});
+
 const media = {
   lumencell: {
+    card: clip(
+      "lumencell",
+      1280,
+      800,
+      "Preview of lumenCell: the app's four steps (Prepare, Choose root, Run method, Inspect) beside a cloud of cells branching from a marked root cell, coloured by pseudotime.",
+    ),
     playback: img(
       "lumencell/explorer-playback",
       1440,
@@ -77,6 +91,12 @@ const media = {
     ),
   },
   arohexis: {
+    card: clip(
+      "arohexis",
+      840,
+      526,
+      "Preview of Arohexis: a glowing side view of a brain drawn from coloured lines, beside the name and the line Trains the moment of starting.",
+    ),
     home: img(
       "arohexis/home-desktop",
       1440,
@@ -103,6 +123,12 @@ const media = {
     ),
   },
   nosolear: {
+    card: clip(
+      "nosolear",
+      840,
+      472,
+      "Preview of Nosolear: the sound /θ/ marked as not /t/, a T-for-TH error, beside a panel for what the app trains: sounds, pronunciation, stress and rhythm.",
+    ),
     plan: img(
       "nosolear/plan-sketch",
       1728,
@@ -112,6 +138,12 @@ const media = {
     ),
   },
   trustory: {
+    card: clip(
+      "trustory",
+      840,
+      472,
+      "Preview of TruStory: two statements from different sources, I left the house at nine and It was closer to ten, set side by side to compare.",
+    ),
     concept: img(
       "trustory/concept",
       1728,
@@ -125,7 +157,7 @@ const media = {
 export const projects: Project[] = [
   {
     slug: "lumencell",
-    card: media.lumencell.light,
+    card: media.lumencell.card,
     hero: media.lumencell.playback,
     name: "lumenCell",
     oneLine:
@@ -167,7 +199,7 @@ export const projects: Project[] = [
   },
   {
     slug: "arohexis",
-    card: media.arohexis.home,
+    card: media.arohexis.card,
     // replay.webm was tried as the hero: it records a phone-width column, so it reads poorly at 864px.
     hero: media.arohexis.home,
     name: "Arohexis",
@@ -204,7 +236,7 @@ export const projects: Project[] = [
   },
   {
     slug: "nosolear",
-    card: media.nosolear.plan,
+    card: media.nosolear.card,
     hero: media.nosolear.plan,
     name: "Nosolear",
     oneLine:
@@ -240,7 +272,7 @@ export const projects: Project[] = [
   },
   {
     slug: "trustory",
-    card: media.trustory.concept,
+    card: media.trustory.card,
     hero: media.trustory.concept,
     name: "TruStory",
     oneLine:

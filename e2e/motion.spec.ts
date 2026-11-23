@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const animation = (el: Element) => {
   const s = getComputedStyle(el);
@@ -19,6 +19,33 @@ test("page enter blurs blocks in, 40ms apart", async ({ page }) => {
   await page.goto("/");
   expect(await page.locator("h1").evaluate(animation)).toBe("enter 0.45s");
   expect(await page.locator("h1 + section").evaluate((el) => getComputedStyle(el).animationDelay)).toBe("0.04s");
+});
+
+// Headless Chromium has no H.264, so count play() calls instead of checking playback.
+const countPlays = (page: Page) =>
+  page.addInitScript(() => {
+    const w = window as unknown as { plays: number };
+    w.plays = 0;
+    HTMLMediaElement.prototype.play = () => (w.plays++, Promise.resolve());
+  });
+const plays = (page: Page) => page.evaluate(() => (window as unknown as { plays: number }).plays);
+
+test("card clips play when on screen", async ({ page }) => {
+  await countPlays(page);
+  await page.goto("/");
+  await expect.poll(() => plays(page)).toBeGreaterThan(0);
+});
+
+test.describe("reduced motion clips", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("card clips stay on their poster", async ({ page }) => {
+    await countPlays(page);
+    await page.goto("/");
+    await page.locator("video").last().scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    expect(await plays(page)).toBe(0);
+  });
 });
 
 test("cursor shows a label over a card", async ({ page }) => {

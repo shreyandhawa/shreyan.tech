@@ -10,6 +10,7 @@ function expectMedia(m: Media) {
   expect(m.alt.length, `alt for ${m.src}`).toBeGreaterThan(10);
   expect(m.width).toBeGreaterThan(0);
   expect(m.height).toBeGreaterThan(0);
+  if (m.video) expect(existsSync(publicFile(m.video)), m.video).toBe(true);
   for (const ext of [".avif", ".webp"]) {
     expect(existsSync(publicFile(m.src + ext)), m.src + ext).toBe(true);
     if (m.width > SMALL) expect(existsSync(publicFile(`${m.src}-${SMALL}${ext}`)), `${m.src}-${SMALL}${ext}: run npm run media`).toBe(true);
