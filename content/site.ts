@@ -1,6 +1,6 @@
 // Site copy, word for word from the content document.
 
-export type Row = { label: string; value: string[] };
+export type Row = { label: string; value: string[]; href?: string };
 
 const headline = "Hi! I'm Shreyan Dhawa. I build and benchmark computational tools for single-cell biology, and report when they fail.";
 
@@ -23,9 +23,10 @@ export const site = {
 
   research: [
     {
-      label: "lumenCell",
+      label: "Clonal trajectory research",
+      href: "https://github.com/shreyandhawa/clonal-trajectory-research",
       value: [
-        "single-cell trajectory inference with T-cell clonotype validation. Independent, April 2026 – present. Benchmarked three published methods against synthetic trees and four public datasets under thresholds set before scoring; a case study on published CAR-T data (Sheih et al. 2020) found no run supported as a branching tree, reported as a negative result. Released on PyPI.",
+        "real-data benchmarks, calibration and case studies behind the trust claims of lumenCell, my single-cell trajectory tool. Independent, part of the lumenCell project (April 2026 – present). Three published methods (PAGA + DPT, Palantir, scFates) scored on synthetic trees and four public datasets against gates declared before each analysis, with lineages checked against T-cell receptor clones. Case study on CAR-T data (Sheih et al. 2020): none of 12 per-patient runs was supported as a branching tree, reported as a negative result.",
       ],
     },
   ] satisfies Row[],

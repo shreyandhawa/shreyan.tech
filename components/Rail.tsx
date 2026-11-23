@@ -32,7 +32,7 @@ function useActiveSection(key: string, ids: string[]) {
   return state.key === key ? state.id : ids[0];
 }
 
-export function Rail({ hasResume }: { hasResume: boolean }) {
+export function Rail() {
   const pathname = usePathname().replace(/(.)\/$/, "$1");
   const project = getProject(pathname.match(/^\/projects\/([^/]+)/)?.[1] ?? "");
 
@@ -89,7 +89,7 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
         )}
       </p>
 
-      {(items.length > 0 || (!project && hasResume)) && (
+      {items.length > 0 && (
         <nav aria-label={project ? "Sections" : "Main"} className="relative mt-3 pl-3 md:absolute md:left-8 md:top-[226px] md:mt-0 md:pl-0">
           <span
             ref={marker}
@@ -116,14 +116,6 @@ export function Rail({ hasResume }: { hasResume: boolean }) {
                 </li>
               );
             })}
-            {!project && hasResume && (
-              <li>
-                <a href="/resume.pdf" target="_blank" rel="noopener" className="tap relative text-muted transition-colors duration-150 hover:text-ink">
-                  Resume<span aria-hidden="true"> ↗</span>
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
-              </li>
-            )}
           </ul>
         </nav>
       )}
