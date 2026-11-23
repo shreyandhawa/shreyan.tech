@@ -2,7 +2,7 @@
 
 export type Row = { label: string; value: string[]; href?: string };
 
-const headline = "Hi! I'm Shreyan Dhawa. I build and benchmark computational tools for single-cell biology, and report when they fail.";
+const headline = "Hi! I'm Shreyan Dhawa, I work with computational methods for protein and cell engineering.";
 
 export const site = {
   name: "Shreyan Dhawa",
