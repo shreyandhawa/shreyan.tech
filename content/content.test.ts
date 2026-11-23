@@ -33,6 +33,10 @@ describe("projects", () => {
     for (const s of p.sections) expect(s.paragraphs.length + (s.commands?.length ?? 0)).toBeGreaterThan(0);
     if (p.deployed) expect(p.deployed.href).toMatch(/^https:\/\//);
     if (p.code) expect(p.code).toMatch(/^https:\/\/github\.com\/shreyandhawa\//);
+    for (const l of p.links ?? []) {
+      expect(l.label.trim()).not.toBe("");
+      expect(l.href).toMatch(/^https:\/\//);
+    }
     for (const m of [p.card, p.hero, ...p.sections.flatMap((s) => s.figures ?? [])]) if (m) expectMedia(m);
   });
 

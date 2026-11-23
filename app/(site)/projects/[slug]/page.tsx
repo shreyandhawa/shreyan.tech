@@ -90,6 +90,16 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                   </a>
                 </p>
               )}
+              {i === last &&
+                p.links?.map((l) => (
+                  <p key={l.href} className="mt-2 text-[14px] text-ink">
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+                      {l.label}
+                      <span aria-hidden="true"> ↗</span>
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </p>
+                ))}
               {i === last && p.deployed && (
                 <p className="mt-2 text-[14px] text-ink">
                   <a href={p.deployed.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">

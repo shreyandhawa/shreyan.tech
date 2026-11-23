@@ -38,6 +38,8 @@ export type Project = {
   deployed?: { label: string; href: string };
   stack: string[];
   code?: string;
+  /** Extra links (results, plans) shown under the Code link. */
+  links?: { label: string; href: string }[];
   sections: Section[];
   /** Card media on Home; undefined renders the "Interface in progress" panel. */
   card?: Media;
@@ -184,21 +186,25 @@ export const projects: Project[] = [
       "Interactive explorer for pseudotime and lineage trajectories in single-cell RNA-seq data.",
     listing: {
       what: "Single-cell trajectory inference with clonotype validation",
-      status: "Shipped, v0.4.0 on PyPI",
-      year: "April – November 2026",
+      status: "Shipped on PyPI",
+      year: "April 2026 – present",
     },
     role: "Author.",
-    timeline: "April 2026 – November 2026",
-    status: "Shipped, v0.4.0 on PyPI.",
+    timeline: "April 2026 – present",
+    status: "Shipped on PyPI.",
     deployed: { label: "PyPI, pip install lumencell", href: "https://pypi.org/project/lumencell/" },
     stack: ["Python", "scanpy", "PAGA + DPT", "Palantir", "scFates", "FastAPI", "React", "pytest"],
     code: "https://github.com/shreyandhawa/lumenCell_V2",
+    links: [
+      { label: "Results: github.com/shreyandhawa/clonal-trajectory-research", href: "https://github.com/shreyandhawa/clonal-trajectory-research" },
+      { label: "Analysis plan, committed before any results: PR #51", href: "https://github.com/shreyandhawa/lumenCell_V2/pull/51" },
+    ],
     sections: [
       {
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "Cells don't come with timestamps, so their order has to be inferred. The current version reaches Spearman 0.95 on public pancreas data. My first attempt scored about −0.2 against known ground truth, close to reversed, so I rebuilt the engine to run inference in PCA and diffusion space instead of on the 2-D picture. Every threshold was written into `benchmarks/thresholds.toml` before any score was computed. Methods that miss a gate are marked experimental in the app, and some of mine are.",
+          "Cells don't come with timestamps, so their order has to be inferred. Across the three published methods it runs, cell order tracked known stages with Spearman 0.67–0.95. My first attempt scored about −0.2 against known ground truth, close to reversed, so I rebuilt the engine to run inference in PCA and diffusion space instead of on the 2-D picture. The pass/fail thresholds in `benchmarks/thresholds.toml` were set in advance, and the analysis plan was committed publicly before any real data was scored. Methods that miss a gate are marked experimental in the app, and some of mine are.",
         ],
         figures: [media.lumencell.playback, media.lumencell.pickRoot],
       },
@@ -206,7 +212,7 @@ export const projects: Project[] = [
         id: "validation",
         title: "Validation",
         paragraphs: [
-          "T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together. That checks the answer with evidence the method never saw. I score the agreement against three null models, and exclude receptor genes from feature selection so the model can't recognise clones from expression. Case studies: published CD19 CAR-T data (Sheih et al. 2020) and T-cell exhaustion data (Daniel et al. 2022).",
+          "T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together. That checks the answer with evidence the method never saw. I score the agreement against three null models, and exclude receptor genes from feature selection so the model can't recognise clones from expression. Case study: published CD19 CAR-T data (Sheih et al. 2020), where none of 12 per-patient runs was supported as a branching tree, reported as a negative result. T-cell exhaustion data (Daniel et al. 2022) is in the benchmark, but its clone check was not assessable.",
         ],
         figures: [media.lumencell.evidence],
       },
@@ -228,10 +234,10 @@ export const projects: Project[] = [
     listing: {
       what: "Statement comparison with source citations",
       status: "In progress",
-      year: "August – December 2026",
+      year: "August 2026 – present",
     },
-    role: "Team member, one of six on the Himal-Tech team",
-    timeline: "August 2026 – December 2026",
+    role: "Student team member (frontend), one of six on the Himal-Tech team",
+    timeline: "August 2026 – present",
     status: "In progress",
     where:
       "A project for the Mississippi AI Innovation Hub, a collaboration between the University of Southern Mississippi and Himal-Tech",
@@ -242,7 +248,7 @@ export const projects: Project[] = [
         title: "Overview",
         paragraphs: [
           "The system takes statements from text, PDFs, transcripts and other documents, stores versioned evidence, and flags claims that conflict, each flag carrying the exact source text it came from.",
-          "I'm one of six on the Himal-Tech team building it for the Mississippi AI Innovation Hub, and I work with the whole team on it, including the review interface: the side-by-side view for comparing claims, and the flow for matches the system isn't confident about. An uncertain match stays visibly unresolved rather than being quietly guessed.",
+          "I'm one of six on the Himal-Tech team building it for the Mississippi AI Innovation Hub. I took part in planning the backend with the team and was assigned the frontend. My merged work so far is the shared stylesheet that brings every server-rendered page in line with the graph workspace, meets WCAG AA contrast and keeps wide tables readable on phones. By design, an uncertain match stays visibly unresolved rather than being quietly guessed.",
           "The screens below come from the app's fictional demo cases, not real evidence.",
         ],
         figures: [media.trustory.concept, media.trustory.comparison, media.trustory.unresolved, media.trustory.graph],
@@ -254,7 +260,7 @@ export const projects: Project[] = [
     card: media.arohexis.card,
     hero: media.arohexis.card,
     name: "Arohexis",
-    oneLine: "Installable app for chronic procrastination, with no account and no network requests.",
+    oneLine: "Installable, offline-first app for chronic procrastination, with no account and data that stays on the device.",
     listing: {
       what: "Offline-first app for chronic procrastination",
       status: "Shipped, v2.3",
@@ -279,7 +285,7 @@ export const projects: Project[] = [
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "Everything stays on the device: no account, no sign-in, and no network requests, enforced by a Content Security Policy that blocks them. Each feature is grounded in cited psychology research.",
+          "Everything stays on the device: no account, no sign-in, and a Content Security Policy that blocks third-party connections. Each feature is grounded in cited psychology research.",
           "Shipped v1.0, then v2.1 to v2.3 after a live walkthrough turned up real bugs.",
         ],
         figures: [media.arohexis.home, media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
@@ -317,7 +323,7 @@ export const projects: Project[] = [
         id: "overview",
         title: "Overview",
         paragraphs: [
-          "Scores pronunciation, keeps a per-speaker error profile, and uses it to choose the next day's practice set rather than running a fixed curriculum. I wrote adapters for on-device speech models as offline alternatives to cloud transcription, so it degrades to fully local instead of breaking. Test suite runs in CI on macOS and Linux.",
+          "Scores pronunciation, keeps a per-speaker error profile, and uses it to choose the next day's practice set rather than running a fixed curriculum. I wrote adapters for on-device speech models (wav2vec2, Whisper) as offline alternatives to cloud transcription. Test suite runs in CI on macOS and Linux.",
         ],
         figures: [media.nosolear.plan],
       },
