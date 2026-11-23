@@ -15,11 +15,21 @@ export async function generateMetadata({ params }: PageProps<"/projects/[slug]">
   return { title: p.name, description: p.oneLine };
 }
 
-function Meta({ label, value, wide }: { label: string; value: string; wide?: boolean }) {
+function Meta({ label, value, wide, href }: { label: string; value: string; wide?: boolean; href?: string }) {
   return (
     <div className={wide ? "md:col-span-3" : undefined}>
       <dt className="label">{label}</dt>
-      <dd className="mt-1.5 text-[14px] leading-[21px] text-ink">{value}</dd>
+      <dd className="mt-1.5 text-[14px] leading-[21px] text-ink">
+        {href ? (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+            {value}
+            <span aria-hidden="true"> ↗</span>
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        ) : (
+          value
+        )}
+      </dd>
     </div>
   );
 }
@@ -46,6 +56,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           <Meta label="Timeline" value={p.timeline} />
           <Meta label="Status" value={p.status} />
           {p.where && <Meta label="Where" value={p.where} wide />}
+          {p.deployed && <Meta label="Deployed" value={p.deployed.label} href={p.deployed.href} wide />}
           {p.stack.length > 0 && <Meta label="Stack" value={p.stack.join(" · ")} wide />}
         </dl>
 
@@ -74,6 +85,15 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                 <p className="mt-5 text-[14px] text-ink">
                   <a href={p.code} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
                     Code: {p.code.replace("https://", "")}
+                    <span aria-hidden="true"> ↗</span>
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </p>
+              )}
+              {i === last && p.deployed && (
+                <p className="mt-2 text-[14px] text-ink">
+                  <a href={p.deployed.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+                    Check out the website
                     <span aria-hidden="true"> ↗</span>
                     <span className="sr-only"> (opens in a new tab)</span>
                   </a>

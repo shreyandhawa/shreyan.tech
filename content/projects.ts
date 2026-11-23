@@ -34,6 +34,8 @@ export type Project = {
   timeline: string;
   status: string;
   where?: string;
+  /** Where it runs for real; hidden while undefined (projects that only run locally). */
+  deployed?: { label: string; href: string };
   stack: string[];
   code?: string;
   sections: Section[];
@@ -101,25 +103,25 @@ const media = {
       "arohexis/home-desktop",
       1440,
       900,
-      "Arohexis home screen in demo mode: a glowing side view of a brain drawn from coloured lines, one colour per area of life, beside a Light a line button and a count of 10 starts this week.",
+      "Arohexis home screen in demo mode: a glowing side view of a brain drawn from coloured lines, one colour per area of life, beside a Check in prompt, a Light a line button and links to Plans, Insights, Replay and Settings, with a count of 98 starts and 28 lines.",
     ),
     insights: img(
       "arohexis/insights-desktop",
       1440,
       900,
-      "Arohexis Insights page with a bar chart of starts per week over 11 weeks, a strip showing most starts happen around 9 AM, and a breakdown of feelings.",
+      "Arohexis Insights page in demo mode: a line chart of how automatic starting feels over 10 weekly check-ins, rising to 4.8 out of 7, above a bar chart of starts per week with 98 starts over 11 weeks.",
     ),
     started: img(
       "arohexis/started-desktop",
       1440,
       900,
-      "The screen after starting a task: the word Started, the line That's the hard part, a two-minute timer and a choice of which area the start belongs to.",
+      "The screen after starting a task: the word Started, the line That's the hard part, a two-minute timer over drifting lines, and a choice of which area the start belongs to, with Done for now and Undo buttons.",
     ),
     phone: img(
       "arohexis/home-phone",
       750,
       1624,
-      "Arohexis home screen on a phone: the line brain above category filters, a Check in prompt and the Light a line button.",
+      "Arohexis home screen on a phone in demo mode: the brain of lines above the category filters, a Check in prompt, the Light a line button and links to Plans, Insights, Replay and Settings.",
     ),
   },
   nosolear: {
@@ -182,12 +184,13 @@ export const projects: Project[] = [
       "Interactive explorer for pseudotime and lineage trajectories in single-cell RNA-seq data.",
     listing: {
       what: "Single-cell trajectory inference with clonotype validation",
-      status: "Shipped, v0.2.0 on PyPI",
-      year: "2026 – present",
+      status: "Shipped, v0.4.0 on PyPI",
+      year: "April – November 2026",
     },
     role: "Author.",
-    timeline: "April 2026 – present",
-    status: "Shipped, v0.2.0 on PyPI.",
+    timeline: "April 2026 – November 2026",
+    status: "Shipped, v0.4.0 on PyPI.",
+    deployed: { label: "PyPI, pip install lumencell", href: "https://pypi.org/project/lumencell/" },
     stack: ["Python", "scanpy", "PAGA + DPT", "Palantir", "scFates", "FastAPI", "React", "pytest"],
     code: "https://github.com/shreyandhawa/lumenCell_V2",
     sections: [
@@ -225,10 +228,10 @@ export const projects: Project[] = [
     listing: {
       what: "Statement comparison with source citations",
       status: "In progress",
-      year: "Fall 2026 – present",
+      year: "August – December 2026",
     },
     role: "Team member, one of six on the Himal-Tech team",
-    timeline: "Fall 2026 – present",
+    timeline: "August 2026 – December 2026",
     status: "In progress",
     where:
       "A project for the Mississippi AI Innovation Hub, a collaboration between the University of Southern Mississippi and Himal-Tech",
@@ -255,11 +258,12 @@ export const projects: Project[] = [
     listing: {
       what: "Offline-first app for chronic procrastination",
       status: "Shipped, v2.3",
-      year: "2026",
+      year: "September – November 2026",
     },
     role: "Sole author",
-    timeline: "November 2026",
+    timeline: "September 2026 – November 2026",
     status: "Shipped, v2.3",
+    deployed: { label: "Cloudflare Workers, live demo", href: "https://arohexis.arohexis.workers.dev/welcome" },
     stack: [
       "React 19",
       "TypeScript",
@@ -276,7 +280,7 @@ export const projects: Project[] = [
         title: "Overview",
         paragraphs: [
           "Everything stays on the device: no account, no sign-in, and no network requests, enforced by a Content Security Policy that blocks them. Each feature is grounded in cited psychology research.",
-          "623 tests across 73 files, including automated accessibility checks. Shipped v1.0, then v2.1 to v2.3 after a live walkthrough turned up real bugs.",
+          "Shipped v1.0, then v2.1 to v2.3 after a live walkthrough turned up real bugs.",
         ],
         figures: [media.arohexis.home, media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
       },
@@ -292,7 +296,7 @@ export const projects: Project[] = [
     listing: {
       what: "Local-first English speaking coach",
       status: "In progress",
-      year: "2026 – present",
+      year: "November 2026 – present",
     },
     role: "Sole author",
     timeline: "November 2026 – present",

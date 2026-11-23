@@ -31,6 +31,7 @@ describe("projects", () => {
     expect(JSON.stringify(p)).not.toMatch(/TODO/);
     expect(p.sections[0]?.title).toBe("Overview");
     for (const s of p.sections) expect(s.paragraphs.length + (s.commands?.length ?? 0)).toBeGreaterThan(0);
+    if (p.deployed) expect(p.deployed.href).toMatch(/^https:\/\//);
     if (p.code) expect(p.code).toMatch(/^https:\/\/github\.com\/shreyandhawa\//);
     for (const m of [p.card, p.hero, ...p.sections.flatMap((s) => s.figures ?? [])]) if (m) expectMedia(m);
   });

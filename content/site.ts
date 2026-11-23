@@ -25,7 +25,7 @@ export const site = {
     {
       label: "lumenCell",
       value: [
-        "single-cell trajectory inference with T-cell clonotype validation. Independent, April 2026 – present. Benchmarked three published methods against synthetic trees and four public datasets under pre-registered thresholds; case studies on published CAR-T and T-cell exhaustion data. Released as v0.2.0.",
+        "single-cell trajectory inference with T-cell clonotype validation. Independent, April 2026 – November 2026. Benchmarked three published methods against synthetic trees and four public datasets under pre-registered thresholds; case studies on published CAR-T and T-cell exhaustion data. Released as v0.4.0.",
       ],
     },
   ] satisfies Row[],
