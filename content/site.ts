@@ -2,12 +2,12 @@
 
 export type Row = { label: string; value: string[] };
 
-const headline = "Hi! I'm Shreyan Dhawa, I work with computational methods for protein and cell engineering.";
+const headline = "Hi! I'm Shreyan Dhawa. I build and benchmark computational tools for single-cell biology, and report when they fail.";
 
 export const site = {
   name: "Shreyan Dhawa",
   url: "https://shreyandhawa.github.io",
-  description: `Computer science undergraduate working on computational methods for protein and cell engineering. Author of lumenCell, single-cell trajectory inference with T-cell clonotype validation.`,
+  description: `Computer science undergraduate building and benchmarking computational tools for single-cell biology. Author of lumenCell, single-cell trajectory inference with T-cell clonotype validation.`,
 
   home: {
     headline,
@@ -25,7 +25,7 @@ export const site = {
     {
       label: "lumenCell",
       value: [
-        "single-cell trajectory inference with T-cell clonotype validation. Independent, April 2026 – November 2026. Benchmarked three published methods against synthetic trees and four public datasets under pre-registered thresholds; case studies on published CAR-T and T-cell exhaustion data. Released as v0.4.0.",
+        "single-cell trajectory inference with T-cell clonotype validation. Independent, April 2026 – present. Benchmarked three published methods against synthetic trees and four public datasets under thresholds set before scoring; a case study on published CAR-T data (Sheih et al. 2020) found no run supported as a branching tree, reported as a negative result. Released on PyPI.",
       ],
     },
   ] satisfies Row[],
@@ -41,7 +41,7 @@ export const site = {
     {
       label: "Coursework",
       value: [
-        "Probability & Statistics · Linear Algebra · Differential Equations · Data Structures · Software Engineering · Programming Languages · Database Systems · Operating Systems · Computer Networks · Secure Software Development · Genetics and Cell Biology (spring 2027)",
+        "Data Structures · Linear Algebra · Probability & Statistics · Differential Equations · Database Systems",
       ],
     },
   ] satisfies Row[],
