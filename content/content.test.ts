@@ -19,7 +19,7 @@ function expectMedia(m: Media) {
 
 describe("projects", () => {
   it("lists the four projects in grid order with unique slugs", () => {
-    expect(projects.map((p) => p.slug)).toEqual(["lumencell", "arohexis", "nosolear", "trustory"]);
+    expect(projects.map((p) => p.slug)).toEqual(["lumencell", "trustory", "arohexis", "nosolear"]);
   });
 
   it.each(projects)("$name has every field its page needs", (p) => {
@@ -43,8 +43,8 @@ describe("projects", () => {
   });
 
   it("next project wraps around", () => {
-    expect(nextProject("lumencell").slug).toBe("arohexis");
-    expect(nextProject("trustory").slug).toBe("lumencell");
+    expect(nextProject("lumencell").slug).toBe("trustory");
+    expect(nextProject("nosolear").slug).toBe("lumencell");
   });
 });
 

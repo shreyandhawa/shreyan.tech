@@ -51,7 +51,7 @@ const img = (src: string, width: number, height: number, alt: string, caption?: 
   caption,
 });
 
-/** Home card: `<name>/card.mp4` with its poster `<name>/card-poster`. Width and height are the clip's. */
+/** Home card and project hero: `<name>/card.mp4` with its poster `<name>/card-poster`. Width and height are the clip's. */
 const clip = (name: string, width: number, height: number, alt: string): Media => ({
   ...img(`${name}/card-poster`, width, height, alt),
   video: `/media/${name}/card.mp4`,
@@ -93,8 +93,8 @@ const media = {
   arohexis: {
     card: clip(
       "arohexis",
-      840,
-      526,
+      1280,
+      800,
       "Preview of Arohexis: a glowing side view of a brain drawn from coloured lines, beside the name and the line Trains the moment of starting.",
     ),
     home: img(
@@ -125,8 +125,8 @@ const media = {
   nosolear: {
     card: clip(
       "nosolear",
-      840,
-      472,
+      1280,
+      720,
       "Preview of Nosolear: the sound /θ/ marked as not /t/, a T-for-TH error, beside a panel for what the app trains: sounds, pronunciation, stress and rhythm.",
     ),
     plan: img(
@@ -138,10 +138,28 @@ const media = {
     ),
   },
   trustory: {
+    comparison: img(
+      "trustory/comparison",
+      1600,
+      973,
+      "TruStory Statement comparison page with a potential conflict on an attribute: two accounts side by side, witness-b saying the sedan was blue and witness-a saying it was red, each quote linked to its source version and character span.",
+    ),
+    unresolved: img(
+      "trustory/unresolved",
+      1600,
+      973,
+      "TruStory Statement comparison page showing an unresolved finding: Another Alex described a blue sedan and Alex described a red sedan are not compared, because the page says to review provisional identity links first; retrieval does not establish alignment.",
+    ),
+    graph: img(
+      "trustory/graph",
+      1600,
+      1000,
+      "TruStory evidence graph for a case with two statements: a canvas linking the case, its two witness statements, two quoted clues, unreviewed event and object references, and one potential conflict on event order, with a filter panel listing node types.",
+    ),
     card: clip(
       "trustory",
-      840,
-      472,
+      1280,
+      720,
       "Preview of TruStory: two statements from different sources, I left the house at nine and It was closer to ten, set side by side to compare.",
     ),
     concept: img(
@@ -158,7 +176,7 @@ export const projects: Project[] = [
   {
     slug: "lumencell",
     card: media.lumencell.card,
-    hero: media.lumencell.playback,
+    hero: media.lumencell.card,
     name: "lumenCell",
     oneLine:
       "Interactive explorer for pseudotime and lineage trajectories in single-cell RNA-seq data.",
@@ -179,7 +197,7 @@ export const projects: Project[] = [
         paragraphs: [
           "Cells don't come with timestamps, so their order has to be inferred. The current version reaches Spearman 0.95 on public pancreas data. My first attempt scored about −0.2 against known ground truth, close to reversed, so I rebuilt the engine to run inference in PCA and diffusion space instead of on the 2-D picture. Every threshold was written into `benchmarks/thresholds.toml` before any score was computed. Methods that miss a gate are marked experimental in the app, and some of mine are.",
         ],
-        figures: [media.lumencell.pickRoot],
+        figures: [media.lumencell.playback, media.lumencell.pickRoot],
       },
       {
         id: "validation",
@@ -198,10 +216,40 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "trustory",
+    card: media.trustory.card,
+    hero: media.trustory.card,
+    name: "TruStory",
+    oneLine:
+      "Compares statements across documents and flags conflicting claims, each tied to its source.",
+    listing: {
+      what: "Statement comparison with source citations",
+      status: "In progress",
+      year: "Fall 2026 – present",
+    },
+    role: "Team member, one of six on the Himal-Tech team",
+    timeline: "Fall 2026 – present",
+    status: "In progress",
+    where:
+      "A project for the Mississippi AI Innovation Hub, a collaboration between the University of Southern Mississippi and Himal-Tech",
+    stack: ["React", "TypeScript", "Python", "SQLite"],
+    sections: [
+      {
+        id: "overview",
+        title: "Overview",
+        paragraphs: [
+          "The system takes statements from text, PDFs, transcripts and other documents, stores versioned evidence, and flags claims that conflict, each flag carrying the exact source text it came from.",
+          "I'm one of six on the Himal-Tech team building it for the Mississippi AI Innovation Hub, and I work with the whole team on it, including the review interface: the side-by-side view for comparing claims, and the flow for matches the system isn't confident about. An uncertain match stays visibly unresolved rather than being quietly guessed.",
+          "The screens below come from the app's fictional demo cases, not real evidence.",
+        ],
+        figures: [media.trustory.concept, media.trustory.comparison, media.trustory.unresolved, media.trustory.graph],
+      },
+    ],
+  },
+  {
     slug: "arohexis",
     card: media.arohexis.card,
-    // replay.webm was tried as the hero: it records a phone-width column, so it reads poorly at 864px.
-    hero: media.arohexis.home,
+    hero: media.arohexis.card,
     name: "Arohexis",
     oneLine: "Installable app for chronic procrastination, with no account and no network requests.",
     listing: {
@@ -230,14 +278,14 @@ export const projects: Project[] = [
           "Everything stays on the device: no account, no sign-in, and no network requests, enforced by a Content Security Policy that blocks them. Each feature is grounded in cited psychology research.",
           "623 tests across 73 files, including automated accessibility checks. Shipped v1.0, then v2.1 to v2.3 after a live walkthrough turned up real bugs.",
         ],
-        figures: [media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
+        figures: [media.arohexis.home, media.arohexis.insights, media.arohexis.started, media.arohexis.phone],
       },
     ],
   },
   {
     slug: "nosolear",
     card: media.nosolear.card,
-    hero: media.nosolear.plan,
+    hero: media.nosolear.card,
     name: "Nosolear",
     oneLine:
       "Local-first speaking coach that scores pronunciation and plans the next day's practice.",
@@ -267,35 +315,7 @@ export const projects: Project[] = [
         paragraphs: [
           "Scores pronunciation, keeps a per-speaker error profile, and uses it to choose the next day's practice set rather than running a fixed curriculum. I wrote adapters for on-device speech models as offline alternatives to cloud transcription, so it degrades to fully local instead of breaking. Test suite runs in CI on macOS and Linux.",
         ],
-      },
-    ],
-  },
-  {
-    slug: "trustory",
-    card: media.trustory.card,
-    hero: media.trustory.concept,
-    name: "TruStory",
-    oneLine:
-      "Compares statements across documents and flags conflicting claims, each tied to its source.",
-    listing: {
-      what: "Statement comparison with source citations",
-      status: "In progress",
-      year: "Fall 2026 – present",
-    },
-    role: "Review interface, in a team of seven. The ingestion and comparison backend is my teammates' work.",
-    timeline: "Fall 2026 – present",
-    status: "In progress",
-    where:
-      "Mississippi AI Innovation Hub, a collaboration between the University of Southern Mississippi and Himal-Tech",
-    stack: ["React", "TypeScript (my part)", "Python and SQLite backend (team)"],
-    sections: [
-      {
-        id: "overview",
-        title: "Overview",
-        paragraphs: [
-          "The system takes statements from text, PDFs, transcripts and other documents, stores versioned evidence, and flags claims that conflict, each flag carrying the exact source text it came from.",
-          "I'm building the review interface: the side-by-side view for comparing claims, and the flow for matches the system isn't confident about. An uncertain match stays visibly unresolved rather than being quietly guessed.",
-        ],
+        figures: [media.nosolear.plan],
       },
     ],
   },
