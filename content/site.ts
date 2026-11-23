@@ -26,7 +26,7 @@ export const site = {
       label: "Clonal trajectory research",
       href: "https://github.com/shreyandhawa/clonal-trajectory-research",
       value: [
-        "real-data benchmarks, calibration and case studies behind the trust claims of lumenCell, my single-cell trajectory tool. Independent, part of the lumenCell project (April 2026 – present). Three published methods (PAGA + DPT, Palantir, scFates) scored on synthetic trees and four public datasets against gates declared before each analysis, with lineages checked against T-cell receptor clones. Case study on CAR-T data (Sheih et al. 2020): none of 12 per-patient runs was supported as a branching tree, reported as a negative result.",
+        "real-data benchmarks, calibration and case studies behind the trust claims of lumenCell, my single-cell trajectory tool. Independent, September 2026 – present. Three published methods (PAGA + DPT, Palantir, scFates) scored on synthetic trees and four public datasets against gates declared before each analysis, with lineages checked against T-cell receptor clones. Case study on CAR-T data (Sheih et al. 2020): none of 12 per-patient runs was supported as a branching tree, reported as a negative result.",
       ],
     },
   ] satisfies Row[],
