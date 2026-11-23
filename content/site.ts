@@ -6,7 +6,7 @@ const headline = "Hi! I'm Shreyan Dhawa, I work with computational methods for p
 
 export const site = {
   name: "Shreyan Dhawa",
-  url: "https://shreyan.tech",
+  url: "https://shreyandhawa.github.io",
   description: `Computer science undergraduate working on computational methods for protein and cell engineering. Author of lumenCell, single-cell trajectory inference with T-cell clonotype validation.`,
 
   home: {

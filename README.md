@@ -1,4 +1,4 @@
-# shreyan.tech
+# shreyandhawa.github.io
 
 Personal portfolio of Shreyan Dhawa: a quiet, text-first static site. Home (project grid), one page per project under `/projects/`, and About.
 
@@ -28,4 +28,4 @@ Next.js (App Router, static export), TypeScript, Tailwind CSS, React `<ViewTrans
 
 ## Deployment
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build and Playwright on every push and pull request. Domain and DNS setup: [DEPLOY.md](DEPLOY.md).
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build and Playwright on every push and pull request. The site lives at https://shreyandhawa.github.io. Pages and custom-domain setup: [DEPLOY.md](DEPLOY.md).
