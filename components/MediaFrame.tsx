@@ -1,10 +1,12 @@
 import { Clip } from "@/components/Clip";
+import { Lightbox } from "@/components/Lightbox";
 import { SMALL, type Media } from "@/content/projects";
 
-const chip = "absolute bottom-3 left-3 rounded-sm bg-bg/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-ink";
+const chip = "pointer-events-none absolute bottom-3 left-3 rounded-sm bg-bg/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-ink";
 
 /**
  * Still (AVIF with WebP fallback) with its clip, if any, playing over it, or the "Interface in progress" panel when media is missing.
+ * A still outside a card (a project figure) opens full size in a Lightbox.
  * Width and height are always set so nothing shifts on load.
  */
 export function MediaFrame({
@@ -35,26 +37,29 @@ export function MediaFrame({
   const portrait = media.height > media.width;
   const srcSet = (ext: string) =>
     media.width > SMALL ? `${media.src}-${SMALL}.${ext} ${SMALL}w, ${media.src}.${ext} ${media.width}w` : `${media.src}.${ext}`;
+  const picture = (
+    <picture>
+      <source srcSet={srcSet("avif")} sizes={sizes} type="image/avif" />
+      <img
+        src={`${media.src}.webp`}
+        srcSet={srcSet("webp")}
+        sizes={sizes}
+        alt={media.alt}
+        width={media.width}
+        height={media.height}
+        loading={eager ? "eager" : "lazy"}
+        fetchPriority={eager ? "high" : undefined}
+        decoding="async"
+        className={
+          // Under a clip the still is its poster (a poster attribute can't use AVIF or srcset); the clip sets the box.
+          media.video ? "absolute inset-0 size-full object-cover" : portrait ? "h-auto max-h-[640px] w-auto max-w-full" : "h-auto w-full"
+        }
+      />
+    </picture>
+  );
   return (
     <figure className={`${frame} ${portrait ? "mx-auto w-fit" : ""}`}>
-      <picture>
-        <source srcSet={srcSet("avif")} sizes={sizes} type="image/avif" />
-        <img
-          src={`${media.src}.webp`}
-          srcSet={srcSet("webp")}
-          sizes={sizes}
-          alt={media.alt}
-          width={media.width}
-          height={media.height}
-          loading={eager ? "eager" : "lazy"}
-          fetchPriority={eager ? "high" : undefined}
-          decoding="async"
-          className={
-            // Under a clip the still is its poster (a poster attribute can't use AVIF or srcset); the clip sets the box.
-            media.video ? "absolute inset-0 size-full object-cover" : portrait ? "h-auto max-h-[640px] w-auto max-w-full" : "h-auto w-full"
-          }
-        />
-      </picture>
+      {!hover && !media.video ? <Lightbox media={media}>{picture}</Lightbox> : picture}
       {media.video && <Clip src={media.video} width={media.width} height={media.height} />}
       {media.caption && <figcaption className={chip}>{media.caption}</figcaption>}
     </figure>

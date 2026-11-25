@@ -67,7 +67,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 ### Rules
 
-1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Today Home and the project pages share theirs, the card media morphing into the project hero (or, arriving from the Next link, the project name morphing into the title). About and 404 have none beyond the page enter.
+1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Today Home and the project pages share theirs, the card media morphing into the project hero (or, arriving from the Next link, the project name morphing into the title); a project figure opening into its lightbox is the same morph, played only on a click. About and 404 have none beyond the page enter.
 2. **Everything rests under reduced motion.** With `prefers-reduced-motion: reduce` nothing moves or autoplays: at most a short opacity fade. View transitions, zoom, nudges, the underline draw and the rail marker go instant, clips stay on their poster, and the system cursor replaces the custom one. A new animation ships with its reduced-motion branch and a test in `e2e/motion.spec.ts`.
 3. **No scroll-jacking.** Never take over wheel or touch scrolling, change its speed, or pin or scrub content against scroll position. Scroll listeners may read the position (the rail's active section does) but never set it. Smooth scrolling is for in-page anchors and is off under reduced motion.
 4. Hover effects live under `@media (hover: hover)`, so touch screens don't get stuck hover states.
@@ -79,6 +79,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 | Page enter          | `.enter`, `[--i:n]` per block (six at most) | Blur 6px and fade, 450ms, 40ms stagger | 150ms fade     |
 | Card → hero morph   | `<ViewTransition name="media-<slug>">` on the card and the hero | 400ms, `cubic-bezier(0.2, 0, 0, 1)` | Instant |
 | Next → title morph  | `<ViewTransition name="title-<slug>">` on the Next link's name and the project `h1` | As the card morph; skipped when the title lands off screen | Instant |
+| Figure → lightbox   | `components/Lightbox.tsx`, `name="zoom-<src>"` | The card morph; backdrop (`--bg` at 95%) cross-fades in 200ms | 150ms fade, nothing named |
 | Route change        | `::view-transition-*(root)`              | 200ms cross-fade                          | Instant        |
 | Underline draw      | `draw` utility (via `ExternalLink`)      | Draws in from the left, 250ms             | Instant        |
 | Arrow nudge         | `.nudge`, `.nudge-back`                  | 3px toward where it points, 200ms         | None           |
@@ -94,6 +95,13 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 External links use `components/ExternalLink.tsx`: new tab, `rel="noopener noreferrer"`, the `draw` underline, a non-breaking `↗` and a screen-reader "(opens in a new tab)". The footer's GitHub, LinkedIn and Resume links are the exception: plain text with a cursor label and a colour change on hover.
 
+## Keyboard
+
+- ⌘K / Ctrl+K opens the palette, `components/Palette.tsx`: a native `<dialog>` searching projects, published notes, pages and actions (copy email, résumé, GitHub, LinkedIn). Its index is built on the server in `app/(site)/layout.tsx` from `projects` and `content/notes/`, so a new project or note shows up on its own.
+- Look: `--surface` panel, `--line` hairline, no shadow, each row tagged in the label style but in `--ink-2` (muted fails on surface). The active row takes the `--bg` ground. It doesn't animate.
+- On a project page, j/k and →/← go to the next and previous project (`nextProject`, `prevProject`), wrapping around. Keys are ignored while typing in a field, with a modifier held, or with the palette open.
+- The footer's "⌘K to search" hides on touch screens (`pointer: coarse`).
+
 ## Adding a project
 
 1. Put its media in `public/media/<slug>/`. Stills are `<name>.avif` plus `<name>.webp`. The card and hero clip is `card.mp4` with its poster `card-poster.avif` and `.webp`. Then run `npm run media` to write the 840px copies of anything wider.
@@ -106,7 +114,7 @@ External links use `components/ExternalLink.tsx`: new tab, `rel="noopener norefe
 
 1. Save the image as `public/media/<slug>/<name>.avif` and `.webp`, and run `npm run media`.
 2. Add `img("<slug>/<name>", width, height, alt, caption?)` under `media.<slug>`. Width and height are the file's pixel size. Alt text says what the image shows (the test wants more than 10 characters). The caption, if any, appears as a chip in the corner.
-3. List it in a section's `figures`. Figures sit below that section's paragraphs, full column width; portrait images centre at up to 640px tall.
+3. List it in a section's `figures`. Figures sit below that section's paragraphs, full column width; portrait images centre at up to 640px tall. A click opens the full-size file in a lightbox.
 
 ## Adding a note
 
