@@ -30,6 +30,7 @@ Fonts are loaded in `app/layout.tsx`: Instrument Serif (`font-serif`), Geist (`f
 | Project title  | 44/48 → 56/60, tracking −0.5px   | serif, ink        | Project and note `h1`           |
 | Contact        | 28/34 → 44/52                    | serif, ink        | Email on About                  |
 | Next project   | 32/40                            | serif, ink        | Foot of a project page          |
+| Stat           | 32/40, over a `label`            | serif, ink        | Project figures under the facts |
 | Lead           | 17/27                            | sans, ink-2       | Project one-liner               |
 | Body           | 16/26                            | sans, ink-2       | Paragraphs                      |
 | Small          | 14/22 (14/20 card meta, 14/21 project facts) | sans  | Rows, card meta, links          |
@@ -37,7 +38,7 @@ Fonts are loaded in `app/layout.tsx`: Instrument Serif (`font-serif`), Geist (`f
 | Footer         | 13                               | sans, muted       | Footer                          |
 | Code           | 13/24                            | mono, ink         | Command blocks                  |
 | Label          | 11/16, tracking 1.5px, uppercase | mono, muted       | The `label` utility: every section heading and `dt` |
-| Chip           | 10, tracking 1.5px, uppercase    | mono              | Figure captions, "Interface in progress" |
+| Chip           | 10, tracking 1.5px, uppercase    | mono              | Figure captions, "Interface in progress", build badges |
 
 - Section headings use `label`. Don't invent a new heading style.
 - `h1` and `h2` balance, `p` and `dd` wrap pretty (base layer).
@@ -93,10 +94,10 @@ External links use `components/ExternalLink.tsx`: new tab, `rel="noopener norefe
 ## Adding a project
 
 1. Put its media in `public/media/<slug>/`. Stills are `<name>.avif` plus `<name>.webp`. The card and hero clip is `card.mp4` with its poster `card-poster.avif` and `.webp`. Then run `npm run media` to write the 840px copies of anything wider.
-2. In `content/projects.ts`, add a `media.<slug>` entry (`img()` for stills, `clip()` for the card), then the project in `projects`. Array order is grid order, and the first project spans both columns. Leave out facts you don't have (`role`, `where`, `deployed` and `code` hide their rows) rather than writing placeholders; the unit test fails on "TODO".
+2. In `content/projects.ts`, add a `media.<slug>` entry (`img()` for stills, `clip()` for the card), then the project in `projects`. Array order is grid order, and the first project spans both columns. Leave out facts you don't have (`role`, `where`, `deployed` and `code` hide their rows) rather than writing placeholders; the unit test fails on "TODO". Optional: `stats` (two to four figures, only ones the copy already states) and `cite` (a BibTeX entry for the Cite button). A `code` link on GitHub and a `deployed` link to pypi.org/project/<name> add badges fetched at build (last commit, PyPI version); a failed fetch hides the badge.
 3. The first section must be titled "Overview". With more than one section the rail lists them on the project page.
 4. Add the slug to the grid-order test in `content/content.test.ts`, to `routes` in `e2e/routes.spec.ts` and to the URLs in `lighthouserc.json`. The sitemap and static params pick it up from `projects`.
-5. Run `npm run build && npm run og` to regenerate the social image if the top of Home changed.
+5. Run `npm run build && npm run og` to write the project's share image, `public/og/<slug>.png` (its card poster and name), and to regenerate `public/og.png` if the top of Home changed. Commit only the images that should change.
 
 ## Adding a figure
 
