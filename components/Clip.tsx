@@ -2,8 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
-/** A muted looping clip that plays only while on screen. With reduced motion, or before scripts run, the poster stays. */
-export function Clip({ src, poster, label, width, height }: { src: string; poster: string; label: string; width: number; height: number }) {
+/**
+ * A muted looping clip over its poster still (MediaFrame), playing only while on screen.
+ * It has no poster of its own and shows nothing until it plays, so with reduced motion, or before scripts run, the still shows.
+ */
+export function Clip({ src, width, height }: { src: string; width: number; height: number }) {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -17,20 +20,19 @@ export function Clip({ src, poster, label, width, height }: { src: string; poste
     return () => observer.disconnect();
   }, []);
 
+  // aria-hidden: the still underneath carries the alt text.
   return (
     <video
       ref={video}
       src={src}
-      poster={poster}
       width={width}
       height={height}
       muted
       loop
       playsInline
       preload="none"
-      role="img"
-      aria-label={label}
-      className="h-auto w-full"
+      aria-hidden="true"
+      className="relative h-auto w-full"
     />
   );
 }

@@ -30,4 +30,4 @@ Next.js (App Router, static export), TypeScript, Tailwind CSS, React `<ViewTrans
 
 ## Deployment
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build, Playwright and Lighthouse (accessibility 100 and CLS under 0.05 fail the build; performance under 95 only warns until Home and Arohexis get there; `lighthouserc.json`) on every push and pull request. The site lives at https://shreyandhawa.github.io. Pages and custom-domain setup: [DEPLOY.md](DEPLOY.md).
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build, Playwright and Lighthouse (performance under 95, accessibility under 100 or CLS of 0.05 and up fail the build; `lighthouserc.json`) on every push and pull request. The site lives at https://shreyandhawa.github.io. Pages and custom-domain setup: [DEPLOY.md](DEPLOY.md).
