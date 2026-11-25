@@ -89,6 +89,13 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 External links use `components/ExternalLink.tsx`: new tab, `rel="noopener noreferrer"`, the `draw` underline, a non-breaking `↗` and a screen-reader "(opens in a new tab)". The footer's GitHub, LinkedIn and Resume links are the exception: plain text with a cursor label and a colour change on hover.
 
+## Keyboard
+
+- ⌘K / Ctrl+K opens the palette, `components/Palette.tsx`: a native `<dialog>` searching projects, published notes, pages and actions (copy email, résumé, GitHub, LinkedIn). Its index is built on the server in `app/(site)/layout.tsx` from `projects` and `content/notes/`, so a new project or note shows up on its own.
+- Look: `--surface` panel, `--line` hairline, no shadow, each row tagged in the label style but in `--ink-2` (muted fails on surface). The active row takes the `--bg` ground. It doesn't animate.
+- On a project page, j/k and →/← go to the next and previous project (`nextProject`, `prevProject`), wrapping around. Keys are ignored while typing in a field, with a modifier held, or with the palette open.
+- The footer's "⌘K to search" hides on touch screens (`pointer: coarse`).
+
 ## Adding a project
 
 1. Put its media in `public/media/<slug>/`. Stills are `<name>.avif` plus `<name>.webp`. The card and hero clip is `card.mp4` with its poster `card-poster.avif` and `.webp`. Then run `npm run media` to write the 840px copies of anything wider.

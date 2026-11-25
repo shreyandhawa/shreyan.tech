@@ -47,6 +47,11 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
         <time dateTime={built.toISOString().slice(0, 7)}>
           {built.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" })}
         </time>
+        {/* No keyboard to press it with on a phone or tablet. */}
+        <span className="pointer-coarse:hidden">
+          {" "}
+          · <kbd>⌘K</kbd> to search
+        </span>
       </p>
     </footer>
   );

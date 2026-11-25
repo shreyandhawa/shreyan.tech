@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { getNotes } from "./notes";
-import { SMALL, nextProject, projects, type Media } from "./projects";
+import { SMALL, nextProject, prevProject, projects, type Media } from "./projects";
 import { site } from "./site";
 
 const publicFile = (src: string) => join(import.meta.dirname, "..", "public", src);
@@ -51,6 +51,10 @@ describe("projects", () => {
   it("next project wraps around", () => {
     expect(nextProject("lumencell").slug).toBe("trustory");
     expect(nextProject("nosolear").slug).toBe("lumencell");
+  });
+
+  it.each(projects)("previous undoes next from $name", (p) => {
+    expect(prevProject(nextProject(p.slug).slug).slug).toBe(p.slug);
   });
 });
 
