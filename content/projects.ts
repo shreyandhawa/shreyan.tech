@@ -357,3 +357,9 @@ export function nextProject(slug: string): Project {
   const i = projects.findIndex((p) => p.slug === slug);
   return projects[(i + 1) % projects.length];
 }
+
+/** The project before this one; order wraps around. */
+export function prevProject(slug: string): Project {
+  const i = projects.findIndex((p) => p.slug === slug);
+  return projects[(i - 1 + projects.length) % projects.length];
+}

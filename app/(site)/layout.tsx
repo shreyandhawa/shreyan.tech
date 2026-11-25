@@ -1,12 +1,28 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { Footer } from "@/components/Footer";
+import { Palette, type PaletteItem } from "@/components/Palette";
 import { Rail } from "@/components/Rail";
+import { publishedNotes } from "@/content/notes";
+import { projects } from "@/content/projects";
+import { site } from "@/content/site";
 
 // The footer's Resume link is hidden until public/resume.pdf exists.
 const hasResume = existsSync(join(process.cwd(), "public", "resume.pdf"));
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
+  const palette: PaletteItem[] = [
+    ...projects.map((p) => ({ group: "Project", label: p.name, href: `/projects/${p.slug}/` })),
+    ...publishedNotes().map((n) => ({ group: "Note", label: n.title, href: `/notes/${n.slug}/` })),
+    { group: "Page", label: "Home", href: "/" },
+    { group: "Page", label: "Notes", href: "/notes/" },
+    { group: "Page", label: "About", href: "/about/" },
+    { group: "Action", label: "Copy email", href: `mailto:${site.contact.email}` },
+    ...(hasResume ? [{ group: "Action", label: "Open résumé", href: "/resume.pdf" }] : []),
+    { group: "Action", label: "GitHub", href: site.contact.github.href },
+    { group: "Action", label: "LinkedIn", href: site.contact.linkedin.href },
+  ];
+
   return (
     <>
       <a href="#content" className="sr-only z-50 bg-bg px-3 py-2 focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
@@ -19,6 +35,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer hasResume={hasResume} />
       </div>
+      <Palette items={palette} />
       <div aria-hidden="true" className="grain" />
     </>
   );
