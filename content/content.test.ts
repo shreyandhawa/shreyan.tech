@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { getNotes } from "./notes";
 import { SMALL, nextProject, projects, type Media } from "./projects";
 import { site } from "./site";
 
@@ -60,5 +61,16 @@ describe("site", () => {
     for (const r of site.research) expect(r.href).toMatch(/^https:\/\//);
     expect(site.education).toHaveLength(2);
     expect(site.contact.email).toMatch(/@/);
+  });
+});
+
+describe("notes", () => {
+  it.each(getNotes())("$slug has complete frontmatter", (n) => {
+    expect(n.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+    for (const field of [n.title, n.summary]) expect(typeof field === "string" && field.trim(), `${n.slug}: title and summary`).toBeTruthy();
+    expect(n.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(new Date(n.date).toISOString().slice(0, 10)).toBe(n.date);
+    expect(n.draft === undefined || typeof n.draft === "boolean").toBe(true);
+    expect(JSON.stringify(n)).not.toMatch(/TODO/);
   });
 });

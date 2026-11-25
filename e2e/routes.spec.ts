@@ -1,10 +1,14 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { getNotes } from "../content/notes";
 
 const routes = [
   "/",
   "/about/",
   ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/projects/${s}/`),
+  "/notes/",
+  // Drafts too: they build at their URL, just unlisted.
+  ...getNotes().map((n) => `/notes/${n.slug}/`),
   // GitHub Pages serves this for unknown URLs; the test server only serves it by name.
   "/404.html",
 ];
@@ -16,6 +20,20 @@ test("a project page shares its own title and URL", async ({ page }) => {
   await expect(og("url")).toHaveAttribute("content", /\/projects\/lumencell\/$/);
   await expect(og("image")).toHaveAttribute("content", /\/og\.png$/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/projects\/lumencell\/$/);
+});
+
+test("drafts stay off the notes index, the feed and the sitemap", async ({ page, request }) => {
+  const drafts = getNotes().filter((n) => n.draft).map((n) => `/notes/${n.slug}/`);
+  await page.goto("/notes/");
+  const index = await page.content();
+  const feed = await request.get("/notes/feed.xml");
+  expect(feed.status()).toBe(200);
+  const listed = [index, await feed.text(), await (await request.get("/sitemap.xml")).text()].join();
+  for (const d of drafts) expect(listed).not.toContain(d);
+  for (const d of drafts) {
+    await page.goto(d);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  }
 });
 
 for (const [size, viewport] of [

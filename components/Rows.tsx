@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ExternalLink } from "@/components/ExternalLink";
 import type { Row } from "@/content/site";
 
@@ -15,7 +16,11 @@ export function Rows({ title, rows, className = "" }: { title?: string; rows: Ro
         {rows.map((r) => (
           <div key={r.label} className="grid gap-1 border-b border-line py-4 @lg:grid-cols-[180px_1fr] @lg:gap-6">
             <dt className="text-[14px] font-medium leading-[22px] text-ink">
-              {r.href ? (
+              {r.href?.startsWith("/") ? (
+                <Link href={r.href} className="tap relative draw">
+                  {r.label}
+                </Link>
+              ) : r.href ? (
                 <ExternalLink href={r.href}>{r.label}</ExternalLink>
               ) : (
                 r.label

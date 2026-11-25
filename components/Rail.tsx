@@ -42,11 +42,13 @@ export function Rail() {
       : []
     : [
         { id: "/", href: "/", label: "Projects" },
+        { id: "/notes", href: "/notes/", label: "Notes" },
         { id: "/about", href: "/about/", label: "About" },
       ];
 
   const section = useActiveSection(pathname, project ? items.map((i) => i.id) : []);
-  const active = project ? section : pathname;
+  // A single note keeps Notes marked.
+  const active = project ? section : pathname.replace(/^\/notes\/.+/, "/notes");
 
   // One marker that slides to the active item (200ms); placed without animation the first time.
   // Offsets are relative to <nav>, the nearest positioned ancestor of each <li>.
@@ -108,7 +110,7 @@ export function Rail() {
                 <li key={item.id}>
                   <Link
                     href={item.href}
-                    aria-current={isActive ? (project ? "location" : "page") : undefined}
+                    aria-current={isActive ? (project ? "location" : item.id === pathname ? "page" : "true") : undefined}
                     className={`tap relative transition-colors duration-150 hover:text-ink ${isActive ? "text-ink" : "text-muted"}`}
                   >
                     {item.label}
