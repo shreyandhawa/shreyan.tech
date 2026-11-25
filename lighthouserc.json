@@ -8,7 +8,9 @@
         "http://localhost/projects/lumencell/",
         "http://localhost/projects/trustory/",
         "http://localhost/projects/arohexis/",
-        "http://localhost/projects/nosolear/"
+        "http://localhost/projects/nosolear/",
+        "http://localhost/notes/",
+        "http://localhost/notes/car-t-negative-result/"
       ],
       "numberOfRuns": 3
     },
