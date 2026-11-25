@@ -4,7 +4,7 @@ import { SMALL, type Media } from "@/content/projects";
 const chip = "absolute bottom-3 left-3 rounded-sm bg-bg/90 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-ink";
 
 /**
- * Still (AVIF with WebP fallback), or the "Interface in progress" panel when media is missing.
+ * Still (AVIF with WebP fallback) with its clip, if any, playing over it, or the "Interface in progress" panel when media is missing.
  * Width and height are always set so nothing shifts on load.
  */
 export function MediaFrame({
@@ -37,25 +37,25 @@ export function MediaFrame({
     media.width > SMALL ? `${media.src}-${SMALL}.${ext} ${SMALL}w, ${media.src}.${ext} ${media.width}w` : `${media.src}.${ext}`;
   return (
     <figure className={`${frame} ${portrait ? "mx-auto w-fit" : ""}`}>
-      {media.video ? (
-        <Clip src={media.video} poster={`${media.src}.webp`} label={media.alt} width={media.width} height={media.height} />
-      ) : (
-        <picture>
-          <source srcSet={srcSet("avif")} sizes={sizes} type="image/avif" />
-          <img
-            src={`${media.src}.webp`}
-            srcSet={srcSet("webp")}
-            sizes={sizes}
-            alt={media.alt}
-            width={media.width}
-            height={media.height}
-            loading={eager ? "eager" : "lazy"}
-            fetchPriority={eager ? "high" : undefined}
-            decoding="async"
-            className={portrait ? "h-auto max-h-[640px] w-auto max-w-full" : "h-auto w-full"}
-          />
-        </picture>
-      )}
+      <picture>
+        <source srcSet={srcSet("avif")} sizes={sizes} type="image/avif" />
+        <img
+          src={`${media.src}.webp`}
+          srcSet={srcSet("webp")}
+          sizes={sizes}
+          alt={media.alt}
+          width={media.width}
+          height={media.height}
+          loading={eager ? "eager" : "lazy"}
+          fetchPriority={eager ? "high" : undefined}
+          decoding="async"
+          className={
+            // Under a clip the still is its poster (a poster attribute can't use AVIF or srcset); the clip sets the box.
+            media.video ? "absolute inset-0 size-full object-cover" : portrait ? "h-auto max-h-[640px] w-auto max-w-full" : "h-auto w-full"
+          }
+        />
+      </picture>
+      {media.video && <Clip src={media.video} width={media.width} height={media.height} />}
       {media.caption && <figcaption className={chip}>{media.caption}</figcaption>}
     </figure>
   );
