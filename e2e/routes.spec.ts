@@ -2,10 +2,11 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { getNotes } from "../content/notes";
 
+const slugs = ["lumencell", "arohexis", "nosolear", "trustory"];
 const routes = [
   "/",
   "/about/",
-  ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/projects/${s}/`),
+  ...slugs.map((s) => `/projects/${s}/`),
   "/notes/",
   // Drafts too: they build at their URL, just unlisted.
   ...getNotes().map((n) => `/notes/${n.slug}/`),
@@ -18,9 +19,18 @@ test("a project page shares its own title and URL", async ({ page }) => {
   const og = (p: string) => page.locator(`meta[property="og:${p}"]`);
   await expect(og("title")).toHaveAttribute("content", "lumenCell — Shreyan Dhawa");
   await expect(og("url")).toHaveAttribute("content", /\/projects\/lumencell\/$/);
-  await expect(og("image")).toHaveAttribute("content", /\/og\.png$/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/projects\/lumencell\/$/);
 });
+
+for (const slug of slugs)
+  test(`/projects/${slug}/ shares its own image`, async ({ page, request }) => {
+    await page.goto(`/projects/${slug}/`);
+    const image = await page.locator('meta[property="og:image"]').getAttribute("content");
+    expect(image).toMatch(new RegExp(`/og/${slug}\\.png$`));
+    const res = await request.get(new URL(image!).pathname);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toBe("image/png");
+  });
 
 test("drafts stay off the notes index, the feed and the sitemap", async ({ page, request }) => {
   const drafts = getNotes().filter((n) => n.draft).map((n) => `/notes/${n.slug}/`);

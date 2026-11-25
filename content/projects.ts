@@ -40,6 +40,10 @@ export type Project = {
   code?: string;
   /** Extra links (results, plans) shown under the Code link. */
   links?: { label: string; href: string }[];
+  /** Two to four figures shown under the facts. Only numbers already stated in the copy. */
+  stats?: { value: string; label: string }[];
+  /** BibTeX entry the Cite button copies. */
+  cite?: string;
   sections: Section[];
   /** Card media on Home; undefined renders the "Interface in progress" panel. */
   card?: Media;
@@ -199,6 +203,19 @@ export const projects: Project[] = [
       { label: "Results: github.com/shreyandhawa/clonal-trajectory-research", href: "https://github.com/shreyandhawa/clonal-trajectory-research" },
       { label: "Analysis plan, committed before any results: PR #51", href: "https://github.com/shreyandhawa/lumenCell_V2/pull/51" },
     ],
+    // From the copy: the explorer screenshot's cell count, the research row's methods and datasets, the Overview's Spearman range.
+    stats: [
+      { value: "21,762", label: "Cells, patient NHL-6" },
+      { value: "3", label: "Published methods" },
+      { value: "4", label: "Public datasets" },
+      { value: "0.67–0.95", label: "Spearman vs. known stages" },
+    ],
+    cite: `@software{dhawa_lumencell_2026,
+  author = {Dhawa, Shreyan},
+  title = {{lumenCell}: Interactive explorer for pseudotime and lineage trajectories in single-cell {RNA-seq} data},
+  year = {2026},
+  url = {https://github.com/shreyandhawa/lumenCell_V2},
+}`,
     sections: [
       {
         id: "overview",
