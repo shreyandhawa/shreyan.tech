@@ -51,6 +51,5 @@ export const site = {
     email: "shreyan.dhawa@gmail.com",
     github: { href: "https://github.com/shreyandhawa", label: "github.com/shreyandhawa" },
     linkedin: { href: "https://www.linkedin.com/in/shreyan-dhawa/", label: "linkedin.com/in/shreyan-dhawa" },
-    availability: "Open to summer 2027 research placements and internships",
   },
 };

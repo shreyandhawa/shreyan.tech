@@ -22,10 +22,12 @@ All copy lives in typed data files under `content/`: `projects.ts` and `site.ts`
 
 After changing Home, `npm run build && npm run og` regenerates the social preview image, `public/og.png`.
 
+Colour, type and motion rules, and how to add a project or figure: [DESIGN.md](DESIGN.md).
+
 ## Stack
 
 Next.js (App Router, static export), TypeScript, Tailwind CSS, React `<ViewTransition>` for page transitions.
 
 ## Deployment
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build and Playwright on every push and pull request. The site lives at https://shreyandhawa.github.io. Pages and custom-domain setup: [DEPLOY.md](DEPLOY.md).
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `out/` to GitHub Pages. `.github/workflows/ci.yml` runs lint, typecheck, unit tests, the build, Playwright and Lighthouse (accessibility 100 and CLS under 0.05 fail the build; performance under 95 only warns until Home and Arohexis get there; `lighthouserc.json`) on every push and pull request. The site lives at https://shreyandhawa.github.io. Pages and custom-domain setup: [DEPLOY.md](DEPLOY.md).

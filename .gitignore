@@ -46,3 +46,6 @@ next-env.d.ts
 
 # local preview config
 /.claude/
+
+# lighthouse ci
+/.lighthouseci/

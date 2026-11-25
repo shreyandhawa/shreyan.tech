@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { CopyButton } from "@/components/CopyButton";
+import { ExternalLink } from "@/components/ExternalLink";
 import { MediaFrame } from "@/components/MediaFrame";
 import { Rich } from "@/components/Rich";
 import { getProject, nextProject, projects } from "@/content/projects";
@@ -31,11 +32,7 @@ function Meta({ label, value, wide, href }: { label: string; value: string; wide
       <dt className="label">{label}</dt>
       <dd className="mt-1.5 text-[14px] leading-[21px] text-ink">
         {href ? (
-          <a href={href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
-            {value}
-            <span aria-hidden="true">&nbsp;↗</span>
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          <ExternalLink href={href}>{value}</ExternalLink>
         ) : (
           value
         )}
@@ -96,30 +93,18 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               ))}
               {i === last && p.code && (
                 <p className="mt-5 text-[14px] text-ink">
-                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="tap relative draw">
-                    Code: {p.code.replace("https://", "")}
-                    <span aria-hidden="true">&nbsp;↗</span>
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
+                  <ExternalLink href={p.code}>Code: {p.code.replace("https://", "")}</ExternalLink>
                 </p>
               )}
               {i === last &&
                 p.links?.map((l) => (
                   <p key={l.href} className="mt-2 text-[14px] text-ink">
-                    <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
-                      {l.label}
-                      <span aria-hidden="true">&nbsp;↗</span>
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </a>
+                    <ExternalLink href={l.href}>{l.label}</ExternalLink>
                   </p>
                 ))}
               {i === last && p.deployed && (
                 <p className="mt-2 text-[14px] text-ink">
-                  <a href={p.deployed.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
-                    Check out the website
-                    <span aria-hidden="true">&nbsp;↗</span>
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
+                  <ExternalLink href={p.deployed.href}>Check out the website</ExternalLink>
                 </p>
               )}
             </section>
