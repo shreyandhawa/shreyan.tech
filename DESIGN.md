@@ -67,7 +67,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 ### Rules
 
-1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Today Home and the project pages share theirs, the card media morphing into the project hero. About and 404 have none beyond the page enter.
+1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Today Home and the project pages share theirs, the card media morphing into the project hero (or, arriving from the Next link, the project name morphing into the title). About and 404 have none beyond the page enter.
 2. **Everything rests under reduced motion.** With `prefers-reduced-motion: reduce` nothing moves or autoplays: at most a short opacity fade. View transitions, zoom, nudges, the underline draw and the rail marker go instant, clips stay on their poster, and the system cursor replaces the custom one. A new animation ships with its reduced-motion branch and a test in `e2e/motion.spec.ts`.
 3. **No scroll-jacking.** Never take over wheel or touch scrolling, change its speed, or pin or scrub content against scroll position. Scroll listeners may read the position (the rail's active section does) but never set it. Smooth scrolling is for in-page anchors and is off under reduced motion.
 4. Hover effects live under `@media (hover: hover)`, so touch screens don't get stuck hover states.
@@ -78,11 +78,15 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 | ------------------- | ---------------------------------------- | ----------------------------------------- | -------------- |
 | Page enter          | `.enter`, `[--i:n]` per block (six at most) | Blur 6px and fade, 450ms, 40ms stagger | 150ms fade     |
 | Card → hero morph   | `<ViewTransition name="media-<slug>">` on the card and the hero | 400ms, `cubic-bezier(0.2, 0, 0, 1)` | Instant |
+| Next → title morph  | `<ViewTransition name="title-<slug>">` on the Next link's name and the project `h1` | As the card morph; skipped when the title lands off screen | Instant |
 | Route change        | `::view-transition-*(root)`              | 200ms cross-fade                          | Instant        |
 | Underline draw      | `draw` utility (via `ExternalLink`)      | Draws in from the left, 250ms             | Instant        |
 | Arrow nudge         | `.nudge`, `.nudge-back`                  | 3px toward where it points, 200ms         | None           |
 | Card zoom           | `MediaFrame hover`                       | Media scales 2% inside its frame, 500ms   | None           |
-| Rail marker         | `components/Rail.tsx`                    | Slides to the active item, 200ms          | Instant        |
+| Rail marker         | `components/Rail.tsx`                    | Slides to the active item, 200ms; the seed leans 15° the way it moves and settles, 250ms | Instant, no lean |
+| Copy-link toast     | `components/SectionHeading.tsx`          | "Link copied" blurs in, 150ms             | Appears        |
+| Label crossfade     | `CopyButton`, cursor label               | Old label fades out over the new, 150ms   | Swaps          |
+| Button press        | `<button>`: `motion-safe:active:scale-[.98]` | 98% while pressed                     | None           |
 | Cursor              | `components/Cursor.tsx`                  | Follows the pointer exactly; label opens in 120ms | System cursor |
 | Card clips          | `components/Clip.tsx`                    | Play while on screen                      | Poster only    |
 

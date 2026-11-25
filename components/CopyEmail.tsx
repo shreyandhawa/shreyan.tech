@@ -23,7 +23,7 @@ export function CopyEmail({ email, className }: { email: string; className: stri
         onClick={copy}
         aria-label={`Copy email ${email}`}
         data-cursor={copied ? "Copied" : "Copy email"}
-        className={`tap relative text-left font-serif text-ink ${className}`}
+        className={`tap relative text-left font-serif text-ink transition-[scale] duration-(--dur-fast) motion-safe:active:scale-[.98] ${className}`}
       >
         {email} <span aria-hidden="true" className="nudge">→</span>
       </button>
