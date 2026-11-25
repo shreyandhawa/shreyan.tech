@@ -67,6 +67,14 @@ test("clicking the email copies it and the label says Copied", async ({ page, co
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("shreyan.dhawa@gmail.com");
 });
 
+test("the install commands copy with one click", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/projects/lumencell/");
+  await page.getByRole("button", { name: "Copy commands" }).click();
+  await expect(page.getByRole("status")).toHaveText("Commands copied");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("pip install lumencell\nlumencell demo");
+});
+
 test("a card's media morphs into the project hero", async ({ page }) => {
   await page.addInitScript(() => {
     const w = window as unknown as { morphs: string[] };

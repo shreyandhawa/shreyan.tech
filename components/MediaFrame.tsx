@@ -21,7 +21,7 @@ export function MediaFrame({
 }) {
   // 1px inset border at 8% ink, plus the card-hover wash, drawn above the media.
   const frame = `relative overflow-hidden bg-surface after:pointer-events-none after:absolute after:inset-0 after:shadow-[inset_0_0_0_1px_rgb(30_42_34/0.08)] ${
-    hover ? "after:bg-white/0 after:transition-colors after:duration-200 group-hover:after:bg-white/15" : ""
+    hover ? "zoom after:bg-white/0 after:transition-colors after:duration-200 group-hover:after:bg-white/15" : ""
   }`;
 
   if (!media) {

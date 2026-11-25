@@ -1,8 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { MediaFrame } from "@/components/MediaFrame";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/content/site";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
+// Lets search engines tie this site to the same person's GitHub and LinkedIn.
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  sameAs: [site.contact.github.href, site.contact.linkedin.href],
+  affiliation: { "@type": "CollegeOrUniversity", name: "University of Southern Mississippi" },
+};
 
 // The first project spans both columns as the lead piece.
 function Card({ project, featured }: { project: Project; featured?: boolean }) {
@@ -31,6 +45,7 @@ export default function Home() {
   const { headline, currently } = site.home;
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\\u003c") }} />
       <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
         {headline}
       </h1>
