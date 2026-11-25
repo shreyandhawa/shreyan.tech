@@ -8,6 +8,13 @@
   --muted: #5c6a5e;
   --line: #c6d0c2;
   --accent: #2a4d9b;
+
+  /* Motion. Use as ease-(--ease-spring) duration-(--dur-base) in Tailwind; see DESIGN.md. */
+  /* Damping ratio 0.7: about 5% overshoot, settled by 75% of the duration. */
+  --ease-spring: linear(0, 0.075 4.2%, 0.242 8.3%, 0.436 12.5%, 0.62 16.7%, 0.772 20.8%, 0.887 25%, 0.965 29.2%, 1.013 33.3%, 1.037 37.5%, 1.046 41.7%, 1.044 45.8%, 1.037 50%, 1.028 54.2%, 1.02 58.3%, 1.012 62.5%, 1.006 66.7%, 1.002 70.8%, 1 75%, 0.999 79.2%, 0.998 83.3%, 0.998 87.5%, 0.998 91.7%, 0.999 95.8%, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 450ms;
 }
 
 @theme inline {
@@ -39,6 +46,19 @@ body {
     outline: 2px solid var(--ink);
     outline-offset: 3px;
   }
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  /* Inherited, so the code block's sideways scrollbar matches; the track shows each scroller's own ground. */
+  html {
+    scrollbar-color: var(--muted) transparent;
+  }
+  /* Dates and figures: project facts, About rows, the footer date. Elsewhere add tabular-nums. */
+  dd,
+  time {
+    font-variant-numeric: tabular-nums;
+  }
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
@@ -59,7 +79,7 @@ body {
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  transition: background-size 250ms ease-out;
+  transition: background-size var(--dur-base) ease-out;
   @media (hover: hover) {
     &:hover {
       background-size: 100% 1px;
@@ -121,7 +141,7 @@ body {
   }
 }
 .enter {
-  animation: enter 450ms ease-out both;
+  animation: enter var(--dur-slow) ease-out both;
   animation-delay: calc(var(--i, 0) * 40ms);
 }
 
@@ -161,7 +181,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .enter {
-    animation: fade-in 150ms ease-out both;
+    animation: fade-in var(--dur-fast) ease-out both;
   }
   ::view-transition-group(*),
   ::view-transition-old(*),

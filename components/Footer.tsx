@@ -1,5 +1,8 @@
 import { site } from "@/content/site";
 
+// The site is a static export, so this is the build date.
+const built = new Date();
+
 export function Footer({ hasResume }: { hasResume: boolean }) {
   return (
     <footer className="mt-28 flex max-w-[864px] flex-col gap-4 pb-8 text-[13px] text-muted md:flex-row md:justify-between">
@@ -39,6 +42,12 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
           </li>
         )}
       </ul>
+      <p>
+        © {built.getUTCFullYear()} {site.name} · Updated{" "}
+        <time dateTime={built.toISOString().slice(0, 7)}>
+          {built.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" })}
+        </time>
+      </p>
     </footer>
   );
 }

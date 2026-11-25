@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { CopyEmail } from "@/components/CopyEmail";
+import { ExternalLink } from "@/components/ExternalLink";
 import { Rows } from "@/components/Rows";
 import { site } from "@/content/site";
 
@@ -39,11 +40,7 @@ export default function About() {
         <CopyEmail email={email} className="mt-3 text-[28px] leading-[34px] md:text-[44px] md:leading-[52px]" />
         {[github, linkedin].map((l) => (
           <p key={l.href} className="mt-3 text-[14px] text-ink">
-            <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
-              {l.label}
-              <span aria-hidden="true">&nbsp;↗</span>
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            <ExternalLink href={l.href}>{l.label}</ExternalLink>
           </p>
         ))}
       </section>

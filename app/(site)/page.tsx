@@ -32,7 +32,7 @@ function Card({ project, featured }: { project: Project; featured?: boolean }) {
         <span aria-hidden="true" className="mx-2 text-muted">
           /
         </span>
-        <span className="text-muted">
+        <span className="text-muted tabular-nums">
           {listing.status} · {listing.year}
         </span>
       </p>
@@ -50,7 +50,7 @@ export default function Home() {
         {headline}
       </h1>
       <section className="enter mt-10 max-w-[640px] [--i:1]">
-        <h2 className="text-[14px] leading-5 text-muted">Currently</h2>
+        <h2 className="label">Currently</h2>
         <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>
       </section>
 
