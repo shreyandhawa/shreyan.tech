@@ -1,11 +1,15 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { getNotes } from "../content/notes";
 
 const slugs = ["lumencell", "arohexis", "nosolear", "trustory"];
 const routes = [
   "/",
   "/about/",
   ...slugs.map((s) => `/projects/${s}/`),
+  "/notes/",
+  // Drafts too: they build at their URL, just unlisted.
+  ...getNotes().map((n) => `/notes/${n.slug}/`),
   // GitHub Pages serves this for unknown URLs; the test server only serves it by name.
   "/404.html",
 ];
@@ -27,6 +31,20 @@ for (const slug of slugs)
     expect(res.status()).toBe(200);
     expect(res.headers()["content-type"]).toBe("image/png");
   });
+
+test("drafts stay off the notes index, the feed and the sitemap", async ({ page, request }) => {
+  const drafts = getNotes().filter((n) => n.draft).map((n) => `/notes/${n.slug}/`);
+  await page.goto("/notes/");
+  const index = await page.content();
+  const feed = await request.get("/notes/feed.xml");
+  expect(feed.status()).toBe(200);
+  const listed = [index, await feed.text(), await (await request.get("/sitemap.xml")).text()].join();
+  for (const d of drafts) expect(listed).not.toContain(d);
+  for (const d of drafts) {
+    await page.goto(d);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  }
+});
 
 for (const [size, viewport] of [
   ["desktop", { width: 1440, height: 900 }],

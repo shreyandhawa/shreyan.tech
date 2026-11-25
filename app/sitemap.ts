@@ -1,9 +1,16 @@
 import type { MetadataRoute } from "next";
+import { publishedNotes } from "@/content/notes";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["/", "/about/", ...projects.map((p) => `/projects/${p.slug}/`)].map((path) => ({ url: site.url + path }));
+  return [
+    "/",
+    "/about/",
+    ...projects.map((p) => `/projects/${p.slug}/`),
+    "/notes/",
+    ...publishedNotes().map((n) => `/notes/${n.slug}/`),
+  ].map((path) => ({ url: site.url + path }));
 }

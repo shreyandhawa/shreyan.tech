@@ -1,0 +1,22 @@
+---
+title: "A negative result: CAR-T trajectories (Sheih 2020)"
+date: 2026-11-25
+summary: "None of 12 per-patient runs on published CD19 CAR-T data was supported as a branching tree once lineages were checked against T-cell receptor clones."
+draft: true
+---
+
+Cells do not come with timestamps, so the order they go in has to be inferred, and that is what lumenCell, my single-cell trajectory tool, does. It runs three published methods, PAGA + DPT, Palantir and scFates, and across them the cell order tracked known stages with Spearman 0.67–0.95.<Sidenote>My first attempt scored about −0.2 against known ground truth, close to reversed, so I rebuilt the engine to run inference in PCA and diffusion space instead of on the 2-D picture.</Sidenote> Each run also draws lineages, and those get checked against T-cell receptor clones, which is what this note is about.
+
+## The clone check
+
+T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together. This checks the answer with evidence the method never saw. I score the agreement against three null models, and I exclude receptor genes from feature selection so the model cannot recognise clones from expression.
+
+## How it was scored
+
+The pass/fail thresholds in `benchmarks/thresholds.toml` were set in advance, and the analysis plan was committed publicly ([PR #51](https://github.com/shreyandhawa/lumenCell_V2/pull/51)) before any real data was scored. The methods were scored on synthetic trees and four public datasets against gates declared before each analysis. Methods that miss a gate are marked experimental in the app, and some of mine are.
+
+## Result
+
+The case study is published CD19 CAR-T data (Sheih et al. 2020). None of 12 per-patient runs was supported as a branching tree, so I reported it as a negative result. For patient NHL-6, the explorer draws the inferred tree over a UMAP of 21,762 cells, but the Evidence panel reports that clones do not back these lineages.<Sidenote>T-cell exhaustion data (Daniel et al. 2022) is in the benchmark too, but its clone check was not assessable.</Sidenote>
+
+The benchmarks, calibration and case studies are in [clonal-trajectory-research](https://github.com/shreyandhawa/clonal-trajectory-research).

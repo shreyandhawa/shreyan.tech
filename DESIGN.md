@@ -27,7 +27,7 @@ Fonts are loaded in `app/layout.tsx`: Instrument Serif (`font-serif`), Geist (`f
 | Role           | Size / line height, phone → md   | Font, colour      | Where                           |
 | -------------- | -------------------------------- | ----------------- | ------------------------------- |
 | Display        | 36/42 → 52/60, tracking −0.5 → −1px | serif, ink     | Home and 404 `h1`               |
-| Project title  | 44/48 → 56/60, tracking −0.5px   | serif, ink        | Project `h1`                    |
+| Project title  | 44/48 → 56/60, tracking −0.5px   | serif, ink        | Project and note `h1`           |
 | Contact        | 28/34 → 44/52                    | serif, ink        | Email on About                  |
 | Next project   | 32/40                            | serif, ink        | Foot of a project page          |
 | Stat           | 32/40, over a `label`            | serif, ink        | Project figures under the facts |
@@ -48,6 +48,7 @@ Fonts are loaded in `app/layout.tsx`: Instrument Serif (`font-serif`), Geist (`f
 
 - Two breakpoints only (Tailwind's defaults are removed): `md` at 900px, where the fixed rail appears, and `lg` at 1200px, where it widens from 200px to 288px.
 - Content: `max-w-[864px]` for the main column, `max-w-[640px]` for reading text. Phone gutter is 16px (`px-4`).
+- A note's 640px column is left-aligned, not centred like a project page, so `<Sidenote>` has room in the right margin from `lg`. Below `lg` a sidenote is a small block in the text.
 - Small links get `tap relative`, a 44px touch target on phones that moves nothing.
 - Every image and clip carries its width and height, so nothing shifts on load. CI fails a page whose CLS reaches 0.05.
 
@@ -102,3 +103,18 @@ External links use `components/ExternalLink.tsx`: new tab, `rel="noopener norefe
 1. Save the image as `public/media/<slug>/<name>.avif` and `.webp`, and run `npm run media`.
 2. Add `img("<slug>/<name>", width, height, alt, caption?)` under `media.<slug>`. Width and height are the file's pixel size. Alt text says what the image shows (the test wants more than 10 characters). The caption, if any, appears as a chip in the corner.
 3. List it in a section's `figures`. Figures sit below that section's paragraphs, full column width; portrait images centre at up to 640px tall.
+
+## Adding a note
+
+1. Write `content/notes/<slug>.mdx`. The file name is the URL. It opens with frontmatter, one `key: value` per line, strings in double quotes:
+   ```
+   ---
+   title: "A title"
+   date: 2026-11-25
+   summary: "One sentence for the index, the feed and the share card."
+   draft: true
+   ---
+   ```
+2. `draft: true` builds the page at its URL with `noindex` but keeps it off `/notes/`, the feed and the sitemap. Delete the line to publish.
+3. Body type comes from `mdx-components.tsx`: `##` headings are labels, links keep an underline. Put `<Sidenote>…</Sidenote>` right after the sentence it annotates, inside the paragraph.
+4. Add its URL to `lighthouserc.json`. The index, `/notes/feed.xml`, the sitemap, static params and the e2e route list read `content/notes/` themselves.

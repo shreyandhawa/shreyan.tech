@@ -1,6 +1,6 @@
 # shreyandhawa.github.io
 
-Personal portfolio of Shreyan Dhawa: a quiet, text-first static site. Home (project grid), one page per project under `/projects/`, and About.
+Personal portfolio of Shreyan Dhawa: a quiet, text-first static site. Home (project grid), one page per project under `/projects/`, research notes under `/notes/` (with an RSS feed at `/notes/feed.xml`), and About.
 
 Built with AI assistance (Claude Code), from a written specification and Figma designs.
 
@@ -18,15 +18,15 @@ Node 26 and Python 3 (to serve `out/` for the Playwright tests) are expected.
 
 ## Editing content
 
-All copy lives in typed data files under `content/`: `projects.ts` and `site.ts`. Pages render from that data; no copy lives in components. Project screenshots are in `public/media/<project>/` as AVIF with a WebP fallback.
+All copy lives in typed data files under `content/`: `projects.ts` and `site.ts`. Pages render from that data; no copy lives in components. Notes are MDX files in `content/notes/`. Project screenshots are in `public/media/<project>/` as AVIF with a WebP fallback.
 
 `npm run build && npm run og` regenerates the social preview images: `public/og.png` from Home and `public/og/<slug>.png` from each project's card poster and name.
 
-Colour, type and motion rules, and how to add a project or figure: [DESIGN.md](DESIGN.md).
+Colour, type and motion rules, and how to add a project, figure or note: [DESIGN.md](DESIGN.md).
 
 ## Stack
 
-Next.js (App Router, static export), TypeScript, Tailwind CSS, React `<ViewTransition>` for page transitions.
+Next.js (App Router, static export), TypeScript, MDX via `@next/mdx`, Tailwind CSS, React `<ViewTransition>` for page transitions.
 
 ## Deployment
 
