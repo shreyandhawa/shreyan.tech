@@ -71,8 +71,18 @@ test("the install commands copy with one click", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/projects/lumencell/");
   await page.getByRole("button", { name: "Copy commands" }).click();
-  await expect(page.getByRole("status")).toHaveText("Commands copied");
+  await expect(page.getByRole("status").filter({ hasText: "Commands copied" })).toHaveCount(1);
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("pip install lumencell\nlumencell demo");
+});
+
+test("Cite copies the BibTeX entry", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/projects/lumencell/");
+  const cite = page.getByRole("button", { name: "Cite: copy BibTeX" });
+  await cite.click();
+  await expect(cite).toHaveText("Copied");
+  await expect(page.getByRole("status").filter({ hasText: "BibTeX copied" })).toHaveCount(1);
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(/^@software\{dhawa_lumencell_2026,/);
 });
 
 test("a card's media morphs into the project hero", async ({ page }) => {

@@ -38,6 +38,29 @@ describe("projects", () => {
       expect(l.href).toMatch(/^https:\/\//);
     }
     for (const m of [p.card, p.hero, ...p.sections.flatMap((s) => s.figures ?? [])]) if (m) expectMedia(m);
+    if (p.card) expect(existsSync(publicFile(`og/${p.slug}.png`)), "share image: run npm run build && npm run og").toBe(true);
+    if (p.stats) {
+      expect(p.stats.length).toBeGreaterThanOrEqual(2);
+      expect(p.stats.length).toBeLessThanOrEqual(4);
+      for (const s of p.stats) {
+        expect(s.value).toMatch(/\d/);
+        expect(s.label.trim()).not.toBe("");
+      }
+    }
+    if (p.cite) {
+      expect(p.cite).toMatch(/^@\w+\{\w+,\n[\s\S]*\n\}$/);
+      expect(p.cite.split("{").length).toBe(p.cite.split("}").length);
+    }
+  });
+
+  it("lumenCell alone has stats and a citation, both from its copy", () => {
+    const [lumencell, ...rest] = projects;
+    // Each figure appears in the page copy, the research row or the figure alt text: nothing invented.
+    const copy = JSON.stringify({ lumencell, site }).replace(/three/g, "3").replace(/four/g, "4");
+    expect(lumencell.stats?.map((s) => s.value)).toEqual(["21,762", "3", "4", "0.67–0.95"]);
+    for (const s of lumencell.stats!) expect(copy).toContain(s.value);
+    expect(lumencell.cite).toContain(`url = {${lumencell.code}}`);
+    for (const p of rest) expect([p.stats, p.cite]).toEqual([undefined, undefined]);
   });
 
   it("lumenCell has Overview, Validation and Try it; TruStory has a Where row and no code link", () => {

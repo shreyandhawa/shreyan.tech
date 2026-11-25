@@ -20,7 +20,7 @@ Node 26 and Python 3 (to serve `out/` for the Playwright tests) are expected.
 
 All copy lives in typed data files under `content/`: `projects.ts` and `site.ts`. Pages render from that data; no copy lives in components. Project screenshots are in `public/media/<project>/` as AVIF with a WebP fallback.
 
-After changing Home, `npm run build && npm run og` regenerates the social preview image, `public/og.png`.
+`npm run build && npm run og` regenerates the social preview images: `public/og.png` from Home and `public/og/<slug>.png` from each project's card poster and name.
 
 Colour, type and motion rules, and how to add a project or figure: [DESIGN.md](DESIGN.md).
 

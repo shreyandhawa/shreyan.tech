@@ -27,6 +27,9 @@ jobs:
       - uses: actions/configure-pages@v6
       - run: npm ci
       - run: npm run build
+        env:
+          # Build-time badges call the GitHub API; the token lifts its rate limit (content/badges.ts).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: out
