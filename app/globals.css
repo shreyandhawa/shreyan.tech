@@ -46,6 +46,11 @@ body {
     outline: 2px solid var(--ink);
     outline-offset: 3px;
   }
+  /* A figure's zoom button fills a frame that clips its overflow, so the frame draws the ring. */
+  figure:has(> button:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
   ::selection {
     background: var(--accent);
     color: var(--bg);
@@ -169,7 +174,8 @@ body {
   }
 }
 
-/* Route change: the page cross-fades in 200ms; a card's media morphs into the project hero in 400ms. */
+/* Route change: the page cross-fades in 200ms; a card's media morphs into the project hero in 400ms.
+   The same morph takes a figure into its lightbox (components/Lightbox.tsx), whose backdrop arrives with the cross-fade. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 200ms;
@@ -187,6 +193,16 @@ body {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
+  }
+  /* The lightbox fades instead: no named parts, so the whole page cross-fades in 150ms. */
+  :root:active-view-transition-type(zoom) * {
+    view-transition-name: none !important;
+  }
+  :root:active-view-transition-type(zoom)::view-transition-old(root) {
+    animation: fade-in var(--dur-fast) ease-out reverse both !important;
+  }
+  :root:active-view-transition-type(zoom)::view-transition-new(root) {
+    animation: fade-in var(--dur-fast) ease-out both !important;
   }
 }
 
