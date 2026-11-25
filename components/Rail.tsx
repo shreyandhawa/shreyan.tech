@@ -75,7 +75,7 @@ export function Rail() {
         {project ? (
           <>
             <Link href="/" className="tap relative transition-colors duration-150 hover:text-ink">
-              <span aria-hidden="true">← </span>Projects
+              <span aria-hidden="true" className="nudge-back">←</span> Projects
             </Link>
             <span aria-hidden="true" className="mx-1.5 text-muted">
               /

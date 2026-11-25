@@ -25,7 +25,7 @@ export function CopyEmail({ email, className }: { email: string; className: stri
         data-cursor={copied ? "Copied" : "Copy email"}
         className={`tap relative text-left font-serif text-ink ${className}`}
       >
-        {email} <span aria-hidden="true">→</span>
+        {email} <span aria-hidden="true" className="nudge">→</span>
       </button>
       <span role="status" className="sr-only">
         {copied ? "Email copied" : ""}

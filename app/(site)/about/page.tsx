@@ -1,9 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { CopyEmail } from "@/components/CopyEmail";
 import { Rows } from "@/components/Rows";
 import { site } from "@/content/site";
 
-export const metadata: Metadata = { title: "About", description: site.about[0] };
+export async function generateMetadata(_: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  const url = "/about/";
+  // A page's openGraph replaces the layout's whole, so carry the shared image over.
+  const images = (await parent).openGraph?.images;
+  return {
+    title: "About",
+    description: site.about[0],
+    alternates: { canonical: url },
+    openGraph: { type: "website", siteName: site.name, images, url, title: `About — ${site.name}`, description: site.about[0] },
+  };
+}
 
 export default function About() {
   const { email, github, linkedin } = site.contact;
@@ -29,9 +39,9 @@ export default function About() {
         <CopyEmail email={email} className="mt-3 text-[28px] leading-[34px] md:text-[44px] md:leading-[52px]" />
         {[github, linkedin].map((l) => (
           <p key={l.href} className="mt-3 text-[14px] text-ink">
-            <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 hover:underline">
+            <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
               {l.label}
-              <span aria-hidden="true"> ↗</span>
+              <span aria-hidden="true">&nbsp;↗</span>
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </p>

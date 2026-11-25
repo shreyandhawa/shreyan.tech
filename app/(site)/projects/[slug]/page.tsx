@@ -1,18 +1,28 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
+import { CopyButton } from "@/components/CopyButton";
 import { MediaFrame } from "@/components/MediaFrame";
 import { Rich } from "@/components/Rich";
 import { getProject, nextProject, projects } from "@/content/projects";
+import { site } from "@/content/site";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
   return projects.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/projects/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/projects/[slug]">, parent: ResolvingMetadata): Promise<Metadata> {
   const p = getProject((await params).slug)!;
-  return { title: p.name, description: p.oneLine };
+  const url = `/projects/${p.slug}/`;
+  // A page's openGraph replaces the layout's whole, so carry the shared image over.
+  const images = (await parent).openGraph?.images;
+  return {
+    title: p.name,
+    description: p.oneLine,
+    alternates: { canonical: url },
+    openGraph: { type: "website", siteName: site.name, images, url, title: `${p.name} — ${site.name}`, description: p.oneLine },
+  };
 }
 
 function Meta({ label, value, wide, href }: { label: string; value: string; wide?: boolean; href?: string }) {
@@ -21,9 +31,9 @@ function Meta({ label, value, wide, href }: { label: string; value: string; wide
       <dt className="label">{label}</dt>
       <dd className="mt-1.5 text-[14px] leading-[21px] text-ink">
         {href ? (
-          <a href={href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+          <a href={href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
             {value}
-            <span aria-hidden="true"> ↗</span>
+            <span aria-hidden="true">&nbsp;↗</span>
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
         ) : (
@@ -72,9 +82,12 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                 </p>
               ))}
               {s.commands && (
-                <pre className="mt-3 overflow-x-auto bg-surface px-4 py-3 font-mono text-[13px] leading-6 text-ink">
-                  <code>{s.commands.join("\n")}</code>
-                </pre>
+                <div className="relative mt-3">
+                  <pre className="overflow-x-auto bg-surface py-3 pl-4 pr-20 font-mono text-[13px] leading-6 text-ink">
+                    <code>{s.commands.join("\n")}</code>
+                  </pre>
+                  <CopyButton text={s.commands.join("\n")} />
+                </div>
               )}
               {s.figures?.map((f) => (
                 <div key={f.src} className="mt-6">
@@ -83,9 +96,9 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               ))}
               {i === last && p.code && (
                 <p className="mt-5 text-[14px] text-ink">
-                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="tap relative draw">
                     Code: {p.code.replace("https://", "")}
-                    <span aria-hidden="true"> ↗</span>
+                    <span aria-hidden="true">&nbsp;↗</span>
                     <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 </p>
@@ -93,18 +106,18 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               {i === last &&
                 p.links?.map((l) => (
                   <p key={l.href} className="mt-2 text-[14px] text-ink">
-                    <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
                       {l.label}
-                      <span aria-hidden="true"> ↗</span>
+                      <span aria-hidden="true">&nbsp;↗</span>
                       <span className="sr-only"> (opens in a new tab)</span>
                     </a>
                   </p>
                 ))}
               {i === last && p.deployed && (
                 <p className="mt-2 text-[14px] text-ink">
-                  <a href={p.deployed.href} target="_blank" rel="noopener noreferrer" className="tap relative underline-offset-4 transition-colors duration-150 hover:underline">
+                  <a href={p.deployed.href} target="_blank" rel="noopener noreferrer" className="tap relative draw">
                     Check out the website
-                    <span aria-hidden="true"> ↗</span>
+                    <span aria-hidden="true">&nbsp;↗</span>
                     <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 </p>
@@ -116,7 +129,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         <nav aria-label="Next project" className="enter mt-16 [--i:4] border-t border-line pt-6">
           <p className="label">Next</p>
           <Link href={`/projects/${next.slug}/`} className="tap relative mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
-            {next.name} <span aria-hidden="true">→</span>
+            {next.name} <span aria-hidden="true" className="nudge">→</span>
           </Link>
         </nav>
       </div>

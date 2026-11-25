@@ -5,7 +5,18 @@ const routes = [
   "/",
   "/about/",
   ...["lumencell", "arohexis", "nosolear", "trustory"].map((s) => `/projects/${s}/`),
+  // GitHub Pages serves this for unknown URLs; the test server only serves it by name.
+  "/404.html",
 ];
+
+test("a project page shares its own title and URL", async ({ page }) => {
+  await page.goto("/projects/lumencell/");
+  const og = (p: string) => page.locator(`meta[property="og:${p}"]`);
+  await expect(og("title")).toHaveAttribute("content", "lumenCell — Shreyan Dhawa");
+  await expect(og("url")).toHaveAttribute("content", /\/projects\/lumencell\/$/);
+  await expect(og("image")).toHaveAttribute("content", /\/og\.png$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/projects\/lumencell\/$/);
+});
 
 for (const [size, viewport] of [
   ["desktop", { width: 1440, height: 900 }],
