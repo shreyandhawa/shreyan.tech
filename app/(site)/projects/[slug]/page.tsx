@@ -5,6 +5,7 @@ import { CopyButton } from "@/components/CopyButton";
 import { ExternalLink } from "@/components/ExternalLink";
 import { MediaFrame } from "@/components/MediaFrame";
 import { Rich } from "@/components/Rich";
+import { SectionHeading } from "@/components/SectionHeading";
 import { lastCommit, pypiVersion } from "@/content/badges";
 import { getProject, nextProject, projects } from "@/content/projects";
 import { site } from "@/content/site";
@@ -58,9 +59,15 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         <MediaFrame media={p.hero} eager />
       </ViewTransition>
       <div className="mx-auto max-w-[640px]">
-        <h1 className="enter mt-10 font-serif text-[44px] leading-[48px] tracking-[-0.5px] text-ink md:text-[56px] md:leading-[60px]">
-          {p.name}
-        </h1>
+        {/* Same name as the Next link on the previous project: its name morphs into this title. The enter fade sits on a
+            wrapper so it stays out of the morph's snapshot, and w-fit keeps the box the size of the text. */}
+        <div className="enter mt-10">
+          <ViewTransition name={`title-${p.slug}`} share="morph" default="none">
+            <h1 className="w-fit font-serif text-[44px] leading-[48px] tracking-[-0.5px] text-ink md:text-[56px] md:leading-[60px]">
+              {p.name}
+            </h1>
+          </ViewTransition>
+        </div>
         <p className="enter mt-4 text-[17px] [--i:1] leading-[27px] text-ink-2">{p.oneLine}</p>
 
         <dl className="enter mt-10 grid gap-6 md:grid-cols-3 [--i:2]">
@@ -102,9 +109,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         <div className="enter [--i:4]">
           {p.sections.map((s, i) => (
             <section key={s.id} id={s.id} aria-labelledby={`${s.id}-title`} className="mt-12 scroll-mt-8">
-              <h2 id={`${s.id}-title`} className="label">
-                {s.title}
-              </h2>
+              <SectionHeading id={s.id} title={s.title} />
               {s.paragraphs.map((text, j) => (
                 <p key={j} className="mt-3 text-[16px] leading-[26px] text-ink-2">
                   <Rich text={text} />
@@ -151,7 +156,10 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         <nav aria-label="Next project" className="enter mt-16 [--i:5] border-t border-line pt-6">
           <p className="label">Next</p>
           <Link href={`/projects/${next.slug}/`} className="tap relative mt-2 inline-block font-serif text-[32px] leading-10 text-ink">
-            {next.name} <span aria-hidden="true" className="nudge">→</span>
+            <ViewTransition name={`title-${next.slug}`} share="morph" default="none">
+              <span className="inline-block">{next.name}</span>
+            </ViewTransition>{" "}
+            <span aria-hidden="true" className="nudge">→</span>
           </Link>
         </nav>
       </div>

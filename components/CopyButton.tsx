@@ -39,14 +39,18 @@ export function CopyButton({
 
   return (
     <>
-      {/* The label style in ink-2, not its muted grey: muted on the surface ground is under 4.5:1. */}
+      {/* The label style in ink-2, not its muted grey: muted on the surface ground is under 4.5:1.
+          Both labels share one grid cell, so the button keeps its width while they crossfade. */}
       <button
         type="button"
         onClick={copy}
         aria-label={name}
-        className={`tap ${className} rounded-sm px-1.5 py-1 font-mono text-[11px] uppercase leading-4 tracking-[1.5px] text-ink-2 transition-colors duration-150 hover:text-ink`}
+        className={`tap ${className} rounded-sm px-1.5 py-1 font-mono text-[11px] uppercase leading-4 tracking-[1.5px] text-ink-2 transition-[color,scale] duration-150 hover:text-ink motion-safe:active:scale-[.98]`}
       >
-        {copied ? "Copied" : label}
+        <span className="grid justify-items-center *:[grid-area:1/1] motion-safe:*:transition-[opacity,visibility] motion-safe:*:duration-(--dur-fast)">
+          <span className={copied ? "invisible opacity-0" : undefined}>{label}</span>
+          <span className={copied ? undefined : "invisible opacity-0"}>Copied</span>
+        </span>
       </button>
       <span role="status" className="sr-only">
         {copied ? done : ""}

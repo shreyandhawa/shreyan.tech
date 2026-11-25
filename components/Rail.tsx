@@ -55,15 +55,23 @@ export function Rail() {
   const list = useRef<HTMLUListElement>(null);
   const marker = useRef<HTMLSpanElement>(null);
   const placed = useRef(false);
+  const last = useRef({ x: 0, y: 0 });
   useLayoutEffect(() => {
     const place = () => {
       const m = marker.current;
       const li = list.current?.querySelector("[aria-current]")?.parentElement;
       if (!m) return;
       if (!li) return void (m.style.opacity = "0");
+      const x = li.offsetLeft - 15;
+      const y = li.offsetTop + li.offsetHeight / 2 - 4;
+      // While it slides, the seed leans 15° the way it's going (down or right is clockwise), then settles.
+      const lean = Math.sign(y - last.current.y || x - last.current.x) * 15;
+      if (placed.current && lean && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+        m.firstElementChild?.animate({ transform: ["none", `rotate(${lean}deg)`, "none"] }, { duration: 250, easing: "ease-out" });
       m.style.transition = placed.current ? "" : "none";
       m.style.opacity = "1";
-      m.style.transform = `translate(${li.offsetLeft - 15}px, ${li.offsetTop + li.offsetHeight / 2 - 4}px)`;
+      m.style.transform = `translate(${x}px, ${y}px)`;
+      last.current = { x, y };
       placed.current = true;
     };
     place();

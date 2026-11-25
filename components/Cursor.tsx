@@ -33,9 +33,19 @@ export function Cursor() {
       el.style.opacity = target && !target.closest(SYSTEM) ? "1" : "0";
       const next = target?.closest("[data-cursor]")?.getAttribute("data-cursor") ?? "";
       if (next !== label) {
+        const t = text.current!;
+        // One label swapped for another ("Copy email" → "Copied") crossfades in 150ms: the old text fades out over the new.
+        if (label && next) {
+          const old = document.createElement("span");
+          old.className = "absolute left-1.5 top-0 whitespace-nowrap text-[14px] font-medium leading-[22px] text-ink";
+          old.textContent = label;
+          box.current!.append(old);
+          old.animate({ opacity: [1, 0] }, 150).onfinish = () => old.remove();
+          t.animate({ color: ["transparent", getComputedStyle(t).color] }, 150);
+        }
         label = next;
-        text.current!.textContent = next;
-        labelWidth = next ? text.current!.offsetWidth : 0;
+        t.textContent = next;
+        labelWidth = next ? t.offsetWidth : 0;
         box.current!.style.width = `${labelWidth}px`;
       }
       // Near the right edge the label sits to the left of the glyph instead.

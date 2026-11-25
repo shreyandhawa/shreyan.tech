@@ -133,7 +133,8 @@ body {
 
 /* ---- Motion ---- */
 
-/* Page enter: blocks go from blurred and transparent to sharp, 40ms apart (set --i per block, six at most). */
+/* Page enter: blocks go from blurred and transparent to sharp, 40ms apart (set --i per block, six at most).
+   Backwards fill only: a filter held after the end would trap fixed descendants (the copy-link toast) in the block. */
 @keyframes enter {
   from {
     opacity: 0;
@@ -146,7 +147,7 @@ body {
   }
 }
 .enter {
-  animation: enter var(--dur-slow) ease-out both;
+  animation: enter var(--dur-slow) ease-out backwards;
   animation-delay: calc(var(--i, 0) * 40ms);
 }
 
