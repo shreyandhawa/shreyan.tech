@@ -86,6 +86,17 @@ test("j/k and ←/→ step between projects, but not while typing", async ({ pag
   await expect(page).toHaveURL(/\/projects\/lumencell\/$/);
 });
 
+test("j/k and ←/→ wait while a figure's lightbox is open", async ({ page }) => {
+  await visit(page, "/projects/lumencell/");
+  await page.getByRole("button", { name: /^Enlarge: / }).first().click();
+  const lightbox = page.getByRole("dialog");
+  await expect(lightbox).toBeVisible();
+  for (const key of ["j", "k", "ArrowRight", "ArrowLeft"]) await page.keyboard.press(key);
+  // Each would step to another project; none may land within 1.5s.
+  await expect(page.waitForURL((url) => !url.pathname.startsWith("/projects/lumencell/"), { timeout: 1500 })).rejects.toThrow();
+  await expect(lightbox).toBeVisible();
+});
+
 test("the open palette passes axe", async ({ page }) => {
   await visit(page, "/");
   await openPalette(page);

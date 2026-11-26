@@ -39,7 +39,8 @@ export function Palette({ items }: { items: PaletteItem[] }) {
         });
         return d.showModal(); // focuses the input, now rendered
       }
-      if (dialog.current?.open || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      // Any open dialog, this one or a figure's lightbox: stepping away would drop it mid-view.
+      if (document.querySelector("dialog[open]") || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
       if ((e.target as Element).closest?.("input, textarea, select, [contenteditable]")) return;
       // location, not usePathname: a key pressed right after a navigation must see the new page.
       const slug = location.pathname.match(/^\/projects\/([^/]+)/)?.[1] ?? "";
