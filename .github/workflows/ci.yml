@@ -17,11 +17,12 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      # The build prints /cv/ to out/cv.pdf with Playwright (scripts/cv.mjs); e2e/cv.spec.ts checks it.
+      - run: npx playwright install --with-deps chromium
       - run: npm run build
         env:
           # Build-time badges call the GitHub API; the token lifts its rate limit (content/badges.ts).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Thresholds and pages in lighthouserc.json; reports are not uploaded.
       - run: npx @lhci/cli@0.16.1 autorun
-      - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e

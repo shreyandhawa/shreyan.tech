@@ -77,7 +77,7 @@ export function Cursor() {
 
   if (!enabled) return null;
   return (
-    <div ref={root} aria-hidden="true" className="group pointer-events-none fixed left-0 top-0 z-[100] opacity-0 will-change-transform">
+    <div ref={root} aria-hidden="true" className="group pointer-events-none fixed left-0 top-0 z-[100] opacity-0 will-change-transform print:hidden">
       <svg width="16" height="16" viewBox="0 0 16 16" className="block text-ink">
         <path d="M0 0C6 1 15 5 15 10A5 5 0 0 1 10 15C5 15 1 6 0 0Z" fill="currentColor" />
       </svg>

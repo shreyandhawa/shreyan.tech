@@ -7,8 +7,8 @@ import { publishedNotes } from "@/content/notes";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 
-// The footer's Resume link is hidden until public/resume.pdf exists.
-const hasResume = existsSync(join(process.cwd(), "public", "resume.pdf"));
+// A hand-made public/resume.pdf wins; otherwise the build prints /cv/ to /cv.pdf (scripts/cv.mjs).
+const resume = existsSync(join(process.cwd(), "public", "resume.pdf")) ? "/resume.pdf" : "/cv.pdf";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const palette: PaletteItem[] = [
@@ -18,7 +18,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     { group: "Page", label: "Notes", href: "/notes/" },
     { group: "Page", label: "About", href: "/about/" },
     { group: "Action", label: "Copy email", href: `mailto:${site.contact.email}` },
-    ...(hasResume ? [{ group: "Action", label: "Open résumé", href: "/resume.pdf" }] : []),
+    { group: "Action", label: "Open résumé", href: resume },
     { group: "Action", label: "GitHub", href: site.contact.github.href },
     { group: "Action", label: "LinkedIn", href: site.contact.linkedin.href },
   ];
@@ -29,14 +29,14 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         Skip to content
       </a>
       <Rail />
-      <div className="px-4 md:pl-[200px] md:pr-[72px] lg:pl-[288px]">
-        <main id="content" className="max-w-[864px] pt-12 md:pt-[220px]">
+      <div className="px-4 md:pl-[200px] md:pr-[72px] lg:pl-[288px] print:p-0">
+        <main id="content" className="max-w-[864px] pt-12 md:pt-[220px] print:pt-0">
           {children}
         </main>
-        <Footer hasResume={hasResume} />
+        <Footer resume={resume} />
       </div>
       <Palette items={palette} />
-      <div aria-hidden="true" className="grain" />
+      <div aria-hidden="true" className="grain print:hidden" />
     </>
   );
 }

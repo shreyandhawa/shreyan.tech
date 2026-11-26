@@ -98,6 +98,12 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 External links use `components/ExternalLink.tsx`: new tab, `rel="noopener noreferrer"`, the `draw` underline, a non-breaking `↗` and a screen-reader "(opens in a new tab)". The footer's GitHub, LinkedIn and Resume links are the exception: plain text with a cursor label and a colour change on hover.
 
+## CV and print
+
+- `/cv/` has no copy of its own: name and contact, education and research come from `content/site.ts`, and each project's name, one line, stack and timeline from `content/projects.ts`. `npm run build` prints it to `out/cv.pdf` (`scripts/cv.mjs`, Playwright, US Letter).
+- The footer's Resume link and the palette's "Open résumé" go to a hand-made `public/resume.pdf` while it exists, otherwise to `/cv.pdf`.
+- Print styles sit at the end of `app/globals.css`: black on white, nothing animating, rows kept whole across pages, and each link's address printed after it (`print:after:content-none` opts a link out). The rail, grain, cursor and footer carry `print:hidden`.
+
 ## Keyboard
 
 - ⌘K / Ctrl+K opens the palette, `components/Palette.tsx`: a native `<dialog>` searching projects, published notes, pages and actions (copy email, résumé, GitHub, LinkedIn). Its index is built on the server in `app/(site)/layout.tsx` from `projects` and `content/notes/`, so a new project or note shows up on its own.

@@ -80,7 +80,7 @@ export function Rail() {
   }, [active, items.length]);
 
   return (
-    <header className="relative z-30 px-4 pt-4 md:fixed md:inset-y-0 md:left-0 md:w-[200px] md:p-0 lg:w-[288px]">
+    <header className="relative z-30 px-4 pt-4 md:fixed md:inset-y-0 md:left-0 md:w-[200px] md:p-0 lg:w-[288px] print:hidden">
       <p className="flex h-10 items-center text-[14px] text-ink-2 md:absolute md:left-8 md:top-8 md:block md:h-auto">
         {project ? (
           <>
