@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import { CopyButton } from "@/components/CopyButton";
 import { ExternalLink } from "@/components/ExternalLink";
+import { Scrub } from "@/components/field/Scrub";
 import { MediaFrame } from "@/components/MediaFrame";
 import { Rich } from "@/components/Rich";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -121,6 +122,11 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
                     <code>{s.commands.join("\n")}</code>
                   </pre>
                   <CopyButton text={s.commands.join("\n")} />
+                </div>
+              )}
+              {s.scrub && (
+                <div className="mt-6">
+                  <Scrub />
                 </div>
               )}
               {s.figures?.map((f) => (

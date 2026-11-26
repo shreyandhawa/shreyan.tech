@@ -57,8 +57,9 @@ for (const [size, viewport] of [
         const res = await page.goto(route);
         expect(res?.status()).toBe(200);
         await expect(page.locator("h1")).toHaveCount(1);
-        // Check contrast on the settled page, not mid-way through the page-enter fade.
-        await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished)));
+        // Check contrast on the settled page, not mid-way through the page-enter fade. Scroll-driven animations (the
+        // scrub figure) never finish while the page sits still, so only time-based ones are awaited.
+        await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.timeline === document.timeline).map((a) => a.finished)));
         const { violations } = await new AxeBuilder({ page }).analyze();
         const serious = violations.filter((v) => v.impact === "serious" || v.impact === "critical");
         expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);

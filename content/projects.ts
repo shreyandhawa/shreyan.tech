@@ -20,6 +20,8 @@ export type Section = {
   paragraphs: string[];
   commands?: string[];
   figures?: Media[];
+  /** Opens the figures with the field, which recolours along pseudotime as it scrolls up the screen (components/field/Scrub.tsx). */
+  scrub?: boolean;
 };
 
 export type Project = {
@@ -231,6 +233,7 @@ export const projects: Project[] = [
         paragraphs: [
           "T cells that share a receptor sequence descend from a common ancestor, so a correct trajectory should keep each clone together. That checks the answer with evidence the method never saw. I score the agreement against three null models, and exclude receptor genes from feature selection so the model can't recognise clones from expression. Case study: published CD19 CAR-T data (Sheih et al. 2020), where none of 12 per-patient runs was supported as a branching tree, reported as a negative result. T-cell exhaustion data (Daniel et al. 2022) is in the benchmark, but its clone check was not assessable.",
         ],
+        scrub: true,
         figures: [media.lumencell.evidence],
       },
       {

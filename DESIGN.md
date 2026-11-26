@@ -68,9 +68,9 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 ### Rules
 
-1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Home's is the field behind the headline growing into a trajectory (`components/field/`). The project pages' is the card media morphing into the project hero, started from a Home card (or, arriving from the Next link, the project name morphing into the title); a project figure opening into its lightbox is the same morph, played only on a click. About and 404 have none beyond the page enter.
+1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Home's is the field behind the headline growing into a trajectory (`components/field/`). The project pages' is the card media morphing into the project hero, started from a Home card (or, arriving from the Next link, the project name morphing into the title); a project figure opening into its lightbox is the same morph, played only on a click. A section flagged `scrub` (lumenCell's Validation, nowhere else) adds the field as a figure that recolours as you scroll past it. About and 404 have none beyond the page enter.
 2. **Everything rests under reduced motion.** With `prefers-reduced-motion: reduce` nothing moves or autoplays: at most a short opacity fade. View transitions, zoom, nudges, the underline draw and the rail marker go instant, clips stay on their poster, and the system cursor replaces the custom one. A new animation ships with its reduced-motion branch and a test in `e2e/motion.spec.ts`.
-3. **No scroll-jacking.** Never take over wheel or touch scrolling, change its speed, or pin or scrub content against scroll position. Scroll listeners may read the position (the rail's active section does) but never set it. Smooth scrolling is for in-page anchors and is off under reduced motion.
+3. **No scroll-jacking.** Never take over wheel or touch scrolling, change its speed, or pin content. Scroll listeners may read the position (the rail's active section does) but never set it. The one thing scrubbed against scroll position is a `scrub` section's field figure: a CSS view timeline drives it, and it never pins or changes how the page scrolls. Smooth scrolling is for in-page anchors and is off under reduced motion.
 4. Hover effects live under `@media (hover: hover)`, so touch screens don't get stuck hover states.
 
 ### What moves today
@@ -92,6 +92,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 | Cursor              | `components/Cursor.tsx`                  | Follows the pointer exactly; label opens in 120ms | System cursor |
 | Card clips          | `components/Clip.tsx`                    | Play while on screen                      | Poster only    |
 | Home field          | `components/field/`, behind the `h1`     | 1,500 points grow from a scattered cloud into a three-lineage trajectory over 7s, root first, `--muted` → `--accent` along pseudotime; they drift up to 26px from the mouse. Canvas 2D, DPR capped at 2; sleeps off screen, in a hidden tab and once still | One still frame of the grown tree |
+| Scrub field         | `components/field/Scrub.tsx`, a section with `scrub: true` | The grown field, all `--muted`, takes its pseudotime colour from the root outward as it scrolls from half on screen to the middle. `animation-timeline: view()` animates `--scrub`, which masks the coloured layer in; without view timelines a passive scroll listener sets `--scrub` | The coloured still |
 
 ## Links
 
@@ -116,7 +117,7 @@ External links use `components/ExternalLink.tsx`: new tab, `rel="noopener norefe
 
 1. Save the image as `public/media/<slug>/<name>.avif` and `.webp`, and run `npm run media`.
 2. Add `img("<slug>/<name>", width, height, alt, caption?)` under `media.<slug>`. Width and height are the file's pixel size. Alt text says what the image shows (the test wants more than 10 characters). The caption, if any, appears as a chip in the corner.
-3. List it in a section's `figures`. Figures sit below that section's paragraphs, full column width; portrait images centre at up to 640px tall. A click opens the full-size file in a lightbox.
+3. List it in a section's `figures`. `scrub: true` on a section puts the scrub field first among them. Figures sit below that section's paragraphs, full column width; portrait images centre at up to 640px tall. A click opens the full-size file in a lightbox.
 
 ## Adding a note
 
