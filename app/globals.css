@@ -133,7 +133,9 @@ body {
 
 /* ---- Motion ---- */
 
-/* Page enter: blocks go from blurred and transparent to sharp, 40ms apart (set --i per block, six at most). */
+/* Page enter: blocks go from blurred and transparent to sharp, 40ms apart (set --i per block, six at most).
+   Keep fill "both": dropping the held end state repaints every block when it ends, and Chrome counts Home's card poster
+   repainting at ~600ms as its LCP (fails Lighthouse). The held filter traps fixed descendants, so they portal out. */
 @keyframes enter {
   from {
     opacity: 0;
