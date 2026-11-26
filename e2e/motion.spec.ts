@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const animation = (el: Element) => {
   const s = getComputedStyle(el);
@@ -53,8 +53,62 @@ test("the Home field grows, and pauses in a hidden tab and off screen", async ({
   await expect.poll(() => holdsStill(page)).toBe(false);
 });
 
+// lumenCell's Validation section has `scrub`: a field figure that recolours as it scrolls by.
+const scrub = (page: Page) => page.locator("#validation figure", { has: page.getByRole("img", { name: /^Schematic trajectory/ }) });
+// Scrolls the figure to `at` along its range (0: half on screen, 1: centred) and reads --scrub there.
+const scrubAt = (fig: Locator, at: number) =>
+  fig.evaluate(async (el, at) => {
+    const { top, height } = el.getBoundingClientRect();
+    scrollTo({ top: scrollY + top - innerHeight + height / 2 + (at * innerHeight) / 2, behavior: "instant" });
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    return Number(getComputedStyle(el).getPropertyValue("--scrub"));
+  }, at);
+// Makes the page's JS think there are no view timelines, so the scroll-listener fallback runs.
+const noViewTimelines = (page: Page) =>
+  page.addInitScript(() => {
+    const supports = CSS.supports;
+    Object.defineProperty(CSS, "supports", { value: (...a: string[]) => !a.join().includes("animation-timeline") && Reflect.apply(supports, CSS, a) });
+  });
+
+for (const fallback of [false, true])
+  test(`lumenCell's Validation field recolours as it scrolls by${fallback ? ", from JS without view timelines" : ""}`, async ({ page }) => {
+    if (fallback) await noViewTimelines(page);
+    await page.goto("/projects/lumencell/");
+    if (fallback) await page.addStyleTag({ content: ".scrub { animation: none !important }" });
+    const fig = scrub(page);
+    await expect.poll(() => scrubAt(fig, 0)).toBeCloseTo(0, 1);
+    expect(await scrubAt(fig, 0.5)).toBeCloseTo(0.5, 1);
+    expect(await scrubAt(fig, 1)).toBeCloseTo(1, 1);
+    // Reads the scroll position, never sets it: no pinning.
+    const y = await page.evaluate(() => scrollY);
+    await page.mouse.wheel(0, 120);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(y + 120);
+  });
+
+for (const slug of ["trustory", "arohexis", "nosolear"])
+  test(`/projects/${slug}/ has no scrub field`, async ({ page }) => {
+    await page.goto(`/projects/${slug}/`);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("canvas")).toHaveCount(0);
+    expect(await page.evaluate(() => document.getAnimations().filter((a) => a.timeline !== document.timeline).length)).toBe(0);
+  });
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
+
+  test("lumenCell's Validation field is the coloured still wherever it scrolls, in CSS and in the JS fallback", async ({ page }) => {
+    await noViewTimelines(page);
+    await page.goto("/projects/lumencell/");
+    const fig = scrub(page);
+    await expect(fig.getByRole("img")).toHaveAccessibleName(/coloured by pseudotime from grey-green at the root to blue at the three tips/);
+    await expect
+      .poll(() =>
+        fig.locator(".scrub-colour").evaluate((c: HTMLCanvasElement) => c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data.some((v) => v > 0)),
+      )
+      .toBe(true);
+    for (const at of [0, 0.5, 1]) expect(await scrubAt(fig, at)).toBe(1);
+    expect(await fig.evaluate((el) => el.getAnimations().length)).toBe(0);
+  });
 
   test("the Home field is one still frame, even under the mouse", async ({ page }) => {
     await page.goto("/");
@@ -223,7 +277,8 @@ test("a figure morphs into a full-size lightbox and Esc returns focus to it", as
   await expect(dialog).toBeVisible();
   await expect(dialog.locator("img")).toHaveAttribute("src", "/media/lumencell/explorer-playback.webp");
   await expect.poll(() => animated(page)).toContain("::view-transition-group(zoom-media-lumencell-explorer-playback)");
-  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished)));
+  // The scrub figure's scroll-driven animation never finishes while the page sits still.
+  await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.timeline === document.timeline).map((a) => a.finished)));
   const { violations } = await new AxeBuilder({ page }).analyze();
   expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
   await page.keyboard.press("Escape");
