@@ -28,8 +28,9 @@ export default function CV() {
       <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
         {site.name}
       </h1>
-      {/* The link text is already the address, so print adds nothing after it. */}
-      <ul className="enter mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[14px] leading-[22px] text-ink [--i:1]">
+      {/* The link text is already the address, so print adds nothing after it. Wrapped on a phone, touch:gap-y-6 keeps
+          the rows' 44px touch areas apart. */}
+      <ul className="enter mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[14px] leading-[22px] text-ink touch:gap-y-6 [--i:1]">
         <li>
           <a href={`mailto:${email}`} className="tap relative draw">
             {email}

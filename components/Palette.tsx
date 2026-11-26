@@ -58,6 +58,8 @@ export function Palette({ items }: { items: PaletteItem[] }) {
 
   async function run({ href }: PaletteItem) {
     if (href.startsWith("mailto:")) {
+      // Umami, when the build turned it on (app/layout.tsx); the About button tags itself with data-umami-event.
+      (window as { umami?: { track(event: string): void } }).umami?.track("Copy email");
       try {
         await navigator.clipboard.writeText(href.slice(7));
         return setCopied(true);
@@ -121,7 +123,7 @@ export function Palette({ items }: { items: PaletteItem[] }) {
                   aria-selected={i === active}
                   onClick={() => run(item)}
                   onPointerMove={() => setActive(i)}
-                  className={`flex cursor-pointer items-baseline justify-between gap-4 px-4 py-2 text-[14px] leading-[22px] ${i === active ? "bg-bg" : ""}`}
+                  className={`flex cursor-pointer items-baseline justify-between gap-4 px-4 py-2 text-[14px] leading-[22px] touch:py-3 ${i === active ? "bg-bg" : ""}`}
                 >
                   <span>
                     {copied && item.href.startsWith("mailto:") ? "Copied" : item.label}

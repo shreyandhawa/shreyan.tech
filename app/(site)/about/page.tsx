@@ -39,7 +39,8 @@ export default function About() {
         </h2>
         <CopyEmail email={email} className="mt-3 text-[28px] leading-[34px] md:text-[44px] md:leading-[52px]" />
         {[github, linkedin].map((l) => (
-          <p key={l.href} className="mt-3 text-[14px] text-ink">
+          // touch:mt-6 keeps stacked links' 44px touch areas apart.
+          <p key={l.href} className="mt-3 text-[14px] text-ink touch:mt-6">
             <ExternalLink href={l.href}>{l.label}</ExternalLink>
           </p>
         ))}

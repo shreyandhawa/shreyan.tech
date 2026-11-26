@@ -136,22 +136,25 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
               ))}
               {i === last && p.code && (
                 <p className="mt-5 text-[14px] text-ink">
-                  <ExternalLink href={p.code}>Code: {p.code.replace("https://", "")}</ExternalLink>
+                  <ExternalLink href={p.code} data-umami-event="Code link" data-umami-event-project={p.slug}>
+                    Code: {p.code.replace("https://", "")}
+                  </ExternalLink>
                 </p>
               )}
+              {/* touch:mt-6 keeps stacked links' 44px touch areas apart. */}
               {i === last &&
                 p.links?.map((l) => (
-                  <p key={l.href} className="mt-2 text-[14px] text-ink">
+                  <p key={l.href} className="mt-2 text-[14px] text-ink touch:mt-6">
                     <ExternalLink href={l.href}>{l.label}</ExternalLink>
                   </p>
                 ))}
               {i === last && p.deployed && (
-                <p className="mt-2 text-[14px] text-ink">
+                <p className="mt-2 text-[14px] text-ink touch:mt-6">
                   <ExternalLink href={p.deployed.href}>Check out the website</ExternalLink>
                 </p>
               )}
               {i === last && p.cite && (
-                <p className="mt-3">
+                <p className="mt-3 touch:mt-6">
                   <CopyButton text={p.cite} label="Cite" name="Cite: copy BibTeX" done="BibTeX copied" className="relative bg-surface" />
                 </p>
               )}

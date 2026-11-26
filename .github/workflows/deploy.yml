@@ -32,6 +32,8 @@ jobs:
         env:
           # Build-time badges call the GitHub API; the token lifts its rate limit (content/badges.ts).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Analytics (app/layout.tsx): off while the repository variable is unset. CI never sets it.
+          UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: out
