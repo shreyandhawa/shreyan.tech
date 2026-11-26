@@ -14,3 +14,13 @@ The IP addresses below are from GitHub's guide, [Managing a custom domain for yo
 4. Set `url` in `content/site.ts` to the new domain.
 
 A free subdomain such as `name.is-a.dev` is set up differently: a `CNAME` to `shreyandhawa.github.io` on that service, not the `A` records.
+
+## Analytics
+
+The site counts visits with Umami Cloud (no cookies; see "Analytics" in DESIGN.md). It stays off until the deploy has a website ID:
+
+1. Sign up at [umami.is](https://umami.is), add a website with the domain `shreyandhawa.github.io`, and copy its **Website ID** from the website's settings.
+2. In **Settings → Secrets and variables → Actions → Variables**, add a repository variable `UMAMI_WEBSITE_ID` with that ID. It is not a secret: it shows in every page's HTML.
+3. Re-run the Deploy workflow, or push to `main`.
+
+To turn it off, delete the variable and deploy again. The script only counts visits on the host in `url` in `content/site.ts`, so after a domain change, change the website's domain in Umami too.

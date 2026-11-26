@@ -100,7 +100,7 @@ export function Rail() {
       </p>
 
       {items.length > 0 && (
-        <nav aria-label={project ? "Sections" : "Main"} className="relative mt-3 pl-3 md:absolute md:left-8 md:top-[226px] md:mt-0 md:pl-0">
+        <nav aria-label={project ? "Sections" : "Main"} className="relative mt-4 pl-3 md:absolute md:left-8 md:top-[226px] md:mt-0 md:pl-0">
           <span
             ref={marker}
             aria-hidden="true"
@@ -111,7 +111,7 @@ export function Rail() {
               <path d="M0 0C6 1 15 5 15 10A5 5 0 0 1 10 15C5 15 1 6 0 0Z" fill="currentColor" />
             </svg>
           </span>
-          <ul ref={list} className="flex gap-6 text-[15px] leading-5 md:flex-col md:gap-3">
+          <ul ref={list} className="flex gap-6 text-[15px] leading-5 md:flex-col md:gap-3 md:touch:gap-6">
             {items.map((item) => {
               const isActive = item.id === active;
               return (

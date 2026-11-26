@@ -104,10 +104,17 @@ body {
   color: var(--muted);
 }
 
-/* Phones: a 44px touch area centred on a small link, without moving anything. The element must be positioned.
-   Off from md up, where the rail's stacked links sit 32px apart and the pointer is a mouse. */
+/* Touch screens: phones and anything below md, plus any coarse pointer (an iPad in landscape is 1024px wide). */
+@custom-variant touch {
+  @media (width < 56.25rem), (pointer: coarse) {
+    @slot;
+  }
+}
+
+/* Touch screens: a 44px touch area centred on a small link, without moving anything. The element must be positioned.
+   Links stacked one above another need 44px from one line to the next, or their areas overlap: add touch:mt-6 (or gap). */
 @utility tap {
-  @media (width < 56.25rem) {
+  @variant touch {
     &::before {
       content: "";
       position: absolute;

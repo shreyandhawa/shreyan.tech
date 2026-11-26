@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import Script from "next/script";
 import { Cursor } from "@/components/Cursor";
 import { site } from "@/content/site";
 import "./globals.css";
@@ -38,6 +39,10 @@ export const metadata: Metadata = {
 // --bg in globals.css.
 export const viewport: Viewport = { themeColor: "#e4eae0" };
 
+// Umami Cloud, no cookies. Only the deploy sets this (deploy.yml), so dev and CI builds carry no script; data-domains
+// also keeps a local build that has it from counting visits.
+const umami = process.env.UMAMI_WEBSITE_ID;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -48,6 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         {children}
         <Cursor />
+        {umami && (
+          <Script src="https://cloud.umami.is/script.js" data-website-id={umami} data-domains={new URL(site.url).hostname} strategy="lazyOnload" />
+        )}
       </body>
     </html>
   );
