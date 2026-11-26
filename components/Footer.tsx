@@ -3,9 +3,9 @@ import { site } from "@/content/site";
 // The site is a static export, so this is the build date.
 const built = new Date();
 
-export function Footer({ hasResume }: { hasResume: boolean }) {
+export function Footer({ resume }: { resume: string }) {
   return (
-    <footer className="mt-28 flex max-w-[864px] flex-col gap-4 pb-8 text-[13px] text-muted md:flex-row md:justify-between">
+    <footer className="mt-28 flex print:hidden max-w-[864px] flex-col gap-4 pb-8 text-[13px] text-muted md:flex-row md:justify-between">
       <ul className="flex gap-5">
         <li>
           <a
@@ -34,13 +34,11 @@ export function Footer({ hasResume }: { hasResume: boolean }) {
             Email
           </a>
         </li>
-        {hasResume && (
-          <li>
-            <a href="/resume.pdf" target="_blank" rel="noopener" className="tap relative transition-colors duration-150 hover:text-ink">
-              Resume<span className="sr-only"> (opens in a new tab)</span>
-            </a>
-          </li>
-        )}
+        <li>
+          <a href={resume} target="_blank" rel="noopener" className="tap relative transition-colors duration-150 hover:text-ink">
+            Resume<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </li>
       </ul>
       <p>
         © {built.getUTCFullYear()} {site.name} · Updated{" "}

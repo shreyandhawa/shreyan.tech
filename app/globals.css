@@ -208,6 +208,50 @@ body {
   }
 }
 
+/* ---- Print ---- */
+
+@page {
+  margin: 0.6in;
+}
+
+/* The rail, grain, cursor and footer carry print:hidden. Black on white, still and with each link's address after it.
+   In base, so a link can opt out with print:after:content-none; internal links need --site (set on /cv/). */
+@media print {
+  :root {
+    --bg: #fff;
+    --surface: #fff;
+    --ink: #000;
+    --ink-2: #000;
+    --muted: #000;
+    --line: #bbb;
+  }
+  .enter {
+    animation: none;
+  }
+  @layer base {
+    a[href^="http"]::after {
+      content: " (" attr(href) ")";
+    }
+    a[href^="/"]::after {
+      content: " (" var(--site) attr(href) ")";
+    }
+    a::after {
+      font-weight: 400;
+      overflow-wrap: anywhere;
+    }
+    a > [aria-hidden="true"] {
+      display: none;
+    }
+    h1,
+    h2 {
+      break-after: avoid;
+    }
+    dl > div {
+      break-inside: avoid;
+    }
+  }
+}
+
 /* Custom cursor: the system cursor is hidden only once ours has mounted, and comes back over text fields and code. */
 html.custom-cursor,
 html.custom-cursor * {

@@ -6,6 +6,7 @@ const slugs = ["lumencell", "arohexis", "nosolear", "trustory"];
 const routes = [
   "/",
   "/about/",
+  "/cv/",
   ...slugs.map((s) => `/projects/${s}/`),
   "/notes/",
   // Drafts too: they build at their URL, just unlisted.
