@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ViewTransition } from "react";
+import { Field } from "@/components/field/Field";
 import { MediaFrame } from "@/components/MediaFrame";
 import { projects, type Project } from "@/content/projects";
 import { site } from "@/content/site";
@@ -46,9 +47,14 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\\u003c") }} />
-      <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
-        {headline}
-      </h1>
+      {/* The field fills the headline's box plus margins, short of the rail and the muted "Currently" label.
+          Phones have no room above the headline, so it sits behind the text at half strength. */}
+      <div className="relative isolate">
+        <Field className="absolute -inset-x-4 -top-10 -bottom-6 -z-10 opacity-50 mask-b-from-80% md:-left-12 md:-right-[72px] md:-top-48 md:-bottom-8 md:opacity-100" />
+        <h1 className="enter font-serif text-[36px] leading-[42px] tracking-[-0.5px] text-ink md:text-[52px] md:leading-[60px] md:tracking-[-1px]">
+          {headline}
+        </h1>
+      </div>
       <section className="enter mt-10 max-w-[640px] [--i:1]">
         <h2 className="label">Currently</h2>
         <p className="mt-1.5 text-[14px] leading-[22px] text-ink">{currently}</p>

@@ -16,8 +16,55 @@ const moving = (page: Page) =>
       .filter((k) => /^(transform|translate|rotate|scale|opacity|filter)$/.test(k)),
   );
 
+// The Home field's pixels, or "" while it is blank.
+const field = (page: Page) =>
+  page.locator("canvas").evaluate((c: HTMLCanvasElement) => {
+    const blank = document.createElement("canvas");
+    [blank.width, blank.height] = [c.width, c.height];
+    return c.toDataURL() === blank.toDataURL() ? "" : c.toDataURL();
+  });
+// Headless tabs are never hidden, so fake what the field reads.
+const setHidden = (page: Page, hidden: boolean) =>
+  page.evaluate((hidden) => {
+    if (hidden) Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+    else delete (document as { hidden?: boolean }).hidden;
+    document.dispatchEvent(new Event("visibilitychange"));
+  }, hidden);
+const holdsStill = async (page: Page) => {
+  const before = await field(page);
+  await page.waitForTimeout(300);
+  return before === (await field(page));
+};
+
+test("the Home field grows, and pauses in a hidden tab and off screen", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('[aria-hidden="true"] > canvas')).toHaveCount(1);
+  await expect.poll(() => holdsStill(page)).toBe(false);
+
+  await setHidden(page, true);
+  expect(await holdsStill(page)).toBe(true);
+  await setHidden(page, false);
+  await expect.poll(() => holdsStill(page)).toBe(false);
+
+  await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await expect.poll(() => holdsStill(page)).toBe(true);
+  // Still growing, so it was paused rather than finished.
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+  await expect.poll(() => holdsStill(page)).toBe(false);
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
+
+  test("the Home field is one still frame, even under the mouse", async ({ page }) => {
+    await page.goto("/");
+    await expect.poll(() => field(page)).not.toBe("");
+    const still = await field(page);
+    await page.mouse.move(400, 150);
+    await page.mouse.move(700, 200, { steps: 10 });
+    await page.waitForTimeout(300);
+    expect(await field(page)).toBe(still);
+  });
 
   test("page enter is a 150ms fade and the system cursor stays", async ({ page }) => {
     await page.goto("/");
@@ -47,7 +94,8 @@ test.describe("reduced motion", () => {
 test("page enter blurs blocks in, 40ms apart", async ({ page }) => {
   await page.goto("/");
   expect(await page.locator("h1").evaluate(animation)).toBe("enter 0.45s");
-  expect(await page.locator("h1 + section").evaluate((el) => getComputedStyle(el).animationDelay)).toBe("0.04s");
+  const currently = page.locator("section", { has: page.getByRole("heading", { name: "Currently" }) });
+  expect(await currently.evaluate((el) => getComputedStyle(el).animationDelay)).toBe("0.04s");
 });
 
 // Headless Chromium has no H.264, so count play() calls instead of checking playback.

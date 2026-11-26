@@ -17,8 +17,9 @@ Defined on `:root` in `app/globals.css` and exposed to Tailwind by `@theme inlin
 | `--accent`  | `#2a4d9b` | Rail marker, text selection                | 6.5 / 5.8                |
 
 - `--muted` fails 4.5:1 on `--surface`: text on a surface uses `--ink-2` or `--ink` (see `components/CopyButton.tsx`).
-- The accent is rare on purpose. It marks where you are and what you selected, nothing else.
+- The accent is rare on purpose. It marks where you are, what you selected and the lineage tips of the Home field, nothing else.
 - Film grain (`.grain`, in the site layout) sits over everything at 20% multiply. Keep new grounds light enough for it.
+- The Home field's points are 60% alpha (30% on phones, where they sit behind the headline). The darkest blend, `--accent` at 60% on `--bg`, still gives ink 4.4:1 against the 3:1 that large text needs. `--muted` text has no margin to spare, so the field stops short of the rail and of "Currently".
 
 ## Type
 
@@ -67,7 +68,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 
 ### Rules
 
-1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Today Home and the project pages share theirs, the card media morphing into the project hero (or, arriving from the Next link, the project name morphing into the title); a project figure opening into its lightbox is the same morph, played only on a click. About and 404 have none beyond the page enter.
+1. **One wow moment per page.** A page gets one piece of motion people notice; everything else stays small and quick. Home's is the field behind the headline growing into a trajectory (`components/field/`). The project pages' is the card media morphing into the project hero, started from a Home card (or, arriving from the Next link, the project name morphing into the title); a project figure opening into its lightbox is the same morph, played only on a click. About and 404 have none beyond the page enter.
 2. **Everything rests under reduced motion.** With `prefers-reduced-motion: reduce` nothing moves or autoplays: at most a short opacity fade. View transitions, zoom, nudges, the underline draw and the rail marker go instant, clips stay on their poster, and the system cursor replaces the custom one. A new animation ships with its reduced-motion branch and a test in `e2e/motion.spec.ts`.
 3. **No scroll-jacking.** Never take over wheel or touch scrolling, change its speed, or pin or scrub content against scroll position. Scroll listeners may read the position (the rail's active section does) but never set it. Smooth scrolling is for in-page anchors and is off under reduced motion.
 4. Hover effects live under `@media (hover: hover)`, so touch screens don't get stuck hover states.
@@ -90,6 +91,7 @@ In Tailwind: `duration-(--dur-base) ease-(--ease-spring)`. In CSS: `var(--dur-ba
 | Button press        | `<button>`: `motion-safe:active:scale-[.98]` | 98% while pressed                     | None           |
 | Cursor              | `components/Cursor.tsx`                  | Follows the pointer exactly; label opens in 120ms | System cursor |
 | Card clips          | `components/Clip.tsx`                    | Play while on screen                      | Poster only    |
+| Home field          | `components/field/`, behind the `h1`     | 1,500 points grow from a scattered cloud into a three-lineage trajectory over 7s, root first, `--muted` → `--accent` along pseudotime; they drift up to 26px from the mouse. Canvas 2D, DPR capped at 2; sleeps off screen, in a hidden tab and once still | One still frame of the grown tree |
 
 ## Links
 
