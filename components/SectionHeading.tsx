@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
+
+const subscribe = () => () => {};
 
 /**
  * A project section's label heading, linking to its own section. A "#" shows on hover; clicking copies the URL with the hash
@@ -8,6 +11,7 @@ import { useState } from "react";
  */
 export function SectionHeading({ id, title }: { id: string; title: string }) {
   const [copied, setCopied] = useState(false);
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
 
   async function copy(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
@@ -35,13 +39,18 @@ export function SectionHeading({ id, title }: { id: string; title: string }) {
           </span>
         </a>
       </h2>
-      <p role="status" className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center">
-        {copied && (
-          <span className="rounded-sm bg-ink px-2.5 py-1 text-[14px] leading-[22px] text-bg motion-safe:animate-[enter_var(--dur-fast)_ease-out]">
-            Link copied
-          </span>
+      {/* In <body>: the .enter block around the heading holds a filter, which would pin a fixed child to the block. */}
+      {mounted &&
+        createPortal(
+          <p role="status" className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center">
+            {copied && (
+              <span className="rounded-sm bg-ink px-2.5 py-1 text-[14px] leading-[22px] text-bg motion-safe:animate-[enter_var(--dur-fast)_ease-out]">
+                Link copied
+              </span>
+            )}
+          </p>,
+          document.body,
         )}
-      </p>
     </>
   );
 }
